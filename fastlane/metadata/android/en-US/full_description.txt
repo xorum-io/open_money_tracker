@@ -1,0 +1,13 @@
+<p>Do you want to save some money or just to know where is your money come from and to? Then this app is for you. You can manage you incomes and expenses in two clicks, then take a report in two clicks more.</p>
+<p>Following features are available in current version:</p>
+<ul>
+ <li>Manage expenses/incomes.</li>
+ <li>Create reports for period.</li>
+ <li>Manage accounts with different currencies.</li>
+ <li>Transfer money between accounts.</li>
+ <li>Manage exchange rates between currencies.</li>
+ <li>Quick summaries.</li>
+ <li>Charts.</li>
+ <li>CSV export/import.</li>
+ <li>Dropbox backups.</li>
+</ul>

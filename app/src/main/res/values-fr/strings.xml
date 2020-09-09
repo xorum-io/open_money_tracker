@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Money Tracker</string>
+    <string name="title">Intitulé</string>
+    <string name="category">Catégorie</string>
+    <string name="price">Montant</string>
+    <string name="add_income">Ajouter revenu</string>
+    <string name="add_expense">Ajouter dépense</string>
+    <string name="add">Ajout</string>
+    <string name="report">Rapport</string>
+    <string name="change_date">RÉGLAGE DE LA PÉRIODE</string>
+    <string name="total">TOTAL</string>
+    <string name="total_incomes">Total revenus</string>
+    <string name="total_expenses">Total dépenses</string>
+    <string name="delete">Supprimer</string>
+    <string name="day">Jour</string>
+    <string name="week">Semaine</string>
+    <string name="month">Mois</string>
+    <string name="year">Année</string>
+    <string name="all_time">Éternité</string>
+    <string name="like_money_tracker">Aimez-vous MoneyTracker ?</string>
+    <string name="rate_it_on_gp">Évaluez-le sur Google Play !</string>
+    <string name="maybe_later">Peut-être plus tard</string>
+    <string name="no_thank_you">Non, merci</string>
+    <string name="yes_very">Oui !</string>
+
+    <string name="title_records">Opérations</string>
+    <string name="title_accounts">Comptes</string>
+    <string name="title_add_income">Ajout d\'un revenu</string>
+    <string name="title_add_expense">Ajout d\'une dépense</string>
+    <string name="title_add_account">Ajout d\'un compte</string>
+
+    <string name="export">Exporter</string>
+    <string name="add_account">Ajouter compte</string>
+    <string name="initial_sum">Solde initial</string>
+    <string name="account">Compte</string>
+    <string name="transfer">Virement</string>
+    <string name="from">Depuis</string>
+    <string name="to">Vers</string>
+    <string name="title_exchange_rates">Taux de conversion</string>
+    <string name="add_exchange_rate">Ajouter un taux</string>
+    <string name="account_removed">Compte supprimé</string>
+
+    <string name="short_summary">Synthèse</string>
+    <string name="custom">Personnalisé</string>
+    <string name="summary">Synthèse</string>
+    <string name="currency">Devise</string>
+    <string name="error_exchange_rates">Erreur ! Conversion à définir.</string>
+    <string name="amount">Montant</string>
+    <string name="title_settings">Paramètres</string>
+    <string name="settings">Paramètres</string>
+    <string name="default_account">Compte par défaut</string>
+    <string name="default_currency">Devise d\'affichage</string>
+    <string name="non_substitution_currency">Devise se substituant à NON</string>
+
+    <string name="title_charts">Résultats</string>
+    <string name="incomes">Revenus</string>
+    <string name="expenses">Dépenses</string>
+
+    <string name="display_precision">Précision d\'affichage</string>
+
+    <string name="title_import_export">Importer/Exporter</string>
+    <string name="text_import">Importer</string>
+    <string name="records_imported">%1$s opérations ont été importées</string>
+    <string name="help">Aide</string>
+    <string name="import_help">Pour importer des opérations dans l\'application :\n
+    1. Créer un fichier CSV au format \n
+    <b>date;titre;catégorie;montant;devise.</b>\n
+    2. Copier son contenu dans le champ de saisie.\n
+    3. Appuyer sur importer. Au bout de quelques secondes, le nombre d\'opérations importées est affiché.\n
+    \n
+    <b>Note :</b> date - horodatage en millisecondes ; devise - code devise à 3 lettres.\n
+    <b>Exemple :</b> 1466948795712;métro;transport;-20.0;EUR</string>
+
+    <string name="bank_sells">Banque achète</string>
+    <string name="convert_to">Convertir vers</string>
+    <string name="bank_buys">Banque vend</string>
+    <string name="convert_from">Convertir depuis</string>
+
+    <string name="date">Date</string>
+    <string name="time">Heure</string>
+
+    <string name="backup_data">Sauvegarde/Restauration</string>
+    <string name="failed_create_backup">Échec de la sauvegarde.</string>
+    <string name="failed_restore_backup">Échec de la restauration.</string>
+    <string name="backup_restored">Le fichier de sauvegarde %1$s a bien été restauré.</string>
+    <string name="backup_is_restored">Restauration effectuée</string>
+    <string name="warning">Attention</string>
+    <string name="want_erase_and_restore">Êtes-vous sûr de vouloir écraser les données courantes avec celles du fichier %1$s ? Assurez-vous d\'avoir une sauvegarde des données courantes.</string>
+    <string name="backup_now">Restaurer maintenant</string>
+
+    <string name="title_edit_income">Éditer le revenu</string>
+    <string name="title_edit_expense">Éditer la dépense</string>
+
+    <string name="importing_records">Importation en cours…</string>
+    <string name="making_backup">Sauvegarde en cours…</string>
+    <string name="restoring_backup">Restauration en cours…</string>
+    <string name="fetching_backups">Recherche des sauvegardes…</string>
+    <string name="removing_backup">Suppression de la sauvegarde…</string>
+
+    <string name="about_summary">Version %1$s (Android %2$s)</string>
+    <string name="title_activity_about">À propos</string>
+    <string name="about">Open Money Tracker (OMT) is an accounting application. You can manage your incomes and expenses in easy way. Accounts and currency exchange rates are also available.\n\nTo help us make OMT better, please report bugs to <a href="http://4pda.ru/forum/index.php?showtopic=755203">the 4PDA forum</a>; new feature ideas are very welcome too. Find answers or start a discussion on <a href="http://4pda.ru/forum/index.php?showtopic=755203">forum</a>.\n\nOMT is <a href="https://en.wikipedia.org/wiki/Open-source_software">open source software</a>, so everyone is encouraged to become a contributor. Non-developers can also help. For instance, you can help translate OMT, provide screenshots or blog about OMT.\n\nOMT is released under the <a href="https://ru.wikipedia.org/wiki/GNU_General_Public_License#GPL_v3">GNU-GPL v3 license</a> and source code is available <a href="https://github.com/evgenii-kanivets/Money-Tracker">on GitHub</a>.\n\n<a href="https://ua.linkedin.com/in/evgeniikanivets">Developer profile on LinkedIn.</a></string>
+
+    <string name="field_cant_be_empty">Champ obligatoire.</string>
+    <string name="too_rich_or_poor">Impossible d\'être si riche ou pauvre.</string>
+    <string name="too_rich">Impossible d\'être si riche.</string>
+    <string name="none">Aucune</string>
+    <string name="too_much_for_transfer">Montant trop important.</string>
+    <string name="too_much_for_exchange">Montant trop important.</string>
+    <string name="same_currencies">Impossible de convertir vers la même devise.</string>
+    <string name="record_in_future">Opérations dans le futur impossibles.</string>
+    <string name="one_account_needed">Au moins un compte est requis.</string>
+
+    <string name="title_activity_edit_account">Éditer le compte</string>
+    <string name="color">Couleur</string>
+    <string name="goal">Objectif</string>
+    <string name="restore">Restaurer</string>
+    <string name="archive">Archiver</string>
+    <string name="cant_archive_default_account">Le compte par défaut ne peut pas être archivé.</string>
+    <string name="delete_account_title">Suppression du compte</string>
+    <string name="delete_account_message">Êtes-vous sûr de vouloir supprimer ce compte ? Il ne pourra plus être restauré.</string>
+
+    <string name="graph">Graphique</string>
+    <string name="information">Information</string>
+    <string name="operations">Opérations</string>
+
+    <string name="delete_backup_title">Suppression de la sauvegarde</string>
+    <string name="delete_backup_message">Êtes-vous sûr de vouloir supprimer le fichier %1$s ? Il ne pourra plus être restauré.</string>
+
+    <string name="start_earlier_end">La date de fin ne peut être antérieure à celle de début</string>
+</resources>

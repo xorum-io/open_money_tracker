@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Money Tracker</string>
+    <string name="title">Título</string>
+    <string name="category">Categoria</string>
+    <string name="price">Preço</string>
+    <string name="add_income">Adicionar receita</string>
+    <string name="add_expense">Adicionar despesa</string>
+    <string name="add">Adicionar</string>
+    <string name="report">Relatório</string>
+    <string name="change_date">MUDAR A DATA</string>
+    <string name="total">TOTAL</string>
+    <string name="total_incomes">Receita total</string>
+    <string name="total_expenses">Despesa total</string>
+    <string name="delete">Deletar</string>
+    <string name="day">Dia</string>
+    <string name="week">Semana</string>
+    <string name="month">Mês</string>
+    <string name="year">Ano</string>
+    <string name="all_time">Tudo</string>
+    <string name="like_money_tracker">Você gosta do MoneyTracker?</string>
+    <string name="rate_it_on_gp">Avalie ele na Google Play!</string>
+    <string name="maybe_later">Talvez depois</string>
+    <string name="no_thank_you">Não, obrigado</string>
+    <string name="yes_very">Sim!</string>
+
+    <string name="title_records">Registos</string>
+    <string name="title_accounts">Contas</string>
+    <string name="title_add_income">Adicionar receita</string>
+    <string name="title_add_expense">Adicionar despesa</string>
+    <string name="title_add_account">Adicionar conta</string>
+
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+
+    <string name="export">Exportar</string>
+    <string name="add_account">Adicionar conta</string>
+    <string name="initial_sum">Saldo inicial</string>
+    <string name="account">Conta</string>
+    <string name="transfer">Transferir</string>
+    <string name="from">De</string>
+    <string name="to">Para</string>
+    <string name="title_exchange_rates">Taxas de câmbio</string>
+    <string name="add_exchange_rate">Adicionar taxa de câmbio</string>
+    <string name="arrow" translatable="false">" -> "</string>
+    <string name="account_removed">Conta removida</string>
+
+    <string name="short_summary">Breve resumo</string>
+    <string name="custom">Personalizado</string>
+    <string name="summary">Resumo</string>
+    <string name="currency">Moeda</string>
+    <string name="error_exchange_rates">Erro! Especifique as taxas de câmbio.</string>
+    <string name="amount">Quantidade</string>
+    <string name="title_settings">Configurações</string>
+    <string name="settings">Configurações</string>
+    <string name="default_account">Conta padrão</string>
+    <string name="pref_default_account" translatable="false">pref_default_account</string>
+    <string name="pref_default_currency" translatable="false">pref_default_currency</string>
+    <string name="period_from_to" translatable="false">%1$s - %2$s</string>
+    <string name="pref_non_substitution_currency" translatable="false">pref_non_substitution_currency</string>
+    <string name="default_currency">Moeda padrão</string>
+    <string name="non_substitution_currency">Moeda não substituível</string>
+
+    <string name="title_charts">Resultados</string>
+    <string name="incomes">Receitas</string>
+    <string name="expenses">Despesas</string>
+
+    <string name="pref_display_precision" translatable="false">pref_display_precision</string>
+    <string name="display_precision">Precisão da exibição</string>
+    <string name="precision_math" translatable="false">9.99$ = 10$</string>
+    <string name="precision_int" translatable="false">9.99$ = 9$</string>
+    <string name="precision_none" translatable="false">9.99$ = 9.99$</string>
+
+    <string name="title_import_export">Importar/Exportar</string>
+    <string name="text_import">Importar</string>
+    <string name="records_imported">%1$s registros foram importados</string>
+    <string name="help">Ajuda</string>
+    <string name="import_help">Para importar registros no aplicativo:\n
+    1. Crie um arquivo no formato CSV - \n
+    <b>hora;título;categoria;preço;moeda.</b>\n
+    2. Copie o seu conteúdo para o campo de texto.\n
+    3. Pressione o botão de importar. Em alguns segundos você verá quantos registros foram importados.\n
+    \n
+    <b>Nota:</b> hora - o valor deve ser em milissegundos; moeda - código de 3 símbolos da moeda.\n
+    <b>Exemplo:</b> 1466948795712;metrô;transporte;-20.0;BRL</string>
+
+    <string name="slash" translatable="false">/</string>
+    <string name="bank_sells">Banco vende</string>
+    <string name="convert_to">Converter para</string>
+    <string name="bank_buys">Banco compra</string>
+    <string name="convert_from">Converte de</string>
+
+    <string name="date">Data</string>
+    <string name="time">Horário</string>
+
+    <string name="backup_data">Backup/Restaurar</string>
+    <string name="failed_create_backup">Falha ao criar o backup.</string>
+    <string name="failed_restore_backup">Falha ao restaurar o backup.</string>
+    <string name="backup_restored">O arquivo de backup selecionado %1$s foi restaurado com sucesso.</string>
+    <string name="backup_is_restored">Backup restaurado</string>
+    <string name="warning">Atenção</string>
+    <string name="want_erase_and_restore">Você tem certeza que deseja apagar todos os dados atuais e restaurar o arquivo de backup %1$s? Certifique-se de fazer backup dos dados atuais.</string>
+    <string name="backup_now">Fazer backup agora</string>
+
+    <string name="title_edit_income">Editar receita</string>
+    <string name="title_edit_expense">Editar despesa</string>
+
+    <string name="importing_records">Importando registros…</string>
+    <string name="making_backup">Fazendo backup…</string>
+    <string name="restoring_backup">Restaurando backup…</string>
+    <string name="fetching_backups">Buscando backups…</string>
+    <string name="removing_backup">Removendo backup…</string>
+
+    <string name="pref_about" translatable="false">pref_about</string>
+    <string name="about_summary">Versão %1$s (Android %2$s)</string>
+    <string name="title_activity_about">Sobre</string>
+    <string name="about">Open Money Tracker (OMT) é uma aplicação contábil. Você pode gerenciar suas receitas e despesas de uma forma fácil. Contas e taxas de câmbio também são suportadas.\n\nPara nos ajudar a tornar o OMT melhor, por favor, reporte bugs no fórum <a href="http://4pda.ru/forum/index.php?showtopic=755203">4PDA</a>; novas ideias de funções também são muito bem vindas. Pesquise respostas ou inicie uma discussão no<a href="http://4pda.ru/forum/index.php?showtopic=755203">fórum</a>.\n\nO OMT é <a href="https://pt.wikipedia.org/wiki/Software_de_c%C3%B3digo_aberto">um software de código aberto</a>, então todo mundo é encorajado a se tornar um contribuidor. Não desenvolvedores também podem ajudar. Por exemplo, você pode ajudar a traduzir o OMT, fornecer capturas de tela ou publicar sobre o OMT.\n\nEste software é disponibilizado sobre a licença <a href="https://ru.wikipedia.org/wiki/GNU_General_Public_License#GPL_v3">GNU-GPL v3</a> e o seu código fonte está disponível no <a href="https://github.com/evgenii-kanivets/Money-Tracker">GitHub</a>.\n\n<a href="https://ua.linkedin.com/in/evgeniikanivets">Perfil do desenvolvedor no LinkedIn.</a></string>
+
+    <string name="field_cant_be_empty">Este campo não pode ficar vazio</string>
+    <string name="too_rich_or_poor">Você não pode ser tão rico ou tão pobre.</string>
+    <string name="too_rich">Você não pode ser tão rico.</string>
+    <string name="none">Nenhum</string>
+    <string name="too_much_for_transfer">Isto é muito para ser transferido.</string>
+    <string name="too_much_for_exchange">Isto é muito para a troca.</string>
+    <string name="same_currencies">Não é possível converter as moedas.</string>
+    <string name="record_in_future">Não é possível criar um registro no futuro.</string>
+    <string name="one_account_needed">Pelo menos uma conta é necessária.</string>
+
+    <string name="title_activity_edit_account">Editar conta</string>
+    <string name="color">Cor</string>
+    <string name="goal">Objetivo</string>
+    <string name="restore">Restaurar</string>
+    <string name="archive">Arquivar</string>
+    <string name="cant_archive_default_account">Você não pode arquivar a conta padrão.</string>
+    <string name="delete_account_title">Deletar conta</string>
+    <string name="delete_account_message">Tem certeza que deseja deletar esta conta? Isso não pode ser desfeito.</string>
+
+    <string name="graph">Gráfico</string>
+    <string name="information">Informação</string>
+    <string name="operations">Operações</string>
+
+    <!-- Not translated strings -->
+    <string name="delete_backup_title">Deletar backup</string>
+    <string name="delete_backup_message">Tem certeza que deseja deletar esse arquivo de backup %1$s? Isso não pode ser desfeito.</string>
+
+    <string name="title_summary_record" translatable="false">%1$s (%2$d)</string>
+    <string name="start_earlier_end">A data final não pode ser anterior a data inicial</string>
+</resources>

@@ -76,8 +76,6 @@ android {
     }
 }
 
-apply plugin: 'com.getkeepsafe.dexcount'
-
 dependencies {
     proprietaryImplementation('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
         transitive = true

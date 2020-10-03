@@ -109,7 +109,7 @@
             android:value="955ae4864ae2a833aeda5b62631512524288adf8" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="com.blogspot.e_kanivets.moneytracker"
             android:exported="false"
             android:grantUriPermissions="true">

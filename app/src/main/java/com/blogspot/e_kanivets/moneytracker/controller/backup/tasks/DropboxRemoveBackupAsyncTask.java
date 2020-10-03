@@ -1,18 +1,11 @@
 package com.blogspot.e_kanivets.moneytracker.controller.backup.tasks;
 
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import com.blogspot.e_kanivets.moneytracker.controller.backup.BackupController;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.files.DeleteResult;
-import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.Metadata;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class DropboxRemoveBackupAsyncTask extends AsyncTask<Void, String, String> {
 

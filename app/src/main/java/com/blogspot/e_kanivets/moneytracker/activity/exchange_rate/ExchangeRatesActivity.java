@@ -1,7 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.activity.exchange_rate;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;

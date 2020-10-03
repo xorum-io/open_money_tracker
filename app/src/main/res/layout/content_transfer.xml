@@ -25,13 +25,13 @@
             android:text="@string/from"
             android:theme="@style/Text_Hint" />
 
-        <android.support.v7.widget.AppCompatSpinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/spinner_from"
             android:layout_width="match_parent"
             android:layout_height="@dimen/spinner_height"
             tools:listitem="@layout/view_spinner_item" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_from_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -46,7 +46,7 @@
                 android:maxLines="1"
                 android:nextFocusDown="@+id/et_to_amount"
                 android:singleLine="true" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -63,13 +63,13 @@
             android:text="@string/to"
             android:theme="@style/Text_Hint" />
 
-        <android.support.v7.widget.AppCompatSpinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/spinner_to"
             android:layout_width="match_parent"
             android:layout_height="@dimen/spinner_height"
             tools:listitem="@layout/view_spinner_item" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_to_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -83,7 +83,7 @@
                 android:inputType="numberDecimal"
                 android:maxLines="1"
                 android:singleLine="true" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
 </LinearLayout>

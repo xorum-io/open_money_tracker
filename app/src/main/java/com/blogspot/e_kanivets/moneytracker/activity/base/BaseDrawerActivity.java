@@ -1,12 +1,12 @@
 package com.blogspot.e_kanivets.moneytracker.activity.base;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.blogspot.e_kanivets.moneytracker.R;
@@ -21,7 +21,7 @@ import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
 import butterknife.BindView;
 
 /**
- * Base implementation of {@link android.support.v7.app.AppCompatActivity} to encapsulate Navigation
+ * Base implementation of {@link androidx.appcompat.app.AppCompatActivity} to encapsulate Navigation
  * Drawer logic.
  * Created on 3/16/16.
  *

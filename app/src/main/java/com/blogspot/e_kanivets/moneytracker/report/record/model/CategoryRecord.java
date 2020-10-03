@@ -1,6 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.report.record.model;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;

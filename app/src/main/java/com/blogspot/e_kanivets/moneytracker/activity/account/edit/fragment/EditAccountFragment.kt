@@ -2,7 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.activity.account.edit.fragment
 
 import android.app.Activity
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.view.View
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.R.layout

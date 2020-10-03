@@ -2,7 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.entity.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.entity.base.BaseEntity;

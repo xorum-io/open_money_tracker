@@ -2,12 +2,12 @@ package com.blogspot.e_kanivets.moneytracker.activity.base;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.widget.Toast;
 
 import com.blogspot.e_kanivets.moneytracker.MtApp;
@@ -16,7 +16,7 @@ import com.blogspot.e_kanivets.moneytracker.di.AppComponent;
 import butterknife.ButterKnife;
 
 /**
- * Base implementation of {@link android.support.v7.app.AppCompatActivity} to describe some common
+ * Base implementation of {@link androidx.appcompat.app.AppCompatActivity} to describe some common
  * methods.
  * Created on 1/26/16.
  *

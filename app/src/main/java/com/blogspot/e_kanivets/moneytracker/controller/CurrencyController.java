@@ -1,6 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.controller;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;

@@ -69,6 +69,11 @@ android {
     }
     productFlavors {
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 apply plugin: 'com.getkeepsafe.dexcount'
@@ -80,15 +85,15 @@ dependencies {
         transitive = true
     }
 
-    compile 'com.android.support:support-v4:27.1.1'
-    compile 'com.android.support:appcompat-v7:27.1.1'
-    compile 'com.android.support:design:27.1.1'
-    compile 'com.jakewharton:butterknife:8.5.1' // View annotation bindings
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1' // ButterKnife compiler
+    compile 'androidx.legacy:legacy-support-v4:1.0.0'
+    compile 'androidx.appcompat:appcompat:1.0.0'
+    compile 'com.google.android.material:material:1.0.0'
+    compile 'com.jakewharton:butterknife:10.2.3' // View annotation bindings
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3' // ButterKnife compiler
     compile 'com.google.dagger:dagger:2.11' // Dependency injection tool
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.4' // Charts
     compile 'com.jakewharton.timber:timber:4.1.2' // Advanced logging tool
-    compile 'com.android.support.constraint:constraint-layout:1.1.3'
+    compile 'androidx.constraintlayout:constraintlayout:1.1.3'
     compile 'com.dropbox.core:dropbox-core-sdk:3.0.5' // Dropbox Core API
 
     testCompile 'junit:junit:4.12'
@@ -99,5 +104,5 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
     provided 'org.glassfish:javax.annotation:10.0-b28'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation 'androidx.cardview:cardview:1.0.0'
 }

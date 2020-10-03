@@ -1,7 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.util.validator;
 
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputLayout;
+import androidx.annotation.NonNull;
+import com.google.android.material.textfield.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 

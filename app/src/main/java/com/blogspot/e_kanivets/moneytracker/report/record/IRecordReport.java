@@ -1,6 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.report.record;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.entity.Period;
 import com.blogspot.e_kanivets.moneytracker.report.record.model.CategoryRecord;

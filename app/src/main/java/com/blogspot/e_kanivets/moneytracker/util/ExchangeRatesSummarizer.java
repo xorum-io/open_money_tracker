@@ -1,6 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.util;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRatePair;
 import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;

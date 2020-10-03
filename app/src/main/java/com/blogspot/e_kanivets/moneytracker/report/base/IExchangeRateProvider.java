@@ -1,6 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.report.base;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;

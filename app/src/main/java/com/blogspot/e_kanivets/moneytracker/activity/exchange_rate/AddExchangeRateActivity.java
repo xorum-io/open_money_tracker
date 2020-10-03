@@ -1,7 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.activity.exchange_rate;
 
-import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatSpinner;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatSpinner;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;

@@ -1,7 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.di.module;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.controller.backup.BackupController;
 import com.blogspot.e_kanivets.moneytracker.controller.external.ExportController;

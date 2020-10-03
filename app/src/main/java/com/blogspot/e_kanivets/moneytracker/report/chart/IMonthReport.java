@@ -1,7 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.report.chart;
 
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.List;
 

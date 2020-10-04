@@ -2,11 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.util;
 
 import android.content.Context;
 import androidx.annotation.Nullable;
-
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
-import io.fabric.sdk.android.Fabric;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 /**
  * Util class that wraps all Crashlytics interactions to disable Answers in
@@ -31,9 +27,10 @@ public class CrashlyticsProxy {
     }
 
     private boolean enabled;
+    private static FirebaseAnalytics analytics;
 
     public static void startCrashlytics(Context context) {
-        Fabric.with(context, new Crashlytics());
+        analytics = FirebaseAnalytics.getInstance(context);
     }
 
     public void setEnabled(boolean enabled) {
@@ -46,9 +43,7 @@ public class CrashlyticsProxy {
 
     public boolean logEvent(@Nullable String eventName) {
         if (enabled) {
-            Answers.getInstance().logContentView(new ContentViewEvent()
-                    .putContentName(eventName)
-                    .putContentType("Event"));
+            analytics.logEvent(eventName, null);
             return true;
         } else {
             return false;
@@ -57,9 +52,7 @@ public class CrashlyticsProxy {
 
     public boolean logButton(@Nullable String buttonName) {
         if (enabled) {
-            Answers.getInstance().logContentView(new ContentViewEvent()
-                    .putContentName(buttonName)
-                    .putContentType("Button"));
+            analytics.logEvent(buttonName, null);
             return true;
         } else {
             return false;

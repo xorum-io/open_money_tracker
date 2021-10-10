@@ -88,7 +88,7 @@
     <string name="backup_is_restored">Restauration effectuée</string>
     <string name="warning">Attention</string>
     <string name="want_erase_and_restore">Êtes-vous sûr de vouloir écraser les données courantes avec celles du fichier %1$s ? Assurez-vous d\'avoir une sauvegarde des données courantes.</string>
-    <string name="backup_now">Restaurer maintenant</string>
+    <string name="backup_now">Sauvegarder maintenant</string>
 
     <string name="title_edit_income">Éditer le revenu</string>
     <string name="title_edit_expense">Éditer la dépense</string>

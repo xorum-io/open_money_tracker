@@ -35,7 +35,7 @@ class AccountOperationsFragment : BaseFragment() {
 
     override fun initData() {
         appComponent.inject(this@AccountOperationsFragment)
-        arguments?.let { arguments -> account = arguments.getParcelable(KEY_ACCOUNT) }
+        arguments?.let { arguments -> account = arguments.getParcelable(KEY_ACCOUNT)!! }
     }
 
     override fun initViews(view: View) {

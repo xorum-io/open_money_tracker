@@ -73,7 +73,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v2.2.4' // Charts
     implementation 'com.jakewharton.timber:timber:4.7.1' // Advanced logging tool
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
-    implementation 'com.dropbox.core:dropbox-core-sdk:3.0.5' // Dropbox Core API
+    implementation 'com.dropbox.core:dropbox-core-sdk:4.0.0' // Dropbox Core API
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.mockito:mockito-core:3.5.13'

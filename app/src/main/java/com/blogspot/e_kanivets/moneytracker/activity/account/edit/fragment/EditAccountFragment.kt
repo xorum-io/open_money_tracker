@@ -31,7 +31,7 @@ class EditAccountFragment : BaseFragment() {
 
     override fun initData() {
         appComponent.inject(this@EditAccountFragment)
-        arguments?.let { arguments -> account = arguments.getParcelable(KEY_ACCOUNT) }
+        arguments?.let { arguments -> account = arguments.getParcelable(KEY_ACCOUNT)!! }
     }
 
     override fun initViews(view: View) {
@@ -42,7 +42,7 @@ class EditAccountFragment : BaseFragment() {
         val fabDone = view.rootView.findViewById<FloatingActionButton>(R.id.fabDone)
         fabDone.setOnClickListener { done() }
 
-        accountValidator = EditAccountValidator(context!!, view)
+        accountValidator = EditAccountValidator(requireContext(), view)
     }
 
     private fun done() {

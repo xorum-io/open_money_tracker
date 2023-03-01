@@ -82,7 +82,7 @@
     2. Copie o seu conteúdo para o campo de texto.\n
     3. Pressione o botão de importar. Em alguns segundos você verá quantos registros foram importados.\n
     \n
-    <b>Nota:</b> hora - o valor deve ser em milissegundos; moeda - código de 3 símbolos da moeda.\n
+    <b>Nota:</b> hora - o valor deve ser em milissegundos;Account_id padrão é 1 e para cada nova conta aumenta em 1; Verifique se todas as contas já existem; moeda - código de 3 símbolos da moeda.\n
     <b>Exemplo:</b> 1466948795712;metrô;transporte;-20.0;BRL</string>
 
     <string name="slash" translatable="false">/</string>

@@ -344,7 +344,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 + TYPE_COLUMN + " INTEGER,"
                 + TITLE_COLUMN + " TEXT,"
                 + CATEGORY_ID_COLUMN + " INTEGER,"
-                + NOTES_COLUMN + "TEXT,"
+                + NOTES_COLUMN + " TEXT,"
                 + PRICE_COLUMN + " INTEGER,"
                 + ACCOUNT_ID_COLUMN + " INTEGER,"
                 + CURRENCY_COLUMN + " TEXT,"

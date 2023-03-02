@@ -10,8 +10,9 @@ public interface Head {
     String TIME = "time";
     String TITLE = "title";
     String CATEGORY = "category";
+    String NOTES = "notes";
     String PRICE = "price";
     String CURRENCY = "currency";
     String DELIMITER = ";";
-    int COLUMN_COUNT = 5;
+    int COLUMN_COUNT = 7;
 }

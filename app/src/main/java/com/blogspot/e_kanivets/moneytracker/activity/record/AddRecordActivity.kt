@@ -92,6 +92,7 @@ class AddRecordActivity : BaseBackActivity() {
             record?.let { record ->
                 etTitle.setText(record.title)
                 etCategory.setText(record.category?.name.orEmpty())
+                etNotes.setText(record.notes)
                 etPrice.setText(formatController.formatPrecisionNone(record.fullPrice))
             }
         }
@@ -102,6 +103,7 @@ class AddRecordActivity : BaseBackActivity() {
         // Restrict ';' for input, because it's used as delimiter when exporting
         etTitle.filters = arrayOf<InputFilter>(SemicolonInputFilter())
         etCategory.filters = arrayOf<InputFilter>(SemicolonInputFilter())
+        etNotes.filters = arrayOf<InputFilter>(SemicolonInputFilter())
 
         tvDate.setOnClickListener { selectDate() }
         tvTime.setOnClickListener { selectTime() }
@@ -262,6 +264,7 @@ class AddRecordActivity : BaseBackActivity() {
 
             var title = etTitle.text.toString().trim()
             val category = etCategory.text.toString().trim()
+            val notes = etNotes.text.toString().trim()
             val price = etPrice.text.toString().toDouble()
             val account = accountList[spinnerAccount.selectedItemPosition]
 
@@ -271,10 +274,10 @@ class AddRecordActivity : BaseBackActivity() {
 
             if (mode == Mode.MODE_ADD) {
                 recordController.create(Record(timestamp, type, title,
-                        Category(category), price, account, account.currency))
+                        Category(category), notes, price, account, account.currency))
             } else if (mode == Mode.MODE_EDIT) {
                 recordController.update(Record(record?.id ?: -1,
-                        timestamp, type, title, Category(category), price, account, account.currency))
+                        timestamp, type, title, Category(category), notes, price, account, account.currency))
             }
 
             autoCompleter.addRecordTitleCategoryPair(title, category)

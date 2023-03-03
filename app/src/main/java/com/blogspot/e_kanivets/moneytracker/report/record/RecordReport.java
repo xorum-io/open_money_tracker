@@ -141,8 +141,8 @@ public class RecordReport implements IRecordReport {
             int decConvertedPrice = (int) Math.round(convertedPrice * 100 - intConvertedPrice * 100);
 
             Record convertedRecord = new Record(record.getId(), record.getTime(), record.getType(),
-                    record.getTitle(), record.getCategory(), intConvertedPrice, record.getAccount(),
-                    currency, decConvertedPrice);
+                    record.getTitle(), record.getCategory(), record.getNotes(), intConvertedPrice,
+                    record.getAccount(), currency, decConvertedPrice);
 
             convertedRecordList.add(convertedRecord);
         }

@@ -131,4 +131,5 @@
     <string name="operations">Операції</string>
 
     <string name="start_earlier_end">Дата початку не може бути раніше за дату кінця</string>
+    <string name="notes">Нотатки</string>
 </resources>

@@ -124,7 +124,7 @@ public class Record extends BaseEntity implements Parcelable {
         return category;
     }
 
-    @Nullable
+
     public String getNotes() { return  notes; }
 
     public long getPrice() {

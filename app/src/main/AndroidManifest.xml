@@ -30,7 +30,7 @@
             android:name=".activity.record.AddRecordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.account.AddAccountActivity"
             android:label="@string/title_add_account"

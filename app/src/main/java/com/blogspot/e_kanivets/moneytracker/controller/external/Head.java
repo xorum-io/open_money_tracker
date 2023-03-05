@@ -8,10 +8,11 @@ package com.blogspot.e_kanivets.moneytracker.controller.external;
  */
 public interface Head {
     String TIME = "time";
+    String ACCOUNT_ID = "account_id";
     String TITLE = "title";
     String CATEGORY = "category";
     String PRICE = "price";
     String CURRENCY = "currency";
     String DELIMITER = ";";
-    int COLUMN_COUNT = 5;
+    int COLUMN_COUNT = 6;
 }

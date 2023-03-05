@@ -70,7 +70,7 @@
     2. Copier son contenu dans le champ de saisie.\n
     3. Appuyer sur importer. Au bout de quelques secondes, le nombre d\'opérations importées est affiché.\n
     \n
-    <b>Note :</b> date - horodatage en millisecondes ; devise - code devise à 3 lettres.\n
+    <b>Note :</b> date - horodatage en millisecondes ;Le account_id par défaut est 1 et pour chaque nouveau compte, il augmente de 1;Assurez-vous que tous les comptes existent déjà; devise - code devise à 3 lettres.\n
     <b>Exemple :</b> 1466948795712;métro;transport;-20.0;EUR</string>
 
     <string name="bank_sells">Banque achète</string>

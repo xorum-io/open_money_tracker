@@ -35,13 +35,15 @@ public class ImportController {
             if (words.length != Head.COLUMN_COUNT) continue;
 
             String timeCol = words[0];
-            String titleCol = words[1];
-            String categoryCol = words[2];
-            String priceCol = words[3];
-            String currencyCol = words[4];
+            String accountIdCol = words[1];
+            String titleCol = words[2];
+            String categoryCol = words[3];
+            String priceCol = words[4];
+            String currencyCol = words[5];
 
             try {
                 long time = Long.parseLong(timeCol);
+                long accountId = Long.parseLong(accountIdCol);
                 String title = titleCol.trim();
                 String categoryName = categoryCol.trim();
                 double price = Double.parseDouble(priceCol);
@@ -55,7 +57,7 @@ public class ImportController {
                 else type = Record.TYPE_INCOME;
 
                 Category category = new Category(categoryName);
-                Account account = new Account(-1, "MOCK", -1, currency, 0, -1, false, 0);
+                Account account = new Account(accountId, "MOCK", -1, currency, 0, -1, false, 0);
 
                 Record record = new Record(time, type, title, category, Math.abs(price), account, currency);
                 Record createdRecord = recordController.create(record);

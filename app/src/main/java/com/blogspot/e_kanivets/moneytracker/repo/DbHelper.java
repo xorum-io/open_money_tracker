@@ -169,6 +169,14 @@ public class DbHelper extends SQLiteOpenHelper {
             /* Add notes column to the records table */
             db.execSQL("ALTER TABLE " + TABLE_RECORDS + " ADD COLUMN "
                     + NOTES_COLUMN + " TEXT;");
+
+            /* Set the notes as empty string for all the record*/
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(NOTES_COLUMN, "");
+            db.update(DbHelper.TABLE_RECORDS, contentValues, null, null);
+
+            db.setTransactionSuccessful();
+            db.endTransaction();
         }
     }
 

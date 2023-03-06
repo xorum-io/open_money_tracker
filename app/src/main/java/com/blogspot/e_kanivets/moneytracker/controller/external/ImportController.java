@@ -45,6 +45,7 @@ public class ImportController {
 
             try {
                 long time = Long.parseLong(timeCol);
+                long accountId = Long.parseLong(accountIdCol);
                 String title = titleCol.trim();
                 String categoryName = categoryCol.trim();
                 String notes = notesCol.trim();
@@ -59,7 +60,7 @@ public class ImportController {
                 else type = Record.TYPE_INCOME;
 
                 Category category = new Category(categoryName);
-                Account account = new Account(-1, "MOCK", -1, currency, 0, -1, false, 0);
+                Account account = new Account(accountId, "MOCK", -1, currency, 0, -1, false, 0);
 
                 Record record = new Record(time, type, title, category, notes, Math.abs(price), account, currency);
                 Record createdRecord = recordController.create(record);

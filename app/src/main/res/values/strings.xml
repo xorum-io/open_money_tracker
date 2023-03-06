@@ -79,12 +79,12 @@
     <string name="help">Help</string>
     <string name="import_help">To import records into application:\n
     1. Create CSV file in format - \n
-    <b>time;title;category;price;currency.</b>\n
+    <b>time;account_id;title;category;price;currency.</b>\n
     2. Copy its content to text field.\n
     3. Press import button. In few seconds you will see how much records has been imported.\n
     \n
-    <b>Note:</b> time - timestamp value in milliseconds; currency - 3 symbols code of currency.\n
-    <b>Example:</b> 1466948795712;metro;transport;-20.0;UAH</string>
+    <b>Note:</b> time - timestamp value in milliseconds; Default account_id is 1 and for every new account it increases by 1; Make sure all the accounts already exists; currency - 3 symbols code of currency.\n
+    <b>Example:</b> 1466948795712;1;metro;transport;-20.0;UAH</string>
 
     <string name="slash" translatable="false">/</string>
     <string name="bank_sells">Bank sells</string>

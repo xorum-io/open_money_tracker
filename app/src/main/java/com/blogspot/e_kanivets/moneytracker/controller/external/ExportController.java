@@ -31,6 +31,7 @@ public class ExportController {
         @SuppressWarnings("StringBufferReplaceableByString")
         StringBuilder sb = new StringBuilder();
         sb.append(Head.TIME).append(Head.DELIMITER);
+        sb.append(Head.ACCOUNT_ID).append(Head.DELIMITER);
         sb.append(Head.TITLE).append(Head.DELIMITER);
         sb.append(Head.CATEGORY).append(Head.DELIMITER);
         sb.append(Head.NOTES).append(Head.DELIMITER);
@@ -47,6 +48,12 @@ public class ExportController {
         for (Record record : recordList) {
             sb = new StringBuilder();
             sb.append(record.getTime()).append(Head.DELIMITER);
+
+            long account_id = -1;
+            if (record.getAccount() != null)
+                account_id = record.getAccount().getId();
+
+            sb.append(account_id).append(Head.DELIMITER);
             sb.append(record.getTitle()).append(Head.DELIMITER);
 
             Category category = null;

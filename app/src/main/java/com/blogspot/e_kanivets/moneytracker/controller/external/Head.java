@@ -8,6 +8,7 @@ package com.blogspot.e_kanivets.moneytracker.controller.external;
  */
 public interface Head {
     String TIME = "time";
+    String ACCOUNT_ID = "account_id";
     String TITLE = "title";
     String CATEGORY = "category";
     String NOTES = "notes";

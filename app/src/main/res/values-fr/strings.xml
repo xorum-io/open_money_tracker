@@ -131,4 +131,5 @@
 
     <string name="start_earlier_end">La date de fin ne peut être antérieure à celle de début</string>
     <string name="notes">Notes</string>
+    <string name="account_transfer">Transfert de compte</string>
 </resources>

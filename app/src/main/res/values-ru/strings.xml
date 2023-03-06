@@ -132,5 +132,6 @@
 
   <string name="start_earlier_end">Дата конца не может быть раньше даты начала</string>
   <string name="notes">примечания</string>
+  <string name="account_transfer">Перевод счета</string>
 
 </resources>

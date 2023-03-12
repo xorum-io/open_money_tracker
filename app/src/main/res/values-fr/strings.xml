@@ -130,4 +130,6 @@
     <string name="delete_backup_message">Êtes-vous sûr de vouloir supprimer le fichier %1$s ? Il ne pourra plus être restauré.</string>
 
     <string name="start_earlier_end">La date de fin ne peut être antérieure à celle de début</string>
+    <string name="notes">Notes</string>
+    <string name="account_transfer">Transfert de compte</string>
 </resources>

@@ -44,6 +44,7 @@ public class RecordRepo extends BaseRepo<Record> {
         contentValues.put(DbHelper.TYPE_COLUMN, record.getType());
         contentValues.put(DbHelper.TITLE_COLUMN, record.getTitle());
         contentValues.put(DbHelper.CATEGORY_ID_COLUMN, record.getCategory().getId());
+        contentValues.put(DbHelper.NOTES_COLUMN, record.getNotes());
         contentValues.put(DbHelper.PRICE_COLUMN, record.getPrice());
         contentValues.put(DbHelper.ACCOUNT_ID_COLUMN, record.getAccount().getId());
         contentValues.put(DbHelper.CURRENCY_COLUMN, record.getCurrency());
@@ -64,6 +65,7 @@ public class RecordRepo extends BaseRepo<Record> {
             int typeColIndex = cursor.getColumnIndex(DbHelper.TYPE_COLUMN);
             int titleColIndex = cursor.getColumnIndex(DbHelper.TITLE_COLUMN);
             int categoryColIndex = cursor.getColumnIndex(DbHelper.CATEGORY_ID_COLUMN);
+            int notesColIndex = cursor.getColumnIndex(DbHelper.NOTES_COLUMN);
             int priceColIndex = cursor.getColumnIndex(DbHelper.PRICE_COLUMN);
             int accountIdColIndex = cursor.getColumnIndex(DbHelper.ACCOUNT_ID_COLUMN);
             int currencyColIndex = cursor.getColumnIndex(DbHelper.CURRENCY_COLUMN);
@@ -75,6 +77,7 @@ public class RecordRepo extends BaseRepo<Record> {
                         cursor.getInt(typeColIndex),
                         cursor.getString(titleColIndex),
                         cursor.getLong(categoryColIndex),
+                        cursor.getString(notesColIndex),
                         cursor.getLong(priceColIndex),
                         cursor.getLong(accountIdColIndex),
                         cursor.getString(currencyColIndex),

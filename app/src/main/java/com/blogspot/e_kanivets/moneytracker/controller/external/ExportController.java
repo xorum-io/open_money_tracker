@@ -34,6 +34,7 @@ public class ExportController {
         sb.append(Head.ACCOUNT_ID).append(Head.DELIMITER);
         sb.append(Head.TITLE).append(Head.DELIMITER);
         sb.append(Head.CATEGORY).append(Head.DELIMITER);
+        sb.append(Head.NOTES).append(Head.DELIMITER);
         sb.append(Head.PRICE).append(Head.DELIMITER);
         sb.append(Head.CURRENCY);
 
@@ -60,6 +61,7 @@ public class ExportController {
                 category = categoryController.read(record.getCategory().getId());
 
             sb.append(category == null ? "NONE" : category.getName()).append(Head.DELIMITER);
+            sb.append(record.getNotes()).append(Head.DELIMITER);
             sb.append(record.getType() == 0 ? record.getFullPrice()
                     : -record.getFullPrice()).append(Head.DELIMITER);
             sb.append(record.getCurrency() == null ? DbHelper.DEFAULT_ACCOUNT_CURRENCY

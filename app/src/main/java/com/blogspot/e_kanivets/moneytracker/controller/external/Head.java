@@ -11,8 +11,9 @@ public interface Head {
     String ACCOUNT_ID = "account_id";
     String TITLE = "title";
     String CATEGORY = "category";
+    String NOTES = "notes";
     String PRICE = "price";
     String CURRENCY = "currency";
     String DELIMITER = ";";
-    int COLUMN_COUNT = 6;
+    int COLUMN_COUNT = 7;
 }

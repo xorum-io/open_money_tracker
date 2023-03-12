@@ -15,7 +15,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     /* DB_VERSION = 1 */
     public static final String DB_NAME = "database";
-    public static final int DB_VERSION = 5;
+    public static final int DB_VERSION = 6;
     public static final String TABLE_RECORDS = "records";
     public static final String TABLE_CATEGORIES = "categories";
 
@@ -59,6 +59,9 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String ARCHIVED_COLUMN = "archived";
     public static final String COLOR_COLUMN = "color";
 
+    /* DB_VERSION = 6 */
+    public static final String NOTES_COLUMN = "notes";
+
     public DbHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
@@ -69,7 +72,8 @@ public class DbHelper extends SQLiteOpenHelper {
         //createDbVersion2(db);
         //createDbVersion3(db);
         //createDbVersion4(db);
-        createDbVersion5(db);
+        //createDbVersion5(db);
+        createDbVersion6(db);
     }
 
     @Override
@@ -154,6 +158,22 @@ public class DbHelper extends SQLiteOpenHelper {
             /* Add color column to the accounts table */
             db.execSQL("ALTER TABLE " + TABLE_ACCOUNTS + " ADD COLUMN "
                     + COLOR_COLUMN + " INTEGER;");
+
+            db.setTransactionSuccessful();
+            db.endTransaction();
+        }
+
+        if (oldVersion < 6) {
+            db.beginTransaction();
+
+            /* Add notes column to the records table */
+            db.execSQL("ALTER TABLE " + TABLE_RECORDS + " ADD COLUMN "
+                    + NOTES_COLUMN + " TEXT;");
+
+            /* Set the notes as empty string for all the record*/
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(NOTES_COLUMN, "");
+            db.update(DbHelper.TABLE_RECORDS, contentValues, null, null);
 
             db.setTransactionSuccessful();
             db.endTransaction();
@@ -290,6 +310,49 @@ public class DbHelper extends SQLiteOpenHelper {
                 + TYPE_COLUMN + " INTEGER,"
                 + TITLE_COLUMN + " TEXT,"
                 + CATEGORY_ID_COLUMN + " INTEGER,"
+                + PRICE_COLUMN + " INTEGER,"
+                + ACCOUNT_ID_COLUMN + " INTEGER,"
+                + CURRENCY_COLUMN + " TEXT,"
+                + DECIMALS_COLUMN + " INTEGER);");
+
+        db.execSQL("CREATE TABLE " + TABLE_CATEGORIES + "("
+                + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + NAME_COLUMN + " TEXT" + ");");
+
+        db.execSQL("CREATE TABLE " + TABLE_ACCOUNTS + "("
+                + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + CREATED_AT_COLUMN + " INTEGER,"
+                + TITLE_COLUMN + " TEXT,"
+                + CUR_SUM_COLUMN + " INTEGER,"
+                + CURRENCY_COLUMN + " TEXT,"
+                + DECIMALS_COLUMN + " INTEGER,"
+                + GOAL_COLUMN + " REAL,"
+                + ARCHIVED_COLUMN + " INTEGER,"
+                + COLOR_COLUMN + " INTEGER);");
+
+        db.execSQL("CREATE TABLE " + TABLE_TRANSFERS + "("
+                + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + TIME_COLUMN + " INTEGER,"
+                + FROM_ACCOUNT_ID_COLUMN + " INTEGER,"
+                + TO_ACCOUNT_ID_COLUMN + " INTEGER,"
+                + FROM_AMOUNT_COLUMN + " INTEGER,"
+                + TO_AMOUNT_COLUMN + " INTEGER,"
+                + DECIMALS_FROM_COLUMN + " INTEGER,"
+                + DECIMALS_TO_COLUMN + " INTEGER);");
+
+        createRatesTable(db);
+
+        insertDefaultAccount(db);
+    }
+
+    private void createDbVersion6(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + TABLE_RECORDS + "("
+                + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + TIME_COLUMN + " INTEGER,"
+                + TYPE_COLUMN + " INTEGER,"
+                + TITLE_COLUMN + " TEXT,"
+                + CATEGORY_ID_COLUMN + " INTEGER,"
+                + NOTES_COLUMN + " TEXT,"
                 + PRICE_COLUMN + " INTEGER,"
                 + ACCOUNT_ID_COLUMN + " INTEGER,"
                 + CURRENCY_COLUMN + " TEXT,"

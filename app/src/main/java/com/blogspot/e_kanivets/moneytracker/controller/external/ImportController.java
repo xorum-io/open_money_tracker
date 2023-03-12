@@ -38,14 +38,17 @@ public class ImportController {
             String accountIdCol = words[1];
             String titleCol = words[2];
             String categoryCol = words[3];
-            String priceCol = words[4];
-            String currencyCol = words[5];
+            String notesCol = words[4];
+            String priceCol = words[5];
+            String currencyCol = words[6];
+
 
             try {
                 long time = Long.parseLong(timeCol);
                 long accountId = Long.parseLong(accountIdCol);
                 String title = titleCol.trim();
                 String categoryName = categoryCol.trim();
+                String notes = notesCol.trim();
                 double price = Double.parseDouble(priceCol);
                 String currency = currencyCol.trim();
 
@@ -59,7 +62,7 @@ public class ImportController {
                 Category category = new Category(categoryName);
                 Account account = new Account(accountId, "MOCK", -1, currency, 0, -1, false, 0);
 
-                Record record = new Record(time, type, title, category, Math.abs(price), account, currency);
+                Record record = new Record(time, type, title, category, notes, Math.abs(price), account, currency);
                 Record createdRecord = recordController.create(record);
                 if (createdRecord != null) recordList.add(createdRecord);
             } catch (Exception e) {

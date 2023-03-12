@@ -59,10 +59,11 @@ class AccountOperationsFragment : BaseFragment() {
             val type = if (it.fromAccountId == account.id) Record.TYPE_EXPENSE else Record.TYPE_INCOME
             val title = constructRecordTitle(type, it)
             val category = Category(getString(R.string.transfer).toLowerCase())
+            val notes = getString(R.string.account_transfer)
             val price = if (type == Record.TYPE_EXPENSE) it.fromAmount else it.toAmount
             val decimals = if (type == Record.TYPE_EXPENSE) it.fromDecimals else it.toDecimals
 
-            records += Record(it.id, it.time, type, title, category, price, account, account.currency, decimals)
+            records += Record(it.id, it.time, type, title, category, notes, price, account, account.currency, decimals)
         }
 
         return records.toList()

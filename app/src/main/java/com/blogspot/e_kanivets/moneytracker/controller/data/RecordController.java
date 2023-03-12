@@ -115,7 +115,7 @@ public class RecordController extends BaseController<Record> {
 
             completedRecordList.add(
                     new Record(record.getId(), record.getTime(), record.getType(), record.getTitle(), category,
-                            record.getPrice(), account, currency, record.getDecimals()));
+                            record.getNotes(), record.getPrice(), account, currency, record.getDecimals()));
         }
 
         return completedRecordList;
@@ -143,6 +143,6 @@ public class RecordController extends BaseController<Record> {
         Category category = categoryController.readOrCreate(record.getCategory().getName());
 
         return new Record(record.getId(), record.getTime(), record.getType(), record.getTitle(), category,
-                record.getPrice(), record.getAccount(), record.getCurrency(), record.getDecimals());
+                record.getNotes(), record.getPrice(), record.getAccount(), record.getCurrency(), record.getDecimals());
     }
 }

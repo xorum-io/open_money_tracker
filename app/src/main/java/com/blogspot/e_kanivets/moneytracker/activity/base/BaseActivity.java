@@ -1,8 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.activity.base;
 
 import android.app.ProgressDialog;
-import android.os.Bundle;
-import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
@@ -13,15 +11,6 @@ import android.widget.Toast;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.di.AppComponent;
 
-import butterknife.ButterKnife;
-
-/**
- * Base implementation of {@link androidx.appcompat.app.AppCompatActivity} to describe some common
- * methods.
- * Created on 1/26/16.
- *
- * @author Evgenii Kanivets
- */
 public abstract class BaseActivity extends AppCompatActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "BaseActivity";
@@ -29,29 +18,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     private Toolbar toolbar;
     protected ProgressDialog progressDialog;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(getContentViewId());
-
-        if (initData()) initViews();
-        else finish();
-    }
-
-    @LayoutRes
-    protected abstract int getContentViewId();
-
     protected AppComponent getAppComponent() {
         return MtApp.get().getAppComponent();
-    }
-
-    protected boolean initData() {
-        return true;
-    }
-
-    protected void initViews() {
-        ButterKnife.bind(BaseActivity.this);
-        toolbar = initToolbar();
     }
 
     public Toolbar getToolbar() {

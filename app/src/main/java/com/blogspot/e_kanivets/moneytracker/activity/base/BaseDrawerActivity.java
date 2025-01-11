@@ -3,10 +3,14 @@ package com.blogspot.e_kanivets.moneytracker.activity.base;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import com.google.android.material.navigation.NavigationView;
+
+import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+
+import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.blogspot.e_kanivets.moneytracker.R;
@@ -18,26 +22,16 @@ import com.blogspot.e_kanivets.moneytracker.activity.account.AccountsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.exchange_rate.ExchangeRatesActivity;
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
 
-import butterknife.BindView;
-
-/**
- * Base implementation of {@link androidx.appcompat.app.AppCompatActivity} to encapsulate Navigation
- * Drawer logic.
- * Created on 3/16/16.
- *
- * @author Evgenii Kanivets
- */
 public abstract class BaseDrawerActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
     private static final int REQUEST_ACCOUNTS = 1;
     private static final int REQUEST_RATES = 2;
     private static final int REQUEST_SETTINGS = 3;
     private static final int REQUEST_IMPORT_EXPORT = 4;
     protected static final int REQUEST_BACKUP = 5;
 
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawer;
-    @BindView(R.id.nav_view)
+    protected DrawerLayout drawer;
     protected NavigationView navigationView;
 
     protected abstract void update();
@@ -62,12 +56,6 @@ public abstract class BaseDrawerActivity extends BaseActivity
         toggle.syncState();
 
         return toolbar;
-    }
-
-    @Override
-    protected void initViews() {
-        super.initViews();
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override

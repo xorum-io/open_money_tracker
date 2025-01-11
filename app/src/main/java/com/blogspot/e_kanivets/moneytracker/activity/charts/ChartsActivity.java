@@ -1,6 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.activity.charts;
 
-import com.google.android.material.tabs.TabLayout;
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivityChartsBinding;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -20,32 +20,34 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-
 public class ChartsActivity extends BaseBackActivity {
 
     @Inject RecordController recordController;
     @Inject ExchangeRateController exchangeRateController;
     @Inject CurrencyController currencyController;
 
-    @BindView(R.id.tabs) TabLayout tabLayout;
-    @BindView(R.id.view_pager) ViewPager viewPager;
+    private ActivityChartsBinding binding;
 
-    @Override protected int getContentViewId() {
-        return R.layout.activity_charts;
+    @Override
+    protected void onCreate(android.os.Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        binding = ActivityChartsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        initData();
+        initToolbar();
+        initViews();
     }
 
-    @Override protected boolean initData() {
-        boolean result = super.initData();
+    private boolean initData() {
         getAppComponent().inject(ChartsActivity.this);
-        return result;
+        return true;
     }
 
-    @Override protected void initViews() {
-        super.initViews();
-
-        setupViewPager(viewPager);
-        tabLayout.setupWithViewPager(viewPager);
+    private void initViews() {
+        setupViewPager(binding.viewPager);
+        binding.tabs.setupWithViewPager(binding.viewPager);
     }
 
     protected String createRatesNeededList(String currency, List<String> ratesNeeded) {

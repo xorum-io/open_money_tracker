@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.res.ColorStateList
+import android.os.Bundle
 import androidx.core.content.ContextCompat
 import android.text.InputFilter
 import android.text.Spanned
@@ -23,6 +24,7 @@ import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.controller.data.CategoryController
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivityAddRecordBinding
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
 import com.blogspot.e_kanivets.moneytracker.entity.data.Category
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
@@ -31,8 +33,6 @@ import com.blogspot.e_kanivets.moneytracker.util.CategoryAutoCompleter
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator
 import com.blogspot.e_kanivets.moneytracker.util.validator.RecordValidator
-import kotlinx.android.synthetic.main.activity_add_record.*
-import kotlinx.android.synthetic.main.content_add_record.*
 import java.util.*
 import javax.inject.Inject
 
@@ -47,12 +47,16 @@ class AddRecordActivity : BaseBackActivity() {
 
     @Inject
     lateinit var categoryController: CategoryController
+
     @Inject
     lateinit var recordController: RecordController
+
     @Inject
     lateinit var accountController: AccountController
+
     @Inject
     lateinit var formatController: FormatController
+
     @Inject
     lateinit var preferenceController: PreferenceController
 
@@ -60,11 +64,20 @@ class AddRecordActivity : BaseBackActivity() {
     private lateinit var uiDecorator: AddRecordUiDecorator
     private lateinit var autoCompleter: CategoryAutoCompleter
 
-    override fun getContentViewId() = R.layout.activity_add_record
+    private lateinit var binding: ActivityAddRecordBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    override fun initData(): Boolean {
-        super.initData()
+        binding = ActivityAddRecordBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        initData()
+        initToolbar()
+        initViews()
+    }
+
+    private fun initData(): Boolean {
         appComponent.inject(this)
 
         record = intent.getParcelableExtra(KEY_RECORD)
@@ -75,14 +88,12 @@ class AddRecordActivity : BaseBackActivity() {
         timestamp = record?.time ?: Date().time
 
         return (mode != null && (type == Record.TYPE_INCOME || type == Record.TYPE_EXPENSE)
-                && ((mode == Mode.MODE_EDIT && record != null) || (mode == Mode.MODE_ADD && record == null)))
+            && ((mode == Mode.MODE_EDIT && record != null) || (mode == Mode.MODE_ADD && record == null)))
     }
 
     @SuppressLint("SetTextI18n")
-    override fun initViews() {
-        super.initViews()
-
-        recordValidator = RecordValidator(this, contentView)
+    private fun initViews() {
+        recordValidator = RecordValidator(this, binding)
         autoCompleter = CategoryAutoCompleter(categoryController, preferenceController)
         uiDecorator = AddRecordUiDecorator(this)
 
@@ -90,10 +101,10 @@ class AddRecordActivity : BaseBackActivity() {
 
         if (mode == Mode.MODE_EDIT) {
             record?.let { record ->
-                etTitle.setText(record.title)
-                etCategory.setText(record.category?.name.orEmpty())
-                etNotes.setText(record.notes)
-                etPrice.setText(formatController.formatPrecisionNone(record.fullPrice))
+                binding.etTitle.setText(record.title)
+                binding.etCategory.setText(record.category?.name.orEmpty())
+                binding.etNotes.setText(record.notes)
+                binding.etPrice.setText(formatController.formatPrecisionNone(record.fullPrice))
             }
         }
 
@@ -101,46 +112,41 @@ class AddRecordActivity : BaseBackActivity() {
         presentSpinnerAccount()
 
         // Restrict ';' for input, because it's used as delimiter when exporting
-        etTitle.filters = arrayOf<InputFilter>(SemicolonInputFilter())
-        etCategory.filters = arrayOf<InputFilter>(SemicolonInputFilter())
-        etNotes.filters = arrayOf<InputFilter>(SemicolonInputFilter())
+        binding.etTitle.filters = arrayOf<InputFilter>(SemicolonInputFilter())
+        binding.etCategory.filters = arrayOf<InputFilter>(SemicolonInputFilter())
+        binding.etNotes.filters = arrayOf<InputFilter>(SemicolonInputFilter())
 
-        tvDate.setOnClickListener { selectDate() }
-        tvTime.setOnClickListener { selectTime() }
+        binding.tvDate.setOnClickListener { selectDate() }
+        binding.tvTime.setOnClickListener { selectTime() }
 
-        if (type == Record.TYPE_EXPENSE) {
-            fabDone.backgroundTintList = (getColorForFab(R.color.red_light))
-        } else {
-            fabDone.backgroundTintList = (getColorForFab(R.color.green_light))
-        }
-
-        fabDone.setOnClickListener { tryRecord() }
+        binding.fabDone.backgroundTintList = ColorStateList.valueOf(
+            ContextCompat.getColor(this, if (type == Record.TYPE_EXPENSE) R.color.red_light else R.color.green_light)
+        )
+        binding.fabDone.setOnClickListener { tryRecord() }
 
         updateDateAndTime()
     }
 
-    private fun getColorForFab(color: Int): ColorStateList {
-        return ColorStateList.valueOf(ContextCompat.getColor(this, color))
-    }
-
     private fun initCategoryAutocomplete() {
         val categoryAutoCompleteAdapter = CategoryAutoCompleteAdapter(
-                this, R.layout.view_category_item, autoCompleter)
-        etCategory.setAdapter(categoryAutoCompleteAdapter)
-        etCategory.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            etCategory.setText(parent.adapter.getItem(position) as String)
-            etCategory.setSelection(etCategory.text.length)
-        }
-        etCategory.setOnEditorActionListener { v, actionId, event ->
+            this, R.layout.view_category_item, autoCompleter
+        )
+        binding.etCategory.setAdapter(categoryAutoCompleteAdapter)
+        binding.etCategory.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                binding.etCategory.setText(parent.adapter.getItem(position) as String)
+                binding.etCategory.setSelection(binding.etCategory.text.length)
+            }
+        binding.etCategory.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) tryRecord()
             false
         }
-        etCategory.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
-            if (hasFocus && etCategory.text.toString().trim().isEmpty()) {
-                val title = etTitle.text.toString().trim()
+        binding.etCategory.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
+            if (hasFocus && binding.etCategory.text.toString().trim().isEmpty()) {
+                val title = binding.etTitle.text.toString().trim()
                 autoCompleter.completeByRecordTitle(title)?.let { prediction ->
-                    etCategory.setText(prediction)
-                    etCategory.selectAll()
+                    binding.etCategory.setText(prediction)
+                    binding.etCategory.selectAll()
                 }
             }
         }
@@ -180,21 +186,22 @@ class AddRecordActivity : BaseBackActivity() {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = timestamp
         val dialog = DatePickerDialog(this, uiDecorator.getTheme(type),
-                DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                    val newCalendar = Calendar.getInstance()
-                    newCalendar.timeInMillis = timestamp
-                    newCalendar.set(Calendar.YEAR, year)
-                    newCalendar.set(Calendar.MONTH, monthOfYear)
-                    newCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            { view, year, monthOfYear, dayOfMonth ->
+                val newCalendar = Calendar.getInstance()
+                newCalendar.timeInMillis = timestamp
+                newCalendar.set(Calendar.YEAR, year)
+                newCalendar.set(Calendar.MONTH, monthOfYear)
+                newCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-                    if (newCalendar.timeInMillis < Date().time) {
-                        timestamp = newCalendar.timeInMillis
-                        updateDateAndTime()
-                    } else {
-                        showToast(R.string.record_in_future)
-                    }
-                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH))
+                if (newCalendar.timeInMillis < Date().time) {
+                    timestamp = newCalendar.timeInMillis
+                    updateDateAndTime()
+                } else {
+                    showToast(R.string.record_in_future)
+                }
+            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
         dialog.show()
     }
 
@@ -203,20 +210,21 @@ class AddRecordActivity : BaseBackActivity() {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = timestamp
         val dialog = TimePickerDialog(this, uiDecorator.getTheme(type),
-                TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                    val newCalendar = Calendar.getInstance()
-                    newCalendar.timeInMillis = timestamp
-                    newCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                    newCalendar.set(Calendar.MINUTE, minute)
+            { view, hourOfDay, minute ->
+                val newCalendar = Calendar.getInstance()
+                newCalendar.timeInMillis = timestamp
+                newCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                newCalendar.set(Calendar.MINUTE, minute)
 
-                    if (newCalendar.timeInMillis < Date().time) {
-                        timestamp = newCalendar.timeInMillis
-                        updateDateAndTime()
-                    } else {
-                        showToast(R.string.record_in_future)
-                    }
-                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),
-                DateFormat.is24HourFormat(this))
+                if (newCalendar.timeInMillis < Date().time) {
+                    timestamp = newCalendar.timeInMillis
+                    updateDateAndTime()
+                } else {
+                    showToast(R.string.record_in_future)
+                }
+            }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),
+            DateFormat.is24HourFormat(this)
+        )
         dialog.show()
     }
 
@@ -235,14 +243,14 @@ class AddRecordActivity : BaseBackActivity() {
         }
 
         if (selectedAccountIndex == -1) {
-            spinnerAccount.isEnabled = false
+            binding.spinnerAccount.isEnabled = false
 
             accounts.clear()
             accounts.add(getString(R.string.account_removed))
         }
 
-        spinnerAccount.adapter = ArrayAdapter(this, R.layout.view_spinner_item, accounts)
-        spinnerAccount.setSelection(selectedAccountIndex)
+        binding.spinnerAccount.adapter = ArrayAdapter(this, R.layout.view_spinner_item, accounts)
+        binding.spinnerAccount.setSelection(selectedAccountIndex)
     }
 
     private fun tryRecord() {
@@ -262,11 +270,11 @@ class AddRecordActivity : BaseBackActivity() {
                 return false
             }
 
-            var title = etTitle.text.toString().trim()
-            val category = etCategory.text.toString().trim()
-            val notes = etNotes.text.toString().trim()
-            val price = etPrice.text.toString().toDouble()
-            val account = accountList[spinnerAccount.selectedItemPosition]
+            var title = binding.etTitle.text.toString().trim()
+            val category = binding.etCategory.text.toString().trim()
+            val notes = binding.etNotes.text.toString().trim()
+            val price = binding.etPrice.text.toString().toDouble()
+            val account = accountList[binding.spinnerAccount.selectedItemPosition]
 
             if (title.isEmpty()) {
                 title = category
@@ -288,8 +296,8 @@ class AddRecordActivity : BaseBackActivity() {
     }
 
     private fun updateDateAndTime() {
-        tvDate.text = formatController.formatDateToNumber(timestamp)
-        tvTime.text = formatController.formatTime(timestamp)
+        binding.tvDate.text = formatController.formatDateToNumber(timestamp)
+        binding.tvTime.text = formatController.formatTime(timestamp)
     }
 
     enum class Mode { MODE_ADD, MODE_EDIT }

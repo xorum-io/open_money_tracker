@@ -6,6 +6,8 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
+import androidx.annotation.Nullable;
+
 import com.blogspot.e_kanivets.moneytracker.BuildConfig;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
@@ -14,6 +16,7 @@ import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivitySettingsBinding;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 
 import java.util.ArrayList;
@@ -24,15 +27,22 @@ import javax.inject.Inject;
 public class SettingsActivity extends BaseBackActivity {
     @SuppressWarnings("unused") private static final String TAG = "SettingsActivity";
 
-    @Override protected int getContentViewId() {
-        return R.layout.activity_settings;
+    private ActivitySettingsBinding binding;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        initToolbar();
+        initViews();
     }
 
-    @Override protected void initViews() {
-        super.initViews();
-
+    private void initViews() {
         // Display the fragment as the main content.
-        getFragmentManager().beginTransaction().replace(R.id.contentView, new SettingsFragment()).commit();
+        getFragmentManager().beginTransaction().replace(binding.contentView.getId(), new SettingsFragment()).commit();
     }
 
     public static class SettingsFragment extends PreferenceFragment {

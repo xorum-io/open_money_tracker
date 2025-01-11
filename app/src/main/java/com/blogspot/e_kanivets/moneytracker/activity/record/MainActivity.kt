@@ -1,9 +1,10 @@
 package com.blogspot.e_kanivets.moneytracker.activity.record
 
 import android.content.Intent
+import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import android.widget.TextView
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseDrawerActivity
@@ -15,6 +16,7 @@ import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivityMainBinding
 import com.blogspot.e_kanivets.moneytracker.entity.Period
 import com.blogspot.e_kanivets.moneytracker.entity.RecordItem
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
@@ -23,8 +25,6 @@ import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
 import com.blogspot.e_kanivets.moneytracker.util.RecordItemsBuilder
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
 
 class MainActivity : BaseDrawerActivity() {
@@ -36,41 +36,58 @@ class MainActivity : BaseDrawerActivity() {
 
     @Inject
     lateinit var recordController: RecordController
+
     @Inject
     lateinit var rateController: ExchangeRateController
+
     @Inject
     lateinit var accountController: AccountController
+
     @Inject
     lateinit var currencyController: CurrencyController
+
     @Inject
     lateinit var preferenceController: PreferenceController
+
     @Inject
     lateinit var periodController: PeriodController
+
     @Inject
     lateinit var formatController: FormatController
 
+    private lateinit var summaryPresenter: ShortSummaryPresenter
+
+    private lateinit var binding: ActivityMainBinding
     private lateinit var tvDefaultAccountTitle: TextView
     private lateinit var tvDefaultAccountSum: TextView
     private lateinit var tvCurrency: TextView
-    private lateinit var summaryPresenter: ShortSummaryPresenter
 
-    override fun getContentViewId(): Int = R.layout.activity_main
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    override fun initData(): Boolean {
-        super.initData()
-        appComponent.inject(this)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        preferenceController.addLaunchCount()
-
-        return super.initData()
+        initData()
+        initToolbar()
+        initViews()
     }
 
-    override fun initViews() {
-        super.initViews()
+    private fun initData(): Boolean {
+        appComponent.inject(this)
+        preferenceController.addLaunchCount()
+        return true
+    }
 
+    private fun initViews() {
         setTitle(R.string.title_records)
 
         if (preferenceController.checkRateDialog()) showAppRateDialog()
+
+        drawer = binding.drawerLayout
+        navigationView = binding.navView
+
+        navigationView.setNavigationItemSelectedListener(this)
 
         tvDefaultAccountTitle = navigationView.getHeaderView(0).findViewById(R.id.tvDefaultAccountTitle)
         tvDefaultAccountSum = navigationView.getHeaderView(0).findViewById(R.id.tvDefaultAccountSum)
@@ -83,27 +100,25 @@ class MainActivity : BaseDrawerActivity() {
         val summaryViewHolder = summaryPresenter.create(true) { showReport() }.tag as RecyclerView.ViewHolder
         recordAdapter.summaryViewHolder = summaryViewHolder
 
-        recyclerView.adapter = recordAdapter
+        binding.recyclerView.adapter = recordAdapter
 
-        spinner.setPeriodSelectedListener { period ->
+        binding.spinner.setPeriodSelectedListener { period ->
             this.period = period
             periodController.writeLastUsedPeriod(period)
             update()
         }
 
-        spinner.setPeriod(periodController.readLastUsedPeriod())
+        binding.spinner.setPeriod(periodController.readLastUsedPeriod())
 
-        btnAddExpense.setOnClickListener { addExpense() }
-        btnAddIncome.setOnClickListener { addIncome() }
+        binding.btnAddExpense.setOnClickListener { addExpense() }
+        binding.btnAddIncome.setOnClickListener { addIncome() }
     }
 
     private fun getPositionWithoutSummary(position: Int) = position - 1
 
     private fun editRecord(position: Int) {
-
         CrashlyticsProxy.get().logButton("Edit Record")
         val record = recordList[getRecordPosition(position)]
-
         startAddRecordActivity(record, AddRecordActivity.Mode.MODE_EDIT, record.type)
     }
 
@@ -124,27 +139,22 @@ class MainActivity : BaseDrawerActivity() {
         startActivity(intent)
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == AppCompatActivity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_ACTION_RECORD -> update()
-
                 REQUEST_BACKUP -> {
                     appComponent.inject(this)
                     update()
-                }
-
-                else -> {
                 }
             }
         }
     }
 
     override fun update() {
-        recordList = recordController.getRecordsForPeriod(period)
-        recordList = recordList.reversed()
+        recordList = recordController.getRecordsForPeriod(period).reversed()
         recordItems = RecordItemsBuilder().getRecordItems(recordList)
 
         val currency = currencyController.readDefaultCurrency()
@@ -160,7 +170,6 @@ class MainActivity : BaseDrawerActivity() {
 
     private fun getRecordPosition(position: Int): Int {
         var recordPosition = 0
-
         for (indexOfItem in 0 until position) {
             if (recordItems[indexOfItem] is RecordItem.Record) {
                 recordPosition++
@@ -186,8 +195,7 @@ class MainActivity : BaseDrawerActivity() {
 
     private fun fillDefaultAccount() {
         val defaultAccount = accountController.readDefaultAccount() ?: return
-
-        tvDefaultAccountSum.text = defaultAccount.title
+        tvDefaultAccountTitle.text = defaultAccount.title
         tvDefaultAccountSum.text = formatController.formatAmount(defaultAccount.fullSum)
         tvCurrency.text = defaultAccount.currency
     }
@@ -195,5 +203,4 @@ class MainActivity : BaseDrawerActivity() {
     companion object {
         private const val REQUEST_ACTION_RECORD = 6
     }
-
 }

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
+import com.blogspot.e_kanivets.moneytracker.databinding.ViewSummaryRecordsBinding;
 import com.blogspot.e_kanivets.moneytracker.entity.Period;
 import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.base.BaseSummaryPresenter;
@@ -18,15 +19,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-/**
- * Util class to create and manage summary header view for .
- * Created on 2/26/16.
- *
- * @author Evgenii Kanivets
- */
 public class ShortSummaryPresenter extends BaseSummaryPresenter {
 
     @Inject
@@ -34,7 +26,7 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
 
     private int red;
     private int green;
-    private View view;
+    private ViewSummaryRecordsBinding binding;
 
     public ShortSummaryPresenter(Context context) {
         this.context = context;
@@ -50,18 +42,21 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
     }
 
     public View create(boolean shortSummary, ItemClickListener itemClickListener) {
-        view = layoutInflater.inflate(R.layout.view_summary_records, null);
-        view.findViewById(R.id.iv_more).setVisibility(shortSummary ? View.VISIBLE : View.INVISIBLE);
+        binding = ViewSummaryRecordsBinding.inflate(layoutInflater);
+
+        binding.ivMore.setVisibility(shortSummary ? View.VISIBLE : View.INVISIBLE);
+        binding.lvSummary.setClickable(false);
+        binding.cvSummary.setClickable(true);
+
+        View view = binding.getRoot();
         view.setEnabled(false);
-        view.findViewById(R.id.lvSummary).setClickable(false);
-        view.findViewById(R.id.cvSummary).setClickable(true);
-        view.setTag(new ViewHolder(view, itemClickListener));
+        view.setTag(new ViewHolder(binding, itemClickListener));
 
         return view;
     }
 
     public void update(IRecordReport report, String currency, List<String> ratesNeeded) {
-        ViewHolder viewHolder = (ViewHolder) view.getTag();
+        ViewHolder viewHolder = (ViewHolder) binding.getRoot().getTag();
         if (report == null) {
             viewHolder.tvTotalIncome.setText("");
             viewHolder.tvTotalExpense.setText("");
@@ -107,24 +102,22 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.tvPeriod)
         TextView tvPeriod;
-        @BindView(R.id.tvTotalIncome)
         TextView tvTotalIncome;
-        @BindView(R.id.tvTotalExpense)
         TextView tvTotalExpense;
-        @BindView(R.id.tvTotal)
         TextView tvTotal;
 
-        public ViewHolder(View view, final ItemClickListener itemClickListener) {
-            super(view);
-            ButterKnife.bind(this, view);
-            view.findViewById(R.id.cvSummary).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (itemClickListener != null)
-                        itemClickListener.invoke();
-                }
+        public ViewHolder(ViewSummaryRecordsBinding binding, final ItemClickListener itemClickListener) {
+            super(binding.getRoot());
+
+            this.tvPeriod = binding.tvPeriod;
+            this.tvTotalIncome = binding.tvTotalIncome;
+            this.tvTotalExpense = binding.tvTotalExpense;
+            this.tvTotal = binding.tvTotal;
+
+            binding.getRoot().findViewById(R.id.cvSummary).setOnClickListener(v -> {
+                if (itemClickListener != null)
+                    itemClickListener.invoke();
             });
         }
     }

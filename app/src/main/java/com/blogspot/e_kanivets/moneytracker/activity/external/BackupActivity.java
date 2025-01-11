@@ -1,10 +1,10 @@
 package com.blogspot.e_kanivets.moneytracker.activity.external;
 
 import android.content.DialogInterface;
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import android.view.View;
-import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
@@ -12,6 +12,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.BackupAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.backup.BackupController;
 import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivityBackupBinding;
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.android.Auth;
@@ -21,9 +22,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.OnClick;
-import butterknife.OnItemClick;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import timber.log.Timber;
@@ -37,14 +35,21 @@ public class BackupActivity extends BaseBackActivity
 
     private DbxClientV2 dbClient;
 
-    @BindView(R.id.btn_backup_now) View btnBackupNow;
-    @BindView(R.id.listView) ListView listView;
+    private ActivityBackupBinding binding;
 
-    @Override protected int getContentViewId() {
-        return R.layout.activity_backup;
+    @Override
+    protected void onCreate(@androidx.annotation.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        binding = ActivityBackupBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        initData();
+        initToolbar();
+        initViews();
     }
 
-    @Override protected boolean initData() {
+    private boolean initData() {
         getAppComponent().inject(BackupActivity.this);
 
         String accessToken = preferenceController.readDropboxAccessToken();
@@ -57,12 +62,13 @@ public class BackupActivity extends BaseBackActivity
             fetchBackups();
         }
 
-        return super.initData();
+        return true;
     }
 
-    @Override protected void initViews() {
-        super.initViews();
-        btnBackupNow.setEnabled(preferenceController.readDropboxAccessToken() != null);
+    private void initViews() {
+        binding.btnBackupNow.setEnabled(preferenceController.readDropboxAccessToken() != null);
+        binding.btnBackupNow.setOnClickListener(view -> backupNow());
+        binding.listView.setOnItemClickListener((adapterView, view, i, l) -> restoreBackupClicked(i));
     }
 
     @Override protected void onResume() {
@@ -71,7 +77,7 @@ public class BackupActivity extends BaseBackActivity
         if (Auth.getOAuth2Token() != null) {
             try {
                 preferenceController.writeDropboxAccessToken(Auth.getOAuth2Token());
-                btnBackupNow.setEnabled(true);
+                binding.btnBackupNow.setEnabled(true);
                 DbxRequestConfig config = new DbxRequestConfig("open_money_tracker");
                 dbClient = new DbxClientV2(config, Auth.getOAuth2Token());
                 fetchBackups();
@@ -101,7 +107,7 @@ public class BackupActivity extends BaseBackActivity
 
         BackupAdapter backupAdapter = new BackupAdapter(BackupActivity.this, backupList);
         backupAdapter.setOnBackupListener(BackupActivity.this);
-        listView.setAdapter(backupAdapter);
+        binding.listView.setAdapter(backupAdapter);
     }
 
     @Override public void onBackupSuccess() {
@@ -174,15 +180,15 @@ public class BackupActivity extends BaseBackActivity
         showToast(reason);
     }
 
-    @OnClick(R.id.btn_backup_now) public void backupNow() {
+    public void backupNow() {
         CrashlyticsProxy.get().logButton("Make Backup");
         startProgress(getString(R.string.making_backup));
         backupController.makeBackup(dbClient);
     }
 
-    @OnItemClick(R.id.listView) public void restoreBackupClicked(int position) {
+    public void restoreBackupClicked(int position) {
         CrashlyticsProxy.get().logButton("Restore backup");
-        final String backupName = listView.getAdapter().getItem(position).toString();
+        final String backupName = binding.listView.getAdapter().getItem(position).toString();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
         builder.setTitle(getString(R.string.warning));
@@ -214,6 +220,6 @@ public class BackupActivity extends BaseBackActivity
     private void logout() {
         preferenceController.writeDropboxAccessToken(null);
         Auth.startOAuth2Authentication(BackupActivity.this, APP_KEY);
-        btnBackupNow.setEnabled(false);
+        binding.btnBackupNow.setEnabled(false);
     }
 }

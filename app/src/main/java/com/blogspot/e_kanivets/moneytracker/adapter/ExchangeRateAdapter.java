@@ -6,26 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.MtApp;
-import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
+import com.blogspot.e_kanivets.moneytracker.databinding.ViewExchangeRateBinding;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRatePair;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-/**
- * Custom adapter class for Exchange rate entity.
- * Created on 23/2/16.
- *
- * @author Evgenii Kanivets
- */
 public class ExchangeRateAdapter extends BaseAdapter {
     @Inject
     FormatController formatController;
@@ -57,39 +47,26 @@ public class ExchangeRateAdapter extends BaseAdapter {
     @SuppressLint("SetTextI18n")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
+        ViewExchangeRateBinding binding;
 
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
 
-            convertView = layoutInflater.inflate(R.layout.view_exchange_rate, parent, false);
-            viewHolder = new ViewHolder(convertView);
+            binding = ViewExchangeRateBinding.inflate(layoutInflater, parent, false);
+            convertView = binding.getRoot();
 
-            convertView.setTag(viewHolder);
-        } else viewHolder = (ViewHolder) convertView.getTag();
+            convertView.setTag(binding);
+        } else {
+            binding = (ViewExchangeRateBinding) convertView.getTag();
+        }
 
         ExchangeRatePair rate = getItem(position);
 
-        viewHolder.tvFromCurrency.setText(rate.getFromCurrency());
-        viewHolder.tvToCurrency.setText(rate.getToCurrency());
-        viewHolder.tvAmountBuy.setText(formatController.formatPrecisionNone(rate.getAmountBuy()));
-        viewHolder.tvAmountSell.setText(formatController.formatPrecisionNone(rate.getAmountSell()));
+        binding.tvFromCurrency.setText(rate.getFromCurrency());
+        binding.tvToCurrency.setText(rate.getToCurrency());
+        binding.tvAmountBuy.setText(formatController.formatPrecisionNone(rate.getAmountBuy()));
+        binding.tvAmountSell.setText(formatController.formatPrecisionNone(rate.getAmountSell()));
 
         return convertView;
-    }
-
-    public static class ViewHolder {
-        @BindView(R.id.tv_from_currency)
-        TextView tvFromCurrency;
-        @BindView(R.id.tv_to_currency)
-        TextView tvToCurrency;
-        @BindView(R.id.tv_amount_buy)
-        TextView tvAmountBuy;
-        @BindView(R.id.tv_amount_sell)
-        TextView tvAmountSell;
-
-        public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
     }
 }

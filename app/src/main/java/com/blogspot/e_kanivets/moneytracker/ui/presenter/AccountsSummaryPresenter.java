@@ -1,12 +1,10 @@
 package com.blogspot.e_kanivets.moneytracker.ui.presenter;
 
 import android.content.Context;
-import androidx.appcompat.widget.AppCompatSpinner;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
@@ -14,6 +12,7 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.databinding.ViewSummaryAccountsBinding;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
 import com.blogspot.e_kanivets.moneytracker.report.account.IAccountsReport;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.base.BaseSummaryPresenter;
@@ -22,15 +21,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-/**
- * Util class to create and manage summary header view for .
- * Created on 2/26/16.
- *
- * @author Evgenii Kanivets
- */
 public class AccountsSummaryPresenter extends BaseSummaryPresenter {
 
     @Inject
@@ -60,14 +50,13 @@ public class AccountsSummaryPresenter extends BaseSummaryPresenter {
     }
 
     public View create() {
-        view = layoutInflater.inflate(R.layout.view_summary_accounts, null);
-
-        final ViewHolder viewHolder = new ViewHolder(view);
-        view.setTag(viewHolder);
+        ViewSummaryAccountsBinding binding = ViewSummaryAccountsBinding.inflate(layoutInflater);
+        view = binding.getRoot();
+        view.setTag(binding);
 
         List<String> currencyList = currencyController.readAll();
 
-        viewHolder.spinnerCurrency.setAdapter(new ArrayAdapter<>(context,
+        binding.spinnerCurrency.setAdapter(new ArrayAdapter<>(context,
                 android.R.layout.simple_list_item_1, currencyList));
 
         String currency = currencyController.readDefaultCurrency();
@@ -76,12 +65,12 @@ public class AccountsSummaryPresenter extends BaseSummaryPresenter {
             String item = currencyList.get(i);
 
             if (item.equals(currency)) {
-                viewHolder.spinnerCurrency.setSelection(i);
+                binding.spinnerCurrency.setSelection(i);
                 break;
             }
         }
 
-        viewHolder.spinnerCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        binding.spinnerCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 update();
@@ -97,34 +86,21 @@ public class AccountsSummaryPresenter extends BaseSummaryPresenter {
     }
 
     public void update() {
-        ViewHolder viewHolder = (ViewHolder) view.getTag();
+        ViewSummaryAccountsBinding binding = (ViewSummaryAccountsBinding) view.getTag();
 
-        String currency = (String) viewHolder.spinnerCurrency.getSelectedItem();
+        String currency = (String) binding.spinnerCurrency.getSelectedItem();
         IAccountsReport report = reportMaker.getAccountsReport(currency, accountController.readAll());
 
         if (report == null) {
-            viewHolder.tvTotal.setTextColor(red);
-            viewHolder.tvTotal.setText(createRatesNeededList(currency,
+            binding.tvTotal.setTextColor(red);
+            binding.tvTotal.setText(createRatesNeededList(currency,
                     reportMaker.currencyNeededAccounts(currency, accountController.readAll())));
-            viewHolder.tvCurrency.setText("");
+            binding.tvCurrency.setText("");
         } else {
-            viewHolder.tvTotal.setTextColor(report.getTotal() >= 0 ? green : red);
-            viewHolder.tvTotal.setText(formatController.formatSignedAmount(report.getTotal()));
-            viewHolder.tvCurrency.setTextColor(report.getTotal() >= 0 ? green : red);
-            viewHolder.tvCurrency.setText(report.getCurrency());
-        }
-    }
-
-    public static class ViewHolder {
-        @BindView(R.id.spinnerCurrency)
-        AppCompatSpinner spinnerCurrency;
-        @BindView(R.id.tvTotal)
-        TextView tvTotal;
-        @BindView(R.id.tvCurrency)
-        TextView tvCurrency;
-
-        public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
+            binding.tvTotal.setTextColor(report.getTotal() >= 0 ? green : red);
+            binding.tvTotal.setText(formatController.formatSignedAmount(report.getTotal()));
+            binding.tvCurrency.setTextColor(report.getTotal() >= 0 ? green : red);
+            binding.tvCurrency.setText(report.getCurrency());
         }
     }
 }

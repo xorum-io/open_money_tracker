@@ -1,18 +1,18 @@
 package com.blogspot.e_kanivets.moneytracker.activity.exchange_rate;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatSpinner;
+
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivityAddExchangeRateBinding;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRatePair;
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
 import com.blogspot.e_kanivets.moneytracker.util.validator.ExchangeRatePairValidator;
@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import butterknife.BindView;
 
 public class AddExchangeRateActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
@@ -44,50 +42,40 @@ public class AddExchangeRateActivity extends BaseBackActivity {
     @Nullable
     private ExchangeRatePair exchangeRatePair;
 
-    @BindView(R.id.contentView)
-    View contentView;
-    @BindView(R.id.spinner_from_currency)
-    AppCompatSpinner spinnerFromCurrency;
-    @BindView(R.id.spinner_to_currency)
-    AppCompatSpinner spinnerToCurrency;
-    @BindView(R.id.et_buy)
-    EditText etBuy;
-    @BindView(R.id.et_sell)
-    EditText etSell;
+    private ActivityAddExchangeRateBinding binding;
 
     @Override
-    protected int getContentViewId() {
-        return R.layout.activity_add_exchange_rate;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        binding = ActivityAddExchangeRateBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        initData();
+        initToolbar();
+        initViews();
     }
 
-    @Override
-    protected boolean initData() {
-        boolean result = super.initData();
+    private boolean initData() {
         getAppComponent().inject(AddExchangeRateActivity.this);
-
-        exchangeRatePair = getIntent().getParcelableExtra(KEY_EXCHANGE_RATE);
-
-        return result;
+        return true;
     }
 
-    @Override
-    protected void initViews() {
-        super.initViews();
-
-        exchangeRatePairValidator = new ExchangeRatePairValidator(AddExchangeRateActivity.this, contentView);
+    private void initViews() {
+        exchangeRatePairValidator = new ExchangeRatePairValidator(AddExchangeRateActivity.this, binding);
         List<String> currencyList = currencyController.readAll();
 
         if (currencyList.size() == 0) {
             currencyList.add(getString(R.string.none));
-            spinnerFromCurrency.setEnabled(false);
-            spinnerToCurrency.setEnabled(false);
+            binding.spinnerFromCurrency.setEnabled(false);
+            binding.spinnerToCurrency.setEnabled(false);
         }
 
-        spinnerFromCurrency.setAdapter(new ArrayAdapter<>(AddExchangeRateActivity.this,
+        binding.spinnerFromCurrency.setAdapter(new ArrayAdapter<>(AddExchangeRateActivity.this,
                 R.layout.view_spinner_item,
                 new ArrayList<>(currencyList)));
 
-        spinnerToCurrency.setAdapter(new ArrayAdapter<>(AddExchangeRateActivity.this,
+        binding.spinnerToCurrency.setAdapter(new ArrayAdapter<>(AddExchangeRateActivity.this,
                 R.layout.view_spinner_item,
                 new ArrayList<>(currencyList)));
 
@@ -95,15 +83,15 @@ public class AddExchangeRateActivity extends BaseBackActivity {
         if (exchangeRatePair != null) {
             for (int i = 0; i < currencyList.size(); i++) {
                 if (currencyList.get(i).equals(exchangeRatePair.getFromCurrency())) {
-                    spinnerFromCurrency.setSelection(i);
+                    binding.spinnerFromCurrency.setSelection(i);
                 }
                 if (currencyList.get(i).equals(exchangeRatePair.getToCurrency())) {
-                    spinnerToCurrency.setSelection(i);
+                    binding.spinnerToCurrency.setSelection(i);
                 }
             }
 
-            etBuy.setText(formatController.formatPrecisionNone(exchangeRatePair.getAmountBuy()));
-            etSell.setText(formatController.formatPrecisionNone(exchangeRatePair.getAmountSell()));
+            binding.etBuy.setText(formatController.formatPrecisionNone(exchangeRatePair.getAmountBuy()));
+            binding.etSell.setText(formatController.formatPrecisionNone(exchangeRatePair.getAmountSell()));
         }
     }
 
@@ -115,14 +103,11 @@ public class AddExchangeRateActivity extends BaseBackActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_done:
-                tryAddExchangeRate();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.action_done) {
+            tryAddExchangeRate();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void tryAddExchangeRate() {
@@ -137,10 +122,10 @@ public class AddExchangeRateActivity extends BaseBackActivity {
     @SuppressWarnings("SimplifiableIfStatement")
     private boolean addExchangeRate() {
         if (exchangeRatePairValidator.validate()) {
-            String fromCurrency = (String) spinnerFromCurrency.getSelectedItem();
-            String toCurrency = (String) spinnerToCurrency.getSelectedItem();
-            double amountBuy = Double.parseDouble(etBuy.getText().toString().trim());
-            double amountSell = Double.parseDouble(etSell.getText().toString().trim());
+            String fromCurrency = (String) binding.spinnerFromCurrency.getSelectedItem();
+            String toCurrency = (String) binding.spinnerToCurrency.getSelectedItem();
+            double amountBuy = Double.parseDouble(binding.etBuy.getText().toString().trim());
+            double amountSell = Double.parseDouble(binding.etSell.getText().toString().trim());
 
             return exchangeRateController.createExchangeRatePair(
                     new ExchangeRatePair(fromCurrency, toCurrency, amountBuy, amountSell)) != null;

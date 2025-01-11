@@ -1,16 +1,17 @@
 package com.blogspot.e_kanivets.moneytracker.activity.account;
 
-import androidx.appcompat.widget.AppCompatSpinner;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+
+import androidx.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.TransferController;
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivityTransferBinding;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer;
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
@@ -21,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import butterknife.BindView;
 
 public class TransferActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
@@ -37,51 +36,44 @@ public class TransferActivity extends BaseBackActivity {
 
     private List<Account> accountList;
 
-    @BindView(R.id.contentView)
-    View contentView;
-    @BindView(R.id.spinner_from)
-    AppCompatSpinner spinnerFrom;
-    @BindView(R.id.spinner_to)
-    AppCompatSpinner spinnerTo;
-    @BindView(R.id.et_from_amount)
-    EditText etFromAmount;
-    @BindView(R.id.et_to_amount)
-    EditText etToAmount;
+    private ActivityTransferBinding binding;
 
     @Override
-    protected int getContentViewId() {
-        return R.layout.activity_transfer;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        binding = ActivityTransferBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        initData();
+        initToolbar();
+        initViews();
     }
 
-    @Override
-    protected boolean initData() {
-        boolean result = super.initData();
+    private boolean initData() {
         getAppComponent().inject(TransferActivity.this);
         accountList = accountController.readActiveAccounts();
-        return result;
+        return true;
     }
 
-    @Override
-    protected void initViews() {
-        super.initViews();
-
+    private void initViews() {
         List<String> accounts = new ArrayList<>();
         for (Account account : accountList) {
             accounts.add(account.getTitle());
         }
 
-        transferValidator = new TransferValidator(TransferActivity.this, contentView);
+        transferValidator = new TransferValidator(TransferActivity.this, binding);
 
         if (accounts.size() == 0) {
             accounts.add(getString(R.string.none));
-            spinnerFrom.setEnabled(false);
-            spinnerTo.setEnabled(false);
+            binding.spinnerFrom.setEnabled(false);
+            binding.spinnerTo.setEnabled(false);
         }
 
-        spinnerFrom.setAdapter(new ArrayAdapter<>(TransferActivity.this,
+        binding.spinnerFrom.setAdapter(new ArrayAdapter<>(TransferActivity.this,
                 R.layout.view_spinner_item, accounts));
 
-        spinnerTo.setAdapter(new ArrayAdapter<>(TransferActivity.this,
+        binding.spinnerTo.setAdapter(new ArrayAdapter<>(TransferActivity.this,
                 R.layout.view_spinner_item, accounts));
     }
 
@@ -93,14 +85,11 @@ public class TransferActivity extends BaseBackActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_done:
-                tryTransfer();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.action_done) {
+            tryTransfer();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void tryTransfer() {
@@ -115,10 +104,10 @@ public class TransferActivity extends BaseBackActivity {
     @SuppressWarnings("SimplifiableIfStatement")
     private boolean doTransfer() {
         if (transferValidator.validate()) {
-            Account fromAccount = accountList.get(spinnerFrom.getSelectedItemPosition());
-            Account toAccount = accountList.get(spinnerTo.getSelectedItemPosition());
-            double fromAmount = Double.parseDouble(etFromAmount.getText().toString());
-            double toAmount = Double.parseDouble(etToAmount.getText().toString());
+            Account fromAccount = accountList.get(binding.spinnerFrom.getSelectedItemPosition());
+            Account toAccount = accountList.get(binding.spinnerTo.getSelectedItemPosition());
+            double fromAmount = Double.parseDouble(binding.etFromAmount.getText().toString());
+            double toAmount = Double.parseDouble(binding.etToAmount.getText().toString());
 
             return transferController.create(new Transfer(System.currentTimeMillis(),
                     fromAccount.getId(), toAccount.getId(), fromAmount, toAmount)) != null;

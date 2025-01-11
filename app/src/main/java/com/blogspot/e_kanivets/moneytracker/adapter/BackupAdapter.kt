@@ -5,35 +5,36 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.blogspot.e_kanivets.moneytracker.R
-import kotlinx.android.synthetic.main.view_backup_item.view.ivDelete
-import kotlinx.android.synthetic.main.view_backup_item.view.tvTitle
+import com.blogspot.e_kanivets.moneytracker.databinding.ViewBackupItemBinding
 
-class BackupAdapter(private val context: Context, private val backups: List<String>) : BaseAdapter() {
+class BackupAdapter(
+    private val context: Context,
+    private val backups: List<String>,
+) : BaseAdapter() {
 
     var onBackupListener: OnBackupListener? = null
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        val binding: ViewBackupItemBinding
         var view = convertView
-        val viewHolder: ViewHolder?
 
         if (view == null) {
             val layoutInflater = LayoutInflater.from(context)
 
-            view = layoutInflater.inflate(R.layout.view_backup_item, parent, false)
-            viewHolder = ViewHolder(view)
+            binding = ViewBackupItemBinding.inflate(layoutInflater, parent, false)
+            view = binding.root
 
-            view.tag = viewHolder
+            view.tag = binding
         } else {
-            viewHolder = view.tag as ViewHolder
+            binding =  view.tag as ViewBackupItemBinding
         }
 
         val backupItem = getItem(position)
 
-        viewHolder.view.tvTitle.text = backupItem
-        viewHolder.view.ivDelete.setOnClickListener { onBackupListener?.onBackupDelete(backupItem) }
+        binding.tvTitle.text = backupItem
+        binding.ivDelete.setOnClickListener { onBackupListener?.onBackupDelete(backupItem) }
 
-        return view!!
+        return view
     }
 
     override fun getItem(position: Int): String = backups[position]
@@ -42,10 +43,7 @@ class BackupAdapter(private val context: Context, private val backups: List<Stri
 
     override fun getCount(): Int = backups.size
 
-    private data class ViewHolder(val view: View)
-
     interface OnBackupListener {
         fun onBackupDelete(backupName: String)
     }
-
 }

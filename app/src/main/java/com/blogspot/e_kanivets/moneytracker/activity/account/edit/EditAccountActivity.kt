@@ -4,10 +4,12 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.activity.account.edit.fragment.AccountOperationsFragment
 import com.blogspot.e_kanivets.moneytracker.activity.account.edit.fragment.EditAccountFragment
@@ -15,12 +17,8 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity
 import com.blogspot.e_kanivets.moneytracker.adapter.GeneralViewPagerAdapter
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
-import kotlinx.android.synthetic.main.activity_edit_account.fabDone
-import kotlinx.android.synthetic.main.activity_edit_account.tabLayout
-import kotlinx.android.synthetic.main.activity_edit_account.viewPager
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivityEditAccountBinding
 import javax.inject.Inject
-import android.view.inputmethod.InputMethodManager
-import kotlinx.android.synthetic.main.fragment_edit_account.*
 
 class EditAccountActivity : BaseBackActivity() {
 
@@ -28,41 +26,49 @@ class EditAccountActivity : BaseBackActivity() {
     internal lateinit var accountController: AccountController
 
     private lateinit var account: Account
+    private lateinit var binding: ActivityEditAccountBinding
 
-    override fun getContentViewId(): Int = R.layout.activity_edit_account
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    override fun initData(): Boolean {
+        binding = ActivityEditAccountBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        initData()
+        initToolbar()
+        initViews()
+    }
+
+    private fun initData(): Boolean {
         appComponent.inject(this@EditAccountActivity)
         val accountFromParcel: Account? = intent.getParcelableExtra(KEY_ACCOUNT)
 
         return if (accountFromParcel == null) false
         else {
             account = accountFromParcel
-            super.initData()
+            true
         }
     }
 
-    override fun initViews() {
-        super.initViews()
-
-        tabLayout.setupWithViewPager(viewPager)
+    private fun initViews() {
+        binding.tabLayout.setupWithViewPager(binding.viewPager)
 
         val adapter = GeneralViewPagerAdapter(supportFragmentManager)
         adapter.addFragment(EditAccountFragment.newInstance(account), getString(R.string.information))
         adapter.addFragment(AccountOperationsFragment.newInstance(account), getString(R.string.operations))
-        viewPager.adapter = adapter
+        binding.viewPager.adapter = adapter
 
-        viewPager.addOnPageChangeListener(object : OnPageChangeListener {
+        binding.viewPager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {}
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
                 if (position == 0) {
-                    fabDone.show()
+                    binding.fabDone.show()
                     showKeyboard()
                 } else {
-                    fabDone.hide()
+                    binding.fabDone.hide()
                     hideKeyboard()
                 }
             }
@@ -79,7 +85,7 @@ class EditAccountActivity : BaseBackActivity() {
 
     private fun showKeyboard() {
         val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(etTitle, 0)
+        imm.showSoftInput(binding.root.findViewById(R.id.etTitle), 0)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -141,5 +147,4 @@ class EditAccountActivity : BaseBackActivity() {
             return intent
         }
     }
-
 }

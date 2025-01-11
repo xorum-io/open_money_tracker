@@ -6,19 +6,19 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+
 import com.blogspot.e_kanivets.moneytracker.MtApp;
-import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
+import com.blogspot.e_kanivets.moneytracker.databinding.DialogRateBinding;
 
 import javax.inject.Inject;
-
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class AppRateDialog extends AlertDialog {
     private static final String GP_MARKET = "market://details?id=";
 
     private Context context;
+    private DialogRateBinding binding;
 
     @Inject
     PreferenceController preferenceController;
@@ -30,25 +30,23 @@ public class AppRateDialog extends AlertDialog {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_rate);
-        ButterKnife.bind(AppRateDialog.this);
+
+        binding = DialogRateBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        binding.yesButton.setOnClickListener(view -> yes());
+        binding.maybeButton.setOnClickListener(view -> dismiss());
+        binding.thanksButton.setOnClickListener(view -> thanks());
     }
 
-    @OnClick(R.id.yes_button)
     public void yes() {
         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GP_MARKET + context.getPackageName())));
         preferenceController.appRated();
         dismiss();
     }
 
-    @OnClick(R.id.maybeButton)
-    public void maybe() {
-        dismiss();
-    }
-
-    @OnClick(R.id.thanksButton)
     public void thanks() {
         preferenceController.appRated();
         dismiss();

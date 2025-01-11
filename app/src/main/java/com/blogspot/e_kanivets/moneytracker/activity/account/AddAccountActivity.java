@@ -1,16 +1,17 @@
 package com.blogspot.e_kanivets.moneytracker.activity.account;
 
-import androidx.appcompat.widget.AppCompatSpinner;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+
+import androidx.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivityAddAccountBinding;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
 import com.blogspot.e_kanivets.moneytracker.util.validator.AccountValidator;
@@ -19,8 +20,6 @@ import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
-
-import butterknife.BindView;
 
 public class AddAccountActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
@@ -33,33 +32,28 @@ public class AddAccountActivity extends BaseBackActivity {
 
     private IValidator<Account> accountValidator;
 
-    @BindView(R.id.contentView)
-    View contentView;
-    @BindView(R.id.etTitle)
-    EditText etTitle;
-    @BindView(R.id.et_init_sum)
-    EditText etInitSum;
-    @BindView(R.id.spinner)
-    AppCompatSpinner spinner;
+    private ActivityAddAccountBinding binding;
 
     @Override
-    protected int getContentViewId() {
-        return R.layout.activity_add_account;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        binding = ActivityAddAccountBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        initData();
+        initToolbar();
+        initViews();
     }
 
-    @Override
-    protected boolean initData() {
-        boolean result = super.initData();
+    private boolean initData() {
         getAppComponent().inject(AddAccountActivity.this);
-        return result;
+        return true;
     }
 
-    @Override
-    protected void initViews() {
-        super.initViews();
-
-        accountValidator = new AccountValidator(AddAccountActivity.this, contentView);
-        spinner.setAdapter(new ArrayAdapter<>(AddAccountActivity.this,
+    private void initViews() {
+        accountValidator = new AccountValidator(AddAccountActivity.this, binding);
+        binding.spinner.setAdapter(new ArrayAdapter<>(AddAccountActivity.this,
                 R.layout.view_spinner_item,
                 new ArrayList<>(currencyController.readAll())));
     }
@@ -72,14 +66,11 @@ public class AddAccountActivity extends BaseBackActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_done:
-                tryAddAccount();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.action_done) {
+            tryAddAccount();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void tryAddAccount() {
@@ -94,9 +85,9 @@ public class AddAccountActivity extends BaseBackActivity {
     @SuppressWarnings("SimplifiableIfStatement")
     private boolean addAccount() {
         if (accountValidator.validate()) {
-            String title = etTitle.getText().toString().trim();
-            double initSum = Double.parseDouble(etInitSum.getText().toString().trim());
-            String currency = (String) spinner.getSelectedItem();
+            String title = binding.etTitle.getText().toString().trim();
+            double initSum = Double.parseDouble(binding.etInitSum.getText().toString().trim());
+            String currency = (String) binding.spinner.getSelectedItem();
             double goal = 0;
             int color = 0;
 

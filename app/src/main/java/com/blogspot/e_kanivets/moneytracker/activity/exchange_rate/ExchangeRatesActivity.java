@@ -1,18 +1,22 @@
 package com.blogspot.e_kanivets.moneytracker.activity.exchange_rate;
 
 import android.content.Intent;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExchangeRateAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivityExchangeRatesBinding;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRatePair;
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
 import com.blogspot.e_kanivets.moneytracker.util.ExchangeRatesSummarizer;
@@ -21,10 +25,6 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.OnClick;
-import butterknife.OnItemClick;
 
 public class ExchangeRatesActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
@@ -37,26 +37,30 @@ public class ExchangeRatesActivity extends BaseBackActivity {
 
     private List<ExchangeRatePair> exchangeRateList;
 
-    @BindView(R.id.listView)
-    ListView listView;
+    private ActivityExchangeRatesBinding binding;
 
     @Override
-    protected int getContentViewId() {
-        return R.layout.activity_exchange_rates;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        binding = ActivityExchangeRatesBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        initData();
+        initToolbar();
+        initViews();
     }
 
-    @Override
-    protected boolean initData() {
-        boolean result = super.initData();
+    private boolean initData() {
         getAppComponent().inject(ExchangeRatesActivity.this);
-        return result;
+        return true;
     }
 
-    @Override
-    protected void initViews() {
-        super.initViews();
+    private void initViews() {
+        registerForContextMenu(binding.listView);
+        binding.btnAddExchangeRate.setOnClickListener(view -> addExchangeRate());
+        binding.listView.setOnItemClickListener((adapterView, view, i, l) -> addExchangeRateOnBaseOfExisted(i));
 
-        registerForContextMenu(listView);
         update();
     }
 
@@ -70,13 +74,12 @@ public class ExchangeRatesActivity extends BaseBackActivity {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-        switch (item.getItemId()) {
-            case R.id.delete:
-                deleteExchangeRate(info.position);
-                return true;
-            default:
-                return super.onContextItemSelected(item);
+        if (item.getItemId() == R.id.delete) {
+            deleteExchangeRate(info.position);
+            return true;
         }
+
+        return super.onContextItemSelected(item);
     }
 
     public void deleteExchangeRate(int position) {
@@ -86,14 +89,12 @@ public class ExchangeRatesActivity extends BaseBackActivity {
         setResult(RESULT_OK);
     }
 
-    @OnClick(R.id.btn_add_exchange_rate)
     public void addExchangeRate() {
         CrashlyticsProxy.get().logButton("Add Exchange Rate");
         Intent intent = new Intent(ExchangeRatesActivity.this, AddExchangeRateActivity.class);
         startActivityForResult(intent, REQUEST_ADD_EXCHANGE_RATE);
     }
 
-    @OnItemClick(R.id.listView)
     public void addExchangeRateOnBaseOfExisted(int position) {
         CrashlyticsProxy.get().logButton("Edit Exchange Rate");
         if (position < 0 || position >= exchangeRateList.size()) return;
@@ -123,7 +124,7 @@ public class ExchangeRatesActivity extends BaseBackActivity {
         exchangeRateList = new ExchangeRatesSummarizer(rateController.readAll()).getPairedSummaryList();
         Collections.reverse(exchangeRateList);
 
-        listView.setAdapter(new ExchangeRateAdapter(ExchangeRatesActivity.this, exchangeRateList));
-        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+        binding.listView.setAdapter(new ExchangeRateAdapter(ExchangeRatesActivity.this, exchangeRateList));
+        ((BaseAdapter) binding.listView.getAdapter()).notifyDataSetChanged();
     }
 }

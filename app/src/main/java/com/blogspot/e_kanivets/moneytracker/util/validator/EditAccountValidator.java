@@ -1,43 +1,35 @@
 package com.blogspot.e_kanivets.moneytracker.util.validator;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import com.google.android.material.textfield.TextInputLayout;
-import android.view.View;
-import android.widget.EditText;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 
-/**
- * Util class for EditAccount validation.
- * Created on 16.09.2018.
- *
- * @author Evgenii Kanivets
- */
+import androidx.annotation.NonNull;
+
+import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.databinding.FragmentEditAccountBinding;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 
 public class EditAccountValidator implements IValidator<Account> {
 
-    @NonNull private final Context context;
+    @NonNull
+    private final Context context;
+    private final FragmentEditAccountBinding binding;
 
-    @BindView(R.id.tilTitle) TextInputLayout tilTitle;
-    @BindView(R.id.etTitle) EditText etTitle;
-    @BindView(R.id.tilGoal) TextInputLayout tilGoal;
-    @BindView(R.id.etGoal) EditText etGoal;
-
-    public EditAccountValidator(@NonNull Context context, @NonNull View view) {
+    public EditAccountValidator(
+            @NonNull Context context,
+            @NonNull FragmentEditAccountBinding binding
+    ) {
         this.context = context;
-        ButterKnife.bind(this, view);
+        this.binding = binding;
         initTextWatchers();
     }
 
-    @Override public boolean validate() {
-        String title = etTitle.getText().toString().trim();
+    @Override
+    public boolean validate() {
+        String title = binding.etTitle.getText().toString().trim();
         double goal = Double.MAX_VALUE;
 
         try {
-            goal = Double.parseDouble(etGoal.getText().toString().trim());
+            goal = Double.parseDouble(binding.etGoal.getText().toString().trim());
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
@@ -45,18 +37,18 @@ public class EditAccountValidator implements IValidator<Account> {
         boolean valid = true;
 
         if (title.isEmpty()) {
-            tilTitle.setError(context.getString(R.string.field_cant_be_empty));
+            binding.tilTitle.setError(context.getString(R.string.field_cant_be_empty));
             valid = false;
         }
 
         if (goal == Double.MAX_VALUE) {
-            tilGoal.setError(context.getString(R.string.field_cant_be_empty));
+            binding.tilGoal.setError(context.getString(R.string.field_cant_be_empty));
             goal = 0;
             valid = false;
         }
 
         if (Math.abs(goal) > MAX_ABS_VALUE) {
-            tilGoal.setError(context.getString(R.string.too_rich_or_poor));
+            binding.tilGoal.setError(context.getString(R.string.too_rich_or_poor));
             valid = false;
         }
 
@@ -64,7 +56,7 @@ public class EditAccountValidator implements IValidator<Account> {
     }
 
     private void initTextWatchers() {
-        etTitle.addTextChangedListener(new ClearErrorTextWatcher(tilTitle));
-        etGoal.addTextChangedListener(new ClearErrorTextWatcher(tilGoal));
+        binding.etTitle.addTextChangedListener(new ClearErrorTextWatcher(binding.tilTitle));
+        binding.etGoal.addTextChangedListener(new ClearErrorTextWatcher(binding.tilGoal));
     }
 }

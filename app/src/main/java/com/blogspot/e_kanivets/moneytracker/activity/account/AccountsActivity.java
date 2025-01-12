@@ -1,25 +1,25 @@
 package com.blogspot.e_kanivets.moneytracker.activity.account;
 
 import android.content.Intent;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.account.edit.EditAccountActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivityAccountsBinding;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.AccountsSummaryPresenter;
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
 
 import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.OnClick;
-import butterknife.OnItemClick;
 
 public class AccountsActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
@@ -34,29 +34,32 @@ public class AccountsActivity extends BaseBackActivity {
 
     private AccountsSummaryPresenter summaryPresenter;
 
-    @BindView(R.id.listView)
-    ListView listView;
+    private ActivityAccountsBinding binding;
 
     @Override
-    protected int getContentViewId() {
-        return R.layout.activity_accounts;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        binding = ActivityAccountsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        initData();
+        initToolbar();
+        initViews();
     }
 
-    @Override
-    protected boolean initData() {
-        boolean result = super.initData();
+    private boolean initData() {
         getAppComponent().inject(AccountsActivity.this);
         summaryPresenter = new AccountsSummaryPresenter(AccountsActivity.this);
-        return result;
+        return true;
     }
 
-    @Override
-    protected void initViews() {
-        super.initViews();
+    private void initViews() {
+        binding.listView.addHeaderView(summaryPresenter.create());
+        binding.listView.setOnItemClickListener((adapterView, view, i, l) -> onAccountClick(i));
+        binding.btnAddAccount.setOnClickListener(view -> addAccount());
 
-        listView.addHeaderView(summaryPresenter.create());
-
-        registerForContextMenu(listView);
+        registerForContextMenu(binding.listView);
         update();
     }
 
@@ -75,7 +78,6 @@ public class AccountsActivity extends BaseBackActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnItemClick(R.id.listView)
     public void onAccountClick(int position) {
         Account account = accountController.readAll().get(position - 1);
         startActivityForResult(EditAccountActivity.Companion.newIntent(this, account), REQUEST_EDIT_ACCOUNT);
@@ -86,7 +88,6 @@ public class AccountsActivity extends BaseBackActivity {
         startActivityForResult(new Intent(AccountsActivity.this, TransferActivity.class), REQUEST_TRANSFER);
     }
 
-    @OnClick(R.id.btn_add_account)
     public void addAccount() {
         CrashlyticsProxy.get().logButton("Add Account");
         Intent intent = new Intent(AccountsActivity.this, AddAccountActivity.class);
@@ -117,7 +118,7 @@ public class AccountsActivity extends BaseBackActivity {
     }
 
     private void update() {
-        listView.setAdapter(new AccountAdapter(AccountsActivity.this, accountController.readAll()));
+        binding.listView.setAdapter(new AccountAdapter(AccountsActivity.this, accountController.readAll()));
         summaryPresenter.update();
     }
 }

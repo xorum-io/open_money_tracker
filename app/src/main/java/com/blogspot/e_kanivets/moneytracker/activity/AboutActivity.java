@@ -1,25 +1,26 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
 import android.text.method.LinkMovementMethod;
-import android.widget.TextView;
 
-import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
-
-import butterknife.BindView;
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivityAboutBinding;
 
 public class AboutActivity extends BaseBackActivity {
-    @BindView(R.id.tv_about)
-    TextView tvAbout;
+
+    private ActivityAboutBinding binding;
 
     @Override
-    protected int getContentViewId() {
-        return R.layout.activity_about;
+    protected void onCreate(android.os.Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        binding = ActivityAboutBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        initToolbar();
+        initViews();
     }
 
-    @Override
-    protected void initViews() {
-        super.initViews();
-        tvAbout.setMovementMethod(LinkMovementMethod.getInstance());
+    private void initViews() {
+        binding.tvAbout.setMovementMethod(LinkMovementMethod.getInstance());
     }
 }

@@ -4,15 +4,14 @@ import android.content.Context
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.blogspot.e_kanivets.moneytracker.MtApp
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController
+import com.blogspot.e_kanivets.moneytracker.databinding.ViewHeaderDateBinding
+import com.blogspot.e_kanivets.moneytracker.databinding.ViewRecordBinding
 import com.blogspot.e_kanivets.moneytracker.entity.RecordItem
-import kotlinx.android.synthetic.main.view_header_date.view.*
-import kotlinx.android.synthetic.main.view_record.view.*
 import javax.inject.Inject
 
 class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -57,12 +56,18 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TYPE_RECORD
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-            when (viewType) {
-                TYPE_RECORD -> RecordViewHolder(LayoutInflater.from(context).inflate(R.layout.view_record, parent, false), itemClickListener)
-                TYPE_HEADER -> HeaderViewHolder(LayoutInflater.from(context).inflate(R.layout.view_header_date, parent, false))
-                else -> summaryViewHolder
-            }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
+        TYPE_RECORD -> RecordViewHolder(
+            ViewRecordBinding.inflate(LayoutInflater.from(context), parent, false),
+            itemClickListener
+        )
+
+        TYPE_HEADER -> HeaderViewHolder(
+            ViewHeaderDateBinding.inflate(LayoutInflater.from(context), parent, false)
+        )
+
+        else -> summaryViewHolder
+    }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
         if (position == 0 && isSummaryViewNeeded) {
@@ -95,27 +100,25 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged()
     }
 
-    class RecordViewHolder : RecyclerView.ViewHolder {
+    class RecordViewHolder(
+        binding: ViewRecordBinding,
+        itemClickListener: ((Int) -> Unit)?,
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-        var tvPrice: TextView
-        var tvTitle: TextView
-        var tvCategory: TextView
-        var tvCurrency: TextView
+        var tvPrice: TextView = binding.tvPrice
+        var tvTitle: TextView = binding.tvTitle
+        var tvCategory: TextView = binding.tvCategory
+        var tvCurrency: TextView = binding.tvCurrency
 
-        constructor(view: View, itemClickListener: ((Int) -> Unit)?) : super(view) {
-            tvPrice = view.tvPrice
-            tvTitle = view.tvTitle
-            tvCategory = view.tvCategory
-            tvCurrency = view.tvCurrency
-
-            view.setOnClickListener {
+        init {
+            binding.root.setOnClickListener {
                 itemClickListener?.invoke(adapterPosition)
             }
         }
     }
 
-    class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvDate: TextView = view.tvDate
+    class HeaderViewHolder(binding: ViewHeaderDateBinding) : RecyclerView.ViewHolder(binding.root) {
+        val tvDate: TextView = binding.tvDate
     }
 
     companion object {

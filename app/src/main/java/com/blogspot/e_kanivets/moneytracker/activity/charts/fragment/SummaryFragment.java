@@ -6,28 +6,19 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.adapter.MonthSummaryAdapter;
+import com.blogspot.e_kanivets.moneytracker.databinding.FragmentSummaryBinding;
 import com.blogspot.e_kanivets.moneytracker.report.chart.IMonthReport;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SummaryFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SummaryFragment extends Fragment {
     private static final String ARG_MONTH_REPORT = "arg_month_report";
 
     @Nullable
     private IMonthReport monthReport;
 
-    @BindView(R.id.listView)
-    ListView listView;
+    private FragmentSummaryBinding binding;
 
     public SummaryFragment() {
         // Required empty public constructor
@@ -66,10 +57,11 @@ public class SummaryFragment extends Fragment {
 
     private void initViews(@Nullable View rootView) {
         if (rootView == null) return;
-        ButterKnife.bind(this, rootView);
+
+        binding = FragmentSummaryBinding.inflate(getLayoutInflater());
 
         if (monthReport != null) {
-            listView.setAdapter(new MonthSummaryAdapter(getActivity(), monthReport));
+            binding.listView.setAdapter(new MonthSummaryAdapter(getActivity(), monthReport));
         }
     }
 }

@@ -6,26 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
+import com.blogspot.e_kanivets.moneytracker.databinding.ViewAccountBinding;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-/**
- * Custom adapter class for Account entity.
- * Created on 6/3/15.
- *
- * @author Evgenii Kanivets
- */
 public class AccountAdapter extends BaseAdapter {
     @Inject
     FormatController formatController;
@@ -71,16 +62,18 @@ public class AccountAdapter extends BaseAdapter {
     @SuppressLint("SetTextI18n")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
+        ViewAccountBinding binding;
 
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
 
-            convertView = layoutInflater.inflate(R.layout.view_account, parent, false);
-            viewHolder = new ViewHolder(convertView);
+            binding = ViewAccountBinding.inflate(layoutInflater, parent, false);
+            convertView = binding.getRoot();
 
-            convertView.setTag(viewHolder);
-        } else viewHolder = (ViewHolder) convertView.getTag();
+            convertView.setTag(binding);
+        } else {
+            binding = (ViewAccountBinding) convertView.getTag();
+        }
 
         Account account = accounts.get(position);
 
@@ -90,26 +83,13 @@ public class AccountAdapter extends BaseAdapter {
             convertView.setBackgroundColor(account.getFullSum() >= 0.0 ? whiteGreen : whiteRed);
         }
 
-        viewHolder.tvCurSum.setTextColor(account.getFullSum() >= 0.0 ? green : red);
-        viewHolder.tvCurrency.setTextColor(account.getFullSum() >= 0.0 ? green : red);
+        binding.tvCurSum.setTextColor(account.getFullSum() >= 0.0 ? green : red);
+        binding.tvCurrency.setTextColor(account.getFullSum() >= 0.0 ? green : red);
 
-        viewHolder.tvTitle.setText(account.getTitle());
-        viewHolder.tvCurSum.setText(formatController.formatSignedAmount(account.getFullSum()));
-        viewHolder.tvCurrency.setText(account.getCurrency());
+        binding.tvTitle.setText(account.getTitle());
+        binding.tvCurSum.setText(formatController.formatSignedAmount(account.getFullSum()));
+        binding.tvCurrency.setText(account.getCurrency());
 
         return convertView;
-    }
-
-    public static class ViewHolder {
-        @BindView(R.id.tvTitle)
-        TextView tvTitle;
-        @BindView(R.id.tv_cur_sum)
-        TextView tvCurSum;
-        @BindView(R.id.tvCurrency)
-        TextView tvCurrency;
-
-        public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
     }
 }

@@ -7,26 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.MtApp;
-import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
+import com.blogspot.e_kanivets.moneytracker.databinding.ViewMonthSummaryBinding;
 import com.blogspot.e_kanivets.moneytracker.report.chart.IMonthReport;
 
 import java.text.SimpleDateFormat;
 
 import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-/**
- * Adapter to display a report grouped by months.
- * Created on 1/13/17.
- *
- * @author Evgenii Kanivets
- */
 
 @SuppressWarnings("WeakerAccess")
 public class MonthSummaryAdapter extends BaseAdapter {
@@ -73,16 +62,18 @@ public class MonthSummaryAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
+        ViewMonthSummaryBinding binding;
 
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
 
-            convertView = layoutInflater.inflate(R.layout.view_month_summary, parent, false);
-            viewHolder = new ViewHolder(convertView);
+            binding = ViewMonthSummaryBinding.inflate(layoutInflater, parent, false);
+            convertView = binding.getRoot();
 
-            convertView.setTag(viewHolder);
-        } else viewHolder = (ViewHolder) convertView.getTag();
+            convertView.setTag(binding);
+        } else {
+            binding = (ViewMonthSummaryBinding) convertView.getTag();
+        }
 
         // Reverse a report
         int index = monthReport.getMonthList().size() - position - 1;
@@ -91,23 +82,10 @@ public class MonthSummaryAdapter extends BaseAdapter {
         double totalIncome = monthReport.getIncomeList().get(index);
         double totalExpense = monthReport.getExpenseList().get(index);
 
-        viewHolder.tvMonth.setText(month);
-        viewHolder.tvTotalIncome.setText(formatController.formatSignedAmount(totalIncome));
-        viewHolder.tvTotalExpense.setText(formatController.formatSignedAmount(-totalExpense));
+        binding.tvMonth.setText(month);
+        binding.tvTotalIncome.setText(formatController.formatSignedAmount(totalIncome));
+        binding.tvTotalExpense.setText(formatController.formatSignedAmount(-totalExpense));
 
         return convertView;
-    }
-
-    public static class ViewHolder {
-        @BindView(R.id.tvMonth)
-        TextView tvMonth;
-        @BindView(R.id.tvTotalIncome)
-        TextView tvTotalIncome;
-        @BindView(R.id.tvTotalExpense)
-        TextView tvTotalExpense;
-
-        public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
     }
 }

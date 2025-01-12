@@ -1,5 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.activity
 
+import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -11,13 +12,13 @@ import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivityReportBinding
 import com.blogspot.e_kanivets.moneytracker.entity.Period
 import com.blogspot.e_kanivets.moneytracker.entity.RecordReportItem
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker
 import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter
-import kotlinx.android.synthetic.main.activity_report.*
 import java.util.*
 import javax.inject.Inject
 
@@ -37,10 +38,20 @@ class ReportActivity : BaseBackActivity() {
 
     private lateinit var shortSummaryPresenter: ShortSummaryPresenter
 
-    override fun getContentViewId() = R.layout.activity_report
+    private lateinit var binding: ActivityReportBinding
 
-    override fun initData(): Boolean {
-        super.initData()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = ActivityReportBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        initData()
+        initToolbar()
+        initViews()
+    }
+
+    private fun initData(): Boolean {
         appComponent.inject(this)
 
         period = intent.getParcelableExtra(KEY_PERIOD)
@@ -54,13 +65,11 @@ class ReportActivity : BaseBackActivity() {
         return true
     }
 
-    override fun initViews() {
-        super.initViews()
-
+    private fun initViews() {
         initSpinnerCurrency()
 
         adapter.setSummaryView(shortSummaryPresenter.create(false, null))
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
     }
 
     private fun update(currency: String) {
@@ -74,17 +83,17 @@ class ReportActivity : BaseBackActivity() {
     private fun initSpinnerCurrency() {
         val currencyList = currencyController.readAll()
 
-        spinnerCurrency.adapter = ArrayAdapter(this, R.layout.view_spinner_item, currencyList)
-        spinnerCurrency.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spinnerCurrency.adapter = ArrayAdapter(this, R.layout.view_spinner_item, currencyList)
+        binding.spinnerCurrency.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) =
-                    update(spinnerCurrency.selectedItem.toString())
+                    update(binding.spinnerCurrency.selectedItem.toString())
 
             override fun onNothingSelected(p0: AdapterView<*>?) {}
         }
 
         val currency = currencyController.readDefaultCurrency()
 
-        spinnerCurrency.setSelection(currencyList.indexOf(currency))
+        binding.spinnerCurrency.setSelection(currencyList.indexOf(currency))
     }
 
     class RecordReportConverter {

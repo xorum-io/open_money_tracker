@@ -8,13 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.blogspot.e_kanivets.moneytracker.R
+import com.blogspot.e_kanivets.moneytracker.databinding.ViewReportItemBinding
+import com.blogspot.e_kanivets.moneytracker.databinding.ViewReportItemExpBinding
 import com.blogspot.e_kanivets.moneytracker.entity.RecordReportItem
-import kotlinx.android.synthetic.main.view_report_item_exp.view.*
 
 class RecordReportAdapter(
-        private var items: MutableList<RecordReportItem>,
-        private var data: HashMap<RecordReportItem.ParentRow, List<RecordReportItem.ChildRow>>,
-        private val context: Context
+    private var items: MutableList<RecordReportItem>,
+    private var data: HashMap<RecordReportItem.ParentRow, List<RecordReportItem.ChildRow>>,
+    private val context: Context
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var red: Int = ContextCompat.getColor(context, R.color.red)
@@ -31,8 +32,16 @@ class RecordReportAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
-        TYPE_PARENT -> ParentViewHolder(LayoutInflater.from(context).inflate(R.layout.view_report_item_exp, parent, false), ::changeItems, context)
-        TYPE_CHILD -> ChildViewHolder(LayoutInflater.from(context).inflate(R.layout.view_report_item, parent, false))
+        TYPE_PARENT -> ParentViewHolder(
+            ViewReportItemExpBinding.inflate(LayoutInflater.from(context), parent, false),
+            ::changeItems,
+            context
+        )
+
+        TYPE_CHILD -> ChildViewHolder(
+            ViewReportItemBinding.inflate(LayoutInflater.from(context), parent, false)
+        )
+
         else -> summaryViewHolder
     }
 
@@ -47,6 +56,7 @@ class RecordReportAdapter(
                 holder.tvTotal.text = row.amount
                 holder.tvTotal.setTextColor(if (row.amount.first() != '-') green else red)
             }
+
             is ParentViewHolder -> {
                 val row = items[posWithoutSummary] as RecordReportItem.ParentRow
                 holder.tvCategory.text = row.category
@@ -56,7 +66,10 @@ class RecordReportAdapter(
         }
     }
 
-    fun setData(items: MutableList<RecordReportItem>, data: HashMap<RecordReportItem.ParentRow, List<RecordReportItem.ChildRow>>) {
+    fun setData(
+        items: MutableList<RecordReportItem>,
+        data: HashMap<RecordReportItem.ParentRow, List<RecordReportItem.ChildRow>>
+    ) {
         this.items = items
         this.data = data
         notifyDataSetChanged()
@@ -81,7 +94,7 @@ class RecordReportAdapter(
 
     private fun closeParentRow(parentRow: RecordReportItem.ParentRow, position: Int) {
         val item = items.filterIndexed { index, _ -> index > position }
-                .find { it is RecordReportItem.ParentRow }
+            .find { it is RecordReportItem.ParentRow }
 
         val lastChildInd = if (item != null) items.indexOf(item) else items.size
 
@@ -109,21 +122,35 @@ class RecordReportAdapter(
 
     private fun getPositionWithoutSummary(position: Int) = position - 1
 
-    class ParentViewHolder(view: View, changeItems: ((Int) -> Unit), context: Context) : RecyclerView.ViewHolder(view) {
+    class ParentViewHolder(
+        binding: ViewReportItemExpBinding,
+        changeItems: ((Int) -> Unit),
+        context: Context,
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-        var tvCategory: TextView = view.tvCategory
-        var tvTotal: TextView = view.tvTotal
+        var tvCategory: TextView = binding.tvCategory
+        var tvTotal: TextView = binding.tvTotal
 
         private var isOpen: Boolean = false
 
         init {
-            view.setOnClickListener {
+            binding.root.setOnClickListener {
                 if (isOpen) {
-                    view.lowerDivider.visibility = View.GONE
-                    view.ivArrow.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_arrow_downward_outline))
+                    binding.lowerDivider.visibility = View.GONE
+                    binding.ivArrow.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.ic_arrow_downward_outline
+                        )
+                    )
                 } else {
-                    view.lowerDivider.visibility = View.VISIBLE
-                    view.ivArrow.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_arrow_upward_outline))
+                    binding.lowerDivider.visibility = View.VISIBLE
+                    binding.ivArrow.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.ic_arrow_upward_outline
+                        )
+                    )
                 }
                 isOpen = !isOpen
                 changeItems(adapterPosition)
@@ -131,9 +158,9 @@ class RecordReportAdapter(
         }
     }
 
-    class ChildViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvCategory: TextView = view.tvCategory
-        val tvTotal: TextView = view.tvTotal
+    class ChildViewHolder(binding: ViewReportItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        val tvCategory: TextView = binding.tvCategory
+        val tvTotal: TextView = binding.tvTotal
     }
 
     companion object {
@@ -142,5 +169,4 @@ class RecordReportAdapter(
         private const val TYPE_PARENT = 1
         private const val TYPE_CHILD = 2
     }
-
 }

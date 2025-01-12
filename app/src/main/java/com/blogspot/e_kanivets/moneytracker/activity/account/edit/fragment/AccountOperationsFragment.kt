@@ -1,45 +1,66 @@
 package com.blogspot.e_kanivets.moneytracker.activity.account.edit.fragment
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.blogspot.e_kanivets.moneytracker.MtApp
 import com.blogspot.e_kanivets.moneytracker.R
-import com.blogspot.e_kanivets.moneytracker.activity.base.BaseFragment
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController
 import com.blogspot.e_kanivets.moneytracker.controller.data.TransferController
+import com.blogspot.e_kanivets.moneytracker.databinding.FragmentAccountOperationsBinding
 import com.blogspot.e_kanivets.moneytracker.entity.RecordItem
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
 import com.blogspot.e_kanivets.moneytracker.entity.data.Category
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
 import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer
 import com.blogspot.e_kanivets.moneytracker.util.RecordItemsBuilder
-import kotlinx.android.synthetic.main.fragment_account_operations.*
 import javax.inject.Inject
 
-class AccountOperationsFragment : BaseFragment() {
+class AccountOperationsFragment : Fragment() {
 
     @Inject
     internal lateinit var accountController: AccountController
+
     @Inject
     internal lateinit var recordController: RecordController
+
     @Inject
     internal lateinit var transferController: TransferController
+
     @Inject
     internal lateinit var formatController: FormatController
 
     private lateinit var account: Account
 
-    override val contentViewId: Int = R.layout.fragment_account_operations
+    private lateinit var binding: FragmentAccountOperationsBinding
 
-    override fun initData() {
-        appComponent.inject(this@AccountOperationsFragment)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initData()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = FragmentAccountOperationsBinding.inflate(inflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViews()
+    }
+
+    private fun initData() {
+        MtApp.get().appComponent.inject(this@AccountOperationsFragment)
         arguments?.let { arguments -> account = arguments.getParcelable(KEY_ACCOUNT)!! }
     }
 
-    override fun initViews(view: View) {
-        recyclerView.adapter = RecordAdapter(requireContext(), getRecordItems(), false)
+    private fun initViews() {
+        binding.recyclerView.adapter = RecordAdapter(requireContext(), getRecordItems(), false)
     }
 
     private fun getRecordItems(): List<RecordItem> {
@@ -89,5 +110,4 @@ class AccountOperationsFragment : BaseFragment() {
         }
 
     }
-
 }

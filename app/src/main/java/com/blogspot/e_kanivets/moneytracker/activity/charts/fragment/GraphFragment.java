@@ -8,20 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.databinding.FragmentGraphBinding;
 import com.blogspot.e_kanivets.moneytracker.report.chart.BarChartConverter;
 import com.blogspot.e_kanivets.moneytracker.report.chart.IMonthReport;
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link GraphFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class GraphFragment extends Fragment {
     private static final String ARG_MONTH_REPORT = "arg_month_report";
     private static final String ARG_NO_DATA_TEXT = "arg_no_data_text";
@@ -31,8 +22,7 @@ public class GraphFragment extends Fragment {
     @Nullable
     private String noDataText;
 
-    @BindView(R.id.bar_chart)
-    BarChart barChart;
+    private FragmentGraphBinding binding;
 
     public GraphFragment() {
         // Required empty public constructor
@@ -80,17 +70,22 @@ public class GraphFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_graph, container, false);
-        initViews(rootView);
-        return rootView;
+        binding = FragmentGraphBinding.inflate(inflater);
+
+        return binding.getRoot();
     }
 
-    private void initViews(@Nullable View rootView) {
-        if (rootView == null) return;
-        ButterKnife.bind(this, rootView);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initViews();
+    }
+
+    private void initViews() {
+        binding = FragmentGraphBinding.inflate(getLayoutInflater());
 
         if (monthReport == null) {
-            barChart.setNoDataText(noDataText);
+            binding.barChart.setNoDataText(noDataText);
         } else {
             BarChartConverter barChartConverter = new BarChartConverter(getActivity(), monthReport);
 
@@ -98,13 +93,13 @@ public class GraphFragment extends Fragment {
                     barChartConverter.getBarDataSetList());
             barData.setDrawValues(false);
 
-            barChart.setData(barData);
-            barChart.setDescription(null);
-            barChart.setVisibleXRangeMinimum(8);
-            barChart.setScaleYEnabled(false);
-            barChart.setVisibleXRangeMaximum(34);
-            barChart.setHighlightPerDragEnabled(false);
-            barChart.setHighlightPerTapEnabled(false);
+            binding.barChart.setData(barData);
+            binding.barChart.setDescription(null);
+            binding.barChart.setVisibleXRangeMinimum(8);
+            binding.barChart.setScaleYEnabled(false);
+            binding.barChart.setVisibleXRangeMaximum(34);
+            binding.barChart.setHighlightPerDragEnabled(false);
+            binding.barChart.setHighlightPerTapEnabled(false);
         }
     }
 }

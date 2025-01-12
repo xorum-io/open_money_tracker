@@ -1,176 +1,177 @@
-package com.blogspot.e_kanivets.moneytracker.activity;
+package com.blogspot.e_kanivets.moneytracker.activity
 
-import android.os.Build;
-import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import android.os.Build
+import android.os.Bundle
+import android.preference.ListPreference
+import android.preference.Preference.OnPreferenceChangeListener
+import android.preference.PreferenceFragment
+import com.blogspot.e_kanivets.moneytracker.BuildConfig
+import com.blogspot.e_kanivets.moneytracker.MtApp
+import com.blogspot.e_kanivets.moneytracker.R
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity
+import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController
+import com.blogspot.e_kanivets.moneytracker.controller.FormatController
+import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController
+import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivitySettingsBinding
+import com.blogspot.e_kanivets.moneytracker.entity.data.Account
+import javax.inject.Inject
 
-import androidx.annotation.Nullable;
+class SettingsActivity : BaseBackActivity() {
 
-import com.blogspot.e_kanivets.moneytracker.BuildConfig;
-import com.blogspot.e_kanivets.moneytracker.MtApp;
-import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
-import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
-import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
-import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
-import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
-import com.blogspot.e_kanivets.moneytracker.databinding.ActivitySettingsBinding;
-import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
+    private lateinit var binding: ActivitySettingsBinding
 
-import java.util.ArrayList;
-import java.util.List;
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-import javax.inject.Inject;
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-public class SettingsActivity extends BaseBackActivity {
-    @SuppressWarnings("unused") private static final String TAG = "SettingsActivity";
-
-    private ActivitySettingsBinding binding;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        initToolbar();
-        initViews();
+        initToolbar()
+        initViews()
     }
 
-    private void initViews() {
+    private fun initViews() {
         // Display the fragment as the main content.
-        getFragmentManager().beginTransaction().replace(binding.contentView.getId(), new SettingsFragment()).commit();
+        fragmentManager.beginTransaction().replace(binding.contentView.id, SettingsFragment()).commit()
     }
 
-    public static class SettingsFragment extends PreferenceFragment {
-        @Inject AccountController accountController;
-        @Inject CurrencyController currencyController;
-        @Inject PreferenceController preferenceController;
+    class SettingsFragment : PreferenceFragment() {
 
-        @Override public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+        @JvmField @Inject
+        var accountController: AccountController? = null
 
-            MtApp.get().getAppComponent().inject(SettingsFragment.this);
+        @JvmField @Inject
+        var currencyController: CurrencyController? = null
+
+        @JvmField @Inject
+        var preferenceController: PreferenceController? = null
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+
+            MtApp.get().appComponent.inject(this@SettingsFragment)
 
             // Load the preferences from an XML resource
-            addPreferencesFromResource(R.xml.preferences);
+            addPreferencesFromResource(R.xml.preferences)
 
-            setupDefaultAccountPref();
-            setupDefaultCurrencyPref();
-            setupNonSubstitutionCurrencyPref();
-            setupDisplayPrecision();
-            setupAboutPref();
+            setupDefaultAccountPref()
+            setupDefaultCurrencyPref()
+            setupNonSubstitutionCurrencyPref()
+            setupDisplayPrecision()
+            setupAboutPref()
         }
 
-        private void setupDefaultAccountPref() {
-            ListPreference defaultAccountPref =
-                    (ListPreference) findPreference(getString(R.string.pref_default_account));
-            defaultAccountPref.setOnPreferenceChangeListener(preferenceChangeListener);
+        private fun setupDefaultAccountPref() {
+            val defaultAccountPref =
+                findPreference(getString(R.string.pref_default_account)) as ListPreference
+            defaultAccountPref.onPreferenceChangeListener = preferenceChangeListener
 
-            List<Account> accountList = accountController.readActiveAccounts();
-            defaultAccountPref.setEntries(getEntries(accountList));
-            defaultAccountPref.setEntryValues(getEntryValues(accountList));
+            val accountList = accountController!!.readActiveAccounts()
+            defaultAccountPref.entries = getEntries(accountList)
+            defaultAccountPref.entryValues = getEntryValues(accountList)
 
-            Account defaultAccount = accountController.readDefaultAccount();
+            val defaultAccount = accountController!!.readDefaultAccount()
             if (defaultAccount == null) {
-                defaultAccountPref.setDefaultValue("");
-                defaultAccountPref.setSummary("");
+                defaultAccountPref.setDefaultValue("")
+                defaultAccountPref.summary = ""
             } else {
-                defaultAccountPref.setDefaultValue(defaultAccount.getTitle());
-                defaultAccountPref.setSummary(defaultAccount.getTitle());
+                defaultAccountPref.setDefaultValue(defaultAccount.title)
+                defaultAccountPref.summary = defaultAccount.title
             }
         }
 
-        @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument") private void setupDefaultCurrencyPref() {
-            ListPreference defaultCurrencyPref =
-                    (ListPreference) findPreference(getString(R.string.pref_default_currency));
-            defaultCurrencyPref.setOnPreferenceChangeListener(preferenceChangeListener);
+        private fun setupDefaultCurrencyPref() {
+            val defaultCurrencyPref =
+                findPreference(getString(R.string.pref_default_currency)) as ListPreference
+            defaultCurrencyPref.onPreferenceChangeListener = preferenceChangeListener
 
-            List<String> currencyList = currencyController.readAll();
-            defaultCurrencyPref.setEntries(currencyList.toArray(new String[0]));
-            defaultCurrencyPref.setEntryValues(currencyList.toArray(new String[0]));
+            val currencyList = currencyController!!.readAll()
+            defaultCurrencyPref.entries = currencyList.toTypedArray<String>()
+            defaultCurrencyPref.entryValues = currencyList.toTypedArray<String>()
 
-            String defaultCurrency = currencyController.readDefaultCurrency();
-            defaultCurrencyPref.setDefaultValue(defaultCurrency);
-            defaultCurrencyPref.setSummary(defaultCurrency);
+            val defaultCurrency = currencyController!!.readDefaultCurrency()
+            defaultCurrencyPref.setDefaultValue(defaultCurrency)
+            defaultCurrencyPref.summary = defaultCurrency
         }
 
-        @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument") private void setupNonSubstitutionCurrencyPref() {
-            ListPreference nonSubstitutionCurrencyPref =
-                    (ListPreference) findPreference(getString(R.string.pref_non_substitution_currency));
-            nonSubstitutionCurrencyPref.setOnPreferenceChangeListener(preferenceChangeListener);
+        private fun setupNonSubstitutionCurrencyPref() {
+            val nonSubstitutionCurrencyPref =
+                findPreference(getString(R.string.pref_non_substitution_currency)) as ListPreference
+            nonSubstitutionCurrencyPref.onPreferenceChangeListener = preferenceChangeListener
 
-            List<String> currencyList = currencyController.readAll();
-            nonSubstitutionCurrencyPref.setEntries(currencyList.toArray(new String[0]));
-            nonSubstitutionCurrencyPref.setEntryValues(currencyList.toArray(new String[0]));
+            val currencyList = currencyController!!.readAll()
+            nonSubstitutionCurrencyPref.entries = currencyList.toTypedArray<String>()
+            nonSubstitutionCurrencyPref.entryValues = currencyList.toTypedArray<String>()
 
-            String nonSubstitutionCurrency = preferenceController.readNonSubstitutionCurrency();
-            nonSubstitutionCurrencyPref.setDefaultValue(nonSubstitutionCurrency);
-            nonSubstitutionCurrencyPref.setSummary(nonSubstitutionCurrency);
+            val nonSubstitutionCurrency = preferenceController!!.readNonSubstitutionCurrency()
+            nonSubstitutionCurrencyPref.setDefaultValue(nonSubstitutionCurrency)
+            nonSubstitutionCurrencyPref.summary = nonSubstitutionCurrency
         }
 
-        @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument") private void setupDisplayPrecision() {
-            ListPreference displayPrecisionPref =
-                    (ListPreference) findPreference(getString(R.string.pref_display_precision));
-            displayPrecisionPref.setOnPreferenceChangeListener(preferenceChangeListener);
+        private fun setupDisplayPrecision() {
+            val displayPrecisionPref =
+                findPreference(getString(R.string.pref_display_precision)) as ListPreference
+            displayPrecisionPref.onPreferenceChangeListener = preferenceChangeListener
 
-            List<String> precisionListValues = new ArrayList<>();
-            precisionListValues.add(FormatController.PRECISION_MATH);
-            precisionListValues.add(FormatController.PRECISION_INT);
-            precisionListValues.add(FormatController.PRECISION_NONE);
-            displayPrecisionPref.setEntryValues(precisionListValues.toArray(new String[0]));
+            val precisionListValues: MutableList<String> = ArrayList()
+            precisionListValues.add(FormatController.PRECISION_MATH)
+            precisionListValues.add(FormatController.PRECISION_INT)
+            precisionListValues.add(FormatController.PRECISION_NONE)
+            displayPrecisionPref.entryValues = precisionListValues.toTypedArray<String>()
 
-            List<String> precisionList = new ArrayList<>();
-            precisionList.add(getString(R.string.precision_math));
-            precisionList.add(getString(R.string.precision_int));
-            precisionList.add(getString(R.string.precision_none));
-            displayPrecisionPref.setEntries(precisionList.toArray(new String[0]));
+            val precisionList: MutableList<String> = ArrayList()
+            precisionList.add(getString(R.string.precision_math))
+            precisionList.add(getString(R.string.precision_int))
+            precisionList.add(getString(R.string.precision_none))
+            displayPrecisionPref.entries = precisionList.toTypedArray<String>()
 
-            if (FormatController.PRECISION_MATH.equals(preferenceController.readDisplayPrecision())) {
-                displayPrecisionPref.setDefaultValue(getString(R.string.precision_math));
-                displayPrecisionPref.setSummary(getString(R.string.precision_math));
+            if (FormatController.PRECISION_MATH == preferenceController!!.readDisplayPrecision()) {
+                displayPrecisionPref.setDefaultValue(getString(R.string.precision_math))
+                displayPrecisionPref.summary = getString(R.string.precision_math)
             }
         }
 
-        private void setupAboutPref() {
-            Preference preference = findPreference(getString(R.string.pref_about));
-            preference.setSummary(getString(R.string.about_summary, BuildConfig.VERSION_NAME, Build.VERSION.RELEASE));
+        private fun setupAboutPref() {
+            val preference = findPreference(getString(R.string.pref_about))
+            preference.summary = getString(
+                R.string.about_summary,
+                BuildConfig.VERSION_NAME,
+                Build.VERSION.RELEASE
+            )
         }
 
-        @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
-        private String[] getEntries(List<Account> accountList) {
-            List<String> result = new ArrayList<>();
+        private fun getEntries(accountList: List<Account>): Array<String> {
+            val result: MutableList<String> = ArrayList()
 
-            for (Account account : accountList) {
-                result.add(account.getTitle());
+            for (account in accountList) {
+                result.add(account.title)
             }
 
-            return result.toArray(new String[0]);
+            return result.toTypedArray<String>()
         }
 
-        @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
-        private String[] getEntryValues(List<Account> accountList) {
-            List<String> result = new ArrayList<>();
+        private fun getEntryValues(accountList: List<Account>): Array<String> {
+            val result: MutableList<String> = ArrayList()
 
-            for (Account account : accountList) {
-                result.add(Long.toString(account.getId()));
+            for (account in accountList) {
+                result.add(account.id.toString())
             }
 
-            return result.toArray(new String[0]);
+            return result.toTypedArray<String>()
         }
 
-        private Preference.OnPreferenceChangeListener preferenceChangeListener =
-                new Preference.OnPreferenceChangeListener() {
-                    @Override public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        // Previously we could set summary to default value,
-                        // but now it's needed to display selected entry
-                        preference.setSummary("%s");
-                        getActivity().setResult(RESULT_OK);
-                        return true;
-                    }
-                };
+        private val preferenceChangeListener =
+            OnPreferenceChangeListener { preference, newValue -> // Previously we could set summary to default value,
+                // but now it's needed to display selected entry
+                preference.summary = "%s"
+                activity.setResult(RESULT_OK)
+                true
+            }
+    }
+
+    companion object {
+        @Suppress("unused")
+        private const val TAG = "SettingsActivity"
     }
 }

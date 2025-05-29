@@ -58,6 +58,7 @@ public class AddExchangeRateActivity extends BaseBackActivity {
 
     private boolean initData() {
         getAppComponent().inject(AddExchangeRateActivity.this);
+        exchangeRatePair = getIntent().getParcelableExtra(KEY_EXCHANGE_RATE);
         return true;
     }
 

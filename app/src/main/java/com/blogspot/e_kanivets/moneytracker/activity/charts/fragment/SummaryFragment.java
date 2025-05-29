@@ -50,16 +50,13 @@ public class SummaryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_summary, container, false);
-        initViews(rootView);
-        return rootView;
+        binding = FragmentSummaryBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
-    private void initViews(@Nullable View rootView) {
-        if (rootView == null) return;
-
-        binding = FragmentSummaryBinding.inflate(getLayoutInflater());
-
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (monthReport != null) {
             binding.listView.setAdapter(new MonthSummaryAdapter(getActivity(), monthReport));
         }

@@ -1,124 +1,106 @@
-package com.blogspot.e_kanivets.moneytracker.activity.account;
+package com.blogspot.e_kanivets.moneytracker.activity.account
 
-import android.content.Intent;
+import android.content.Intent
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import com.blogspot.e_kanivets.moneytracker.R
+import com.blogspot.e_kanivets.moneytracker.activity.account.edit.EditAccountActivity
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity
+import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter
+import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivityAccountsBinding
+import com.blogspot.e_kanivets.moneytracker.ui.presenter.AccountsSummaryPresenter
+import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
+import javax.inject.Inject
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.account.edit.EditAccountActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
-import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
-import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
-import com.blogspot.e_kanivets.moneytracker.databinding.ActivityAccountsBinding;
-import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
-import com.blogspot.e_kanivets.moneytracker.ui.presenter.AccountsSummaryPresenter;
-import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
-
-import javax.inject.Inject;
-
-public class AccountsActivity extends BaseBackActivity {
-    @SuppressWarnings("unused")
-    private static final String TAG = "AccountsActivity";
-
-    private static final int REQUEST_ADD_ACCOUNT = 1;
-    private static final int REQUEST_TRANSFER = 2;
-    private static final int REQUEST_EDIT_ACCOUNT = 3;
+class AccountsActivity : BaseBackActivity() {
 
     @Inject
-    AccountController accountController;
+    lateinit var accountController: AccountController
 
-    private AccountsSummaryPresenter summaryPresenter;
+    private lateinit var summaryPresenter: AccountsSummaryPresenter
+    private lateinit var binding: ActivityAccountsBinding
 
-    private ActivityAccountsBinding binding;
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        binding = ActivityAccountsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        binding = ActivityAccountsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        initData();
-        initToolbar();
-        initViews();
+        initData()
+        initToolbar()
+        initViews()
     }
 
-    private boolean initData() {
-        getAppComponent().inject(AccountsActivity.this);
-        summaryPresenter = new AccountsSummaryPresenter(AccountsActivity.this);
-        return true;
+    private fun initData(): Boolean {
+        appComponent.inject(this)
+        summaryPresenter = AccountsSummaryPresenter(this)
+        return true
     }
 
-    private void initViews() {
-        binding.listView.addHeaderView(summaryPresenter.create());
-        binding.listView.setOnItemClickListener((adapterView, view, i, l) -> onAccountClick(i));
-        binding.btnAddAccount.setOnClickListener(view -> addAccount());
+    private fun initViews() {
+        binding.listView.addHeaderView(summaryPresenter.create())
+        binding.listView.setOnItemClickListener { _, _, i, _ -> onAccountClick(i) }
+        binding.btnAddAccount.setOnClickListener { addAccount() }
 
-        registerForContextMenu(binding.listView);
-        update();
+        registerForContextMenu(binding.listView)
+        update()
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_accounts, menu);
-        return true;
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_accounts, menu)
+        return true
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_transfer) {
-            makeTransfer();
-            return true;
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.action_transfer) {
+            makeTransfer()
+            true
+        } else {
+            super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item);
     }
 
-    public void onAccountClick(int position) {
-        Account account = accountController.readAll().get(position - 1);
-        startActivityForResult(EditAccountActivity.Companion.newIntent(this, account), REQUEST_EDIT_ACCOUNT);
+    fun onAccountClick(position: Int) {
+        val account = accountController.readAll()[position - 1]
+        startActivityForResult(EditAccountActivity.newIntent(this, account), REQUEST_EDIT_ACCOUNT)
     }
 
-    public void makeTransfer() {
-        CrashlyticsProxy.get().logButton("Add Transfer");
-        startActivityForResult(new Intent(AccountsActivity.this, TransferActivity.class), REQUEST_TRANSFER);
+    fun makeTransfer() {
+        CrashlyticsProxy.get().logButton("Add Transfer")
+        startActivityForResult(Intent(this, TransferActivity::class.java), REQUEST_TRANSFER)
     }
 
-    public void addAccount() {
-        CrashlyticsProxy.get().logButton("Add Account");
-        Intent intent = new Intent(AccountsActivity.this, AddAccountActivity.class);
-        startActivityForResult(intent, REQUEST_ADD_ACCOUNT);
+    fun addAccount() {
+        CrashlyticsProxy.get().logButton("Add Account")
+        val intent = Intent(this, AddAccountActivity::class.java)
+        startActivityForResult(intent, REQUEST_ADD_ACCOUNT)
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == AppCompatActivity.RESULT_OK) {
-            switch (requestCode) {
-                case REQUEST_ADD_ACCOUNT:
-                    update();
-                    break;
-
-                case REQUEST_TRANSFER:
-
-                case REQUEST_EDIT_ACCOUNT:
-                    update();
-                    setResult(RESULT_OK);
-                    break;
-
-                default:
-                    break;
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                REQUEST_ADD_ACCOUNT -> update()
+                REQUEST_TRANSFER, REQUEST_EDIT_ACCOUNT -> {
+                    update()
+                    setResult(RESULT_OK)
+                }
+                else -> {}
             }
         }
     }
 
-    private void update() {
-        binding.listView.setAdapter(new AccountAdapter(AccountsActivity.this, accountController.readAll()));
-        summaryPresenter.update();
+    private fun update() {
+        binding.listView.adapter = AccountAdapter(this, accountController.readAll())
+        summaryPresenter.update()
+    }
+
+    companion object {
+        private const val REQUEST_ADD_ACCOUNT = 1
+        private const val REQUEST_TRANSFER = 2
+        private const val REQUEST_EDIT_ACCOUNT = 3
     }
 }

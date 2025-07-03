@@ -7,9 +7,10 @@ import com.blogspot.e_kanivets.moneytracker.repo.DbHelper
 import com.blogspot.e_kanivets.moneytracker.repo.base.BaseRepo
 
 class AccountRepo(dbHelper: DbHelper) : BaseRepo<Account>(dbHelper) {
-    override fun getTable(): String = DbHelper.TABLE_ACCOUNTS
 
-    override fun contentValues(account: Account?): ContentValues? {
+    public override fun getTable(): String = DbHelper.TABLE_ACCOUNTS
+
+    public override fun contentValues(account: Account?): ContentValues? {
         if (account == null) return null
         return ContentValues().apply {
             put(DbHelper.TITLE_COLUMN, account.title)
@@ -22,7 +23,7 @@ class AccountRepo(dbHelper: DbHelper) : BaseRepo<Account>(dbHelper) {
         }
     }
 
-    override fun getListFromCursor(cursor: Cursor?): MutableList<Account> {
+    public override fun getListFromCursor(cursor: Cursor?): MutableList<Account> {
         val accountList = mutableListOf<Account>()
         if (cursor == null) return accountList
 

@@ -1,118 +1,109 @@
-package com.blogspot.e_kanivets.moneytracker.activity.account;
+package com.blogspot.e_kanivets.moneytracker.activity.account
 
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ArrayAdapter;
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.ArrayAdapter
+import com.blogspot.e_kanivets.moneytracker.R
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity
+import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
+import com.blogspot.e_kanivets.moneytracker.controller.data.TransferController
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivityTransferBinding
+import com.blogspot.e_kanivets.moneytracker.entity.data.Account
+import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer
+import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
+import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator
+import com.blogspot.e_kanivets.moneytracker.util.validator.TransferValidator
+import javax.inject.Inject
 
-import androidx.annotation.Nullable;
-
-import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
-import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
-import com.blogspot.e_kanivets.moneytracker.controller.data.TransferController;
-import com.blogspot.e_kanivets.moneytracker.databinding.ActivityTransferBinding;
-import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
-import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer;
-import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
-import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator;
-import com.blogspot.e_kanivets.moneytracker.util.validator.TransferValidator;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-public class TransferActivity extends BaseBackActivity {
-    @SuppressWarnings("unused")
-    private static final String TAG = "TransferActivity";
+class TransferActivity : BaseBackActivity() {
 
     @Inject
-    TransferController transferController;
+    lateinit var transferController: TransferController
+
     @Inject
-    AccountController accountController;
+    lateinit var accountController: AccountController
 
-    private IValidator<Transfer> transferValidator;
+    private lateinit var transferValidator: IValidator<Transfer>
 
-    private List<Account> accountList;
+    private lateinit var accountList: List<Account>
 
-    private ActivityTransferBinding binding;
+    private lateinit var binding: ActivityTransferBinding
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        binding = ActivityTransferBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        binding = ActivityTransferBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        initData();
-        initToolbar();
-        initViews();
+        initData()
+        initToolbar()
+        initViews()
     }
 
-    private boolean initData() {
-        getAppComponent().inject(TransferActivity.this);
-        accountList = accountController.readActiveAccounts();
-        return true;
+    private fun initData(): Boolean {
+        appComponent.inject(this)
+        accountList = accountController.readActiveAccounts()
+        return true
     }
 
-    private void initViews() {
-        List<String> accounts = new ArrayList<>();
-        for (Account account : accountList) {
-            accounts.add(account.getTitle());
+    private fun initViews() {
+        val accounts = mutableListOf<String>()
+        for (account in accountList) {
+            accounts.add(account.title)
         }
 
-        transferValidator = new TransferValidator(TransferActivity.this, binding);
+        transferValidator = TransferValidator(this, binding)
 
-        if (accounts.size() == 0) {
-            accounts.add(getString(R.string.none));
-            binding.spinnerFrom.setEnabled(false);
-            binding.spinnerTo.setEnabled(false);
+        if (accounts.isEmpty()) {
+            accounts.add(getString(R.string.none))
+            binding.spinnerFrom.isEnabled = false
+            binding.spinnerTo.isEnabled = false
         }
 
-        binding.spinnerFrom.setAdapter(new ArrayAdapter<>(TransferActivity.this,
-                R.layout.view_spinner_item, accounts));
-
-        binding.spinnerTo.setAdapter(new ArrayAdapter<>(TransferActivity.this,
-                R.layout.view_spinner_item, accounts));
+        binding.spinnerFrom.adapter = ArrayAdapter(this, R.layout.view_spinner_item, accounts)
+        binding.spinnerTo.adapter = ArrayAdapter(this, R.layout.view_spinner_item, accounts)
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_transfer, menu);
-        return true;
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_transfer, menu)
+        return true
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_done) {
-            tryTransfer();
-            return true;
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_done -> {
+            tryTransfer()
+            true
         }
-        return super.onOptionsItemSelected(item);
+        else -> super.onOptionsItemSelected(item)
     }
 
-    private void tryTransfer() {
-        CrashlyticsProxy.get().logButton("Done Transfer");
+    private fun tryTransfer() {
+        CrashlyticsProxy.get().logButton("Done Transfer")
         if (doTransfer()) {
-            CrashlyticsProxy.get().logEvent("Done Transfer");
-            setResult(RESULT_OK);
-            finish();
+            CrashlyticsProxy.get().logEvent("Done Transfer")
+            setResult(RESULT_OK)
+            finish()
         }
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
-    private boolean doTransfer() {
-        if (transferValidator.validate()) {
-            Account fromAccount = accountList.get(binding.spinnerFrom.getSelectedItemPosition());
-            Account toAccount = accountList.get(binding.spinnerTo.getSelectedItemPosition());
-            double fromAmount = Double.parseDouble(binding.etFromAmount.getText().toString());
-            double toAmount = Double.parseDouble(binding.etToAmount.getText().toString());
+    private fun doTransfer() = if (transferValidator.validate()) {
+        val fromAccount = accountList[binding.spinnerFrom.selectedItemPosition]
+        val toAccount = accountList[binding.spinnerTo.selectedItemPosition]
+        val fromAmount = binding.etFromAmount.text.toString().toDouble()
+        val toAmount = binding.etToAmount.text.toString().toDouble()
 
-            return transferController.create(new Transfer(System.currentTimeMillis(),
-                    fromAccount.getId(), toAccount.getId(), fromAmount, toAmount)) != null;
-        } else {
-            return false;
-        }
+        transferController.create(
+            Transfer(
+                System.currentTimeMillis(),
+                fromAccount.id,
+                toAccount.id,
+                fromAmount,
+                toAmount
+            )
+        ) != null
+    } else {
+        false
     }
 }

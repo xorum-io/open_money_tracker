@@ -1,100 +1,92 @@
-package com.blogspot.e_kanivets.moneytracker.activity.account;
+package com.blogspot.e_kanivets.moneytracker.activity.account
 
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ArrayAdapter;
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.ArrayAdapter
+import androidx.annotation.Nullable
+import com.blogspot.e_kanivets.moneytracker.R
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity
+import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
+import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivityAddAccountBinding
+import com.blogspot.e_kanivets.moneytracker.entity.data.Account
+import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
+import com.blogspot.e_kanivets.moneytracker.util.validator.AccountValidator
+import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator
+import java.util.ArrayList
+import javax.inject.Inject
 
-import androidx.annotation.Nullable;
-
-import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
-import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
-import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
-import com.blogspot.e_kanivets.moneytracker.databinding.ActivityAddAccountBinding;
-import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
-import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
-import com.blogspot.e_kanivets.moneytracker.util.validator.AccountValidator;
-import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator;
-
-import java.util.ArrayList;
-
-import javax.inject.Inject;
-
-public class AddAccountActivity extends BaseBackActivity {
-    @SuppressWarnings("unused")
-    private static final String TAG = "AddAccountActivity";
+class AddAccountActivity : BaseBackActivity() {
 
     @Inject
-    AccountController accountController;
+    lateinit var accountController: AccountController
+
     @Inject
-    CurrencyController currencyController;
+    lateinit var currencyController: CurrencyController
 
-    private IValidator<Account> accountValidator;
+    private lateinit var accountValidator: IValidator<Account>
 
-    private ActivityAddAccountBinding binding;
+    private lateinit var binding: ActivityAddAccountBinding
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    override fun onCreate(@Nullable savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        binding = ActivityAddAccountBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        binding = ActivityAddAccountBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        initData();
-        initToolbar();
-        initViews();
+        initData()
+        initToolbar()
+        initViews()
     }
 
-    private boolean initData() {
-        getAppComponent().inject(AddAccountActivity.this);
-        return true;
+    private fun initData(): Boolean {
+        appComponent.inject(this)
+        return true
     }
 
-    private void initViews() {
-        accountValidator = new AccountValidator(AddAccountActivity.this, binding);
-        binding.spinner.setAdapter(new ArrayAdapter<>(AddAccountActivity.this,
-                R.layout.view_spinner_item,
-                new ArrayList<>(currencyController.readAll())));
+    private fun initViews() {
+        accountValidator = AccountValidator(this, binding)
+        binding.spinner.adapter = ArrayAdapter(
+            this,
+            R.layout.view_spinner_item,
+            ArrayList(currencyController.readAll())
+        )
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add_account, menu);
-        return true;
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_add_account, menu)
+        return true
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_done) {
-            tryAddAccount();
-            return true;
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_done -> {
+            tryAddAccount()
+            true
         }
-        return super.onOptionsItemSelected(item);
+        else -> super.onOptionsItemSelected(item)
     }
 
-    private void tryAddAccount() {
-        CrashlyticsProxy.get().logButton("Done Account");
+    private fun tryAddAccount() {
+        CrashlyticsProxy.get().logButton("Done Account")
         if (addAccount()) {
-            CrashlyticsProxy.get().logEvent("Done Account");
-            setResult(RESULT_OK);
-            finish();
+            CrashlyticsProxy.get().logEvent("Done Account")
+            setResult(RESULT_OK)
+            finish()
         }
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
-    private boolean addAccount() {
-        if (accountValidator.validate()) {
-            String title = binding.etTitle.getText().toString().trim();
-            double initSum = Double.parseDouble(binding.etInitSum.getText().toString().trim());
-            String currency = (String) binding.spinner.getSelectedItem();
-            double goal = 0;
-            int color = 0;
+    private fun addAccount() = if (accountValidator.validate()) {
+        val title = binding.etTitle.text.toString().trim()
+        val initSum = binding.etInitSum.text.toString().trim().toDouble()
+        val currency = binding.spinner.selectedItem as String
+        val goal = 0.0
+        val color = 0
 
-            Account account = new Account(-1, title, initSum, currency, goal, false, color);
-            return accountController.create(account) != null;
-        } else {
-            return false;
-        }
+        val account = Account(-1, title, initSum, currency, goal, false, color)
+        accountController.create(account) != null
+    } else {
+        false
     }
 }

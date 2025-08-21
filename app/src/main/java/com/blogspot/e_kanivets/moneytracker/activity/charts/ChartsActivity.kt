@@ -1,84 +1,76 @@
-package com.blogspot.e_kanivets.moneytracker.activity.charts;
+package com.blogspot.e_kanivets.moneytracker.activity.charts
 
-import com.blogspot.e_kanivets.moneytracker.databinding.ActivityChartsBinding;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
+import com.blogspot.e_kanivets.moneytracker.R
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity
+import com.blogspot.e_kanivets.moneytracker.activity.charts.fragment.GraphFragment
+import com.blogspot.e_kanivets.moneytracker.activity.charts.fragment.SummaryFragment
+import com.blogspot.e_kanivets.moneytracker.adapter.GeneralViewPagerAdapter
+import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController
+import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController
+import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController
+import com.blogspot.e_kanivets.moneytracker.databinding.ActivityChartsBinding
+import com.blogspot.e_kanivets.moneytracker.entity.data.Record
+import com.blogspot.e_kanivets.moneytracker.report.ReportMaker
+import com.blogspot.e_kanivets.moneytracker.report.chart.IMonthReport
+import javax.inject.Inject
 
-import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.charts.fragment.GraphFragment;
-import com.blogspot.e_kanivets.moneytracker.activity.charts.fragment.SummaryFragment;
-import com.blogspot.e_kanivets.moneytracker.adapter.GeneralViewPagerAdapter;
-import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
-import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
-import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController;
-import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
-import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
-import com.blogspot.e_kanivets.moneytracker.report.chart.IMonthReport;
+class ChartsActivity : BaseBackActivity() {
 
-import java.util.List;
+    @Inject lateinit var recordController: RecordController
+    @Inject lateinit var exchangeRateController: ExchangeRateController
+    @Inject lateinit var currencyController: CurrencyController
 
-import javax.inject.Inject;
+    private lateinit var binding: ActivityChartsBinding
 
-public class ChartsActivity extends BaseBackActivity {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    @Inject RecordController recordController;
-    @Inject ExchangeRateController exchangeRateController;
-    @Inject CurrencyController currencyController;
+        binding = ActivityChartsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-    private ActivityChartsBinding binding;
-
-    @Override
-    protected void onCreate(android.os.Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        
-        binding = ActivityChartsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        initData();
-        initToolbar();
-        initViews();
+        initData()
+        initToolbar()
+        initViews()
     }
 
-    private boolean initData() {
-        getAppComponent().inject(ChartsActivity.this);
-        return true;
+    private fun initData(): Boolean {
+        appComponent.inject(this)
+        return true
     }
 
-    private void initViews() {
-        setupViewPager(binding.viewPager);
-        binding.tabs.setupWithViewPager(binding.viewPager);
+    private fun initViews() {
+        setupViewPager(binding.viewPager)
+        binding.tabs.setupWithViewPager(binding.viewPager)
     }
 
-    protected String createRatesNeededList(String currency, List<String> ratesNeeded) {
-        StringBuilder sb = new StringBuilder(getString(R.string.error_exchange_rates));
-
-        for (String str : ratesNeeded) {
-            sb.append("\n").append(str).append(getString(R.string.arrow)).append(currency);
+    private fun createRatesNeededList(currency: String, ratesNeeded: List<String>): String {
+        val sb = StringBuilder(getString(R.string.error_exchange_rates))
+        for (str in ratesNeeded) {
+            sb.append("\n").append(str).append(getString(R.string.arrow)).append(currency)
         }
-
-        return sb.toString();
+        return sb.toString()
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        ReportMaker reportMaker = new ReportMaker(exchangeRateController);
-        String currency = currencyController.readDefaultCurrency();
-        List<Record> recordList = recordController.readAll();
-        List<String> currencyNeeded = reportMaker.currencyNeeded(currency, recordList);
+    private fun setupViewPager(viewPager: ViewPager) {
+        val reportMaker = ReportMaker(exchangeRateController)
+        val currency = currencyController.readDefaultCurrency()
+        val recordList = recordController.readAll()
+        val currencyNeeded = reportMaker.currencyNeeded(currency, recordList)
 
-        IMonthReport monthReport = null;
-        if (currencyNeeded.isEmpty()) monthReport = reportMaker.getMonthReport(currency, recordList);
+        var monthReport = reportMaker.getMonthReport(currency, recordList).takeIf { currencyNeeded.isEmpty() }
 
-        Fragment graphFragment;
-        if (monthReport == null) {
-            graphFragment = GraphFragment.newInstance(createRatesNeededList(currency, currencyNeeded));
+        val graphFragment = if (monthReport == null) {
+            GraphFragment.newInstance(createRatesNeededList(currency, currencyNeeded))
         } else {
-            graphFragment = GraphFragment.newInstance(monthReport);
+            GraphFragment.newInstance(monthReport)
         }
 
-        GeneralViewPagerAdapter adapter = new GeneralViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(SummaryFragment.newInstance(monthReport), getString(R.string.summary));
-        adapter.addFragment(graphFragment, getString(R.string.graph));
-        viewPager.setAdapter(adapter);
+        val adapter = GeneralViewPagerAdapter(supportFragmentManager)
+        adapter.addFragment(SummaryFragment.newInstance(monthReport), getString(R.string.summary))
+        adapter.addFragment(graphFragment, getString(R.string.graph))
+        viewPager.adapter = adapter
     }
 }

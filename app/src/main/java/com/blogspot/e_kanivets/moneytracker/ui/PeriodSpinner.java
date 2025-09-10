@@ -1,7 +1,9 @@
 package com.blogspot.e_kanivets.moneytracker.ui;
 
 import android.content.Context;
+
 import androidx.appcompat.widget.AppCompatSpinner;
+
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
@@ -155,44 +157,34 @@ public class PeriodSpinner extends AppCompatSpinner {
 
     private void showFromDateDialog() {
         if (lastPeriod == null) return;
-        ChangeDateDialog dialog = new ChangeDateDialog(context, lastPeriod.getFirst(),
-                new ChangeDateDialog.OnDateChangedListener() {
-                    @Override
-                    public void OnDataChanged(Date fromDate) {
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(fromDate);
-                        cal.set(Calendar.HOUR_OF_DAY, 0);
-                        cal.set(Calendar.MINUTE, 0);
-                        cal.set(Calendar.SECOND, 0);
-                        cal.set(Calendar.MILLISECOND, 0);
-
-                        showToDateDialog(cal.getTime());
-                    }
-                });
+        ChangeDateDialog dialog = new ChangeDateDialog(context, lastPeriod.getFirst(), fromDate -> {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(fromDate);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            showToDateDialog(cal.getTime());
+        });
         dialog.show();
     }
 
     private void showToDateDialog(final Date fromDate) {
         if (lastPeriod == null) return;
 
-        ChangeDateDialog dialog = new ChangeDateDialog(context, lastPeriod.getLast(),
-                new ChangeDateDialog.OnDateChangedListener() {
-                    @Override
-                    public void OnDataChanged(Date toDate) {
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(toDate);
-                        cal.set(Calendar.HOUR_OF_DAY, 23);
-                        cal.set(Calendar.MINUTE, 59);
-                        cal.set(Calendar.SECOND, 59);
-                        cal.set(Calendar.MILLISECOND, 999);
-
-                        if (cal.getTime().getTime() < fromDate.getTime()) {
-                            Toast.makeText(context, R.string.start_earlier_end, Toast.LENGTH_SHORT).show();
-                        } else {
-                            updatePeriod(new Period(fromDate, cal.getTime(), Period.TYPE_CUSTOM));
-                        }
-                    }
-                });
+        ChangeDateDialog dialog = new ChangeDateDialog(context, lastPeriod.getLast(), toDate -> {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(toDate);
+            cal.set(Calendar.HOUR_OF_DAY, 23);
+            cal.set(Calendar.MINUTE, 59);
+            cal.set(Calendar.SECOND, 59);
+            cal.set(Calendar.MILLISECOND, 999);
+            if (cal.getTime().getTime() < fromDate.getTime()) {
+                Toast.makeText(context, R.string.start_earlier_end, Toast.LENGTH_SHORT).show();
+            } else {
+                updatePeriod(new Period(fromDate, cal.getTime(), Period.TYPE_CUSTOM));
+            }
+        });
         dialog.show();
     }
 

@@ -28,7 +28,7 @@ class TransferController(
 
     fun getTransfersForAccount(account: Account): List<Transfer> {
         val condition = "${DbHelper.FROM_ACCOUNT_ID_COLUMN}=? OR ${DbHelper.TO_ACCOUNT_ID_COLUMN}=?"
-        val args = arrayOf(account.id.toString(), account.id.toString())
+        val args = arrayOf<String?>(account.id.toString(), account.id.toString())
 
         return readWithCondition(condition, args)
     }

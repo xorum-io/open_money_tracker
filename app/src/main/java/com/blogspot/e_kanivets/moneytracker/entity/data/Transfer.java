@@ -24,7 +24,7 @@ public class Transfer extends BaseEntity implements Parcelable {
                     long toAmount, long fromDecimals, long toDecimals) {
         this.fromDecimals = fromDecimals;
         this.toDecimals = toDecimals;
-        this.id = id;
+        setId(id);
         this.time = time;
         this.fromAccountId = fromAccountId;
         this.toAccountId = toAccountId;
@@ -63,11 +63,6 @@ public class Transfer extends BaseEntity implements Parcelable {
             return new Transfer[size];
         }
     };
-
-    @Override
-    public long getId() {
-        return id;
-    }
 
     public long getTime() {
         return time;
@@ -109,7 +104,7 @@ public class Transfer extends BaseEntity implements Parcelable {
     public boolean equals(Object o) {
         if (o instanceof Transfer) {
             Transfer transfer = (Transfer) o;
-            return this.id == transfer.id
+            return this.getId() == transfer.getId()
                     && this.time == transfer.time
                     && this.fromAccountId == transfer.fromAccountId
                     && this.toAccountId == transfer.toAccountId
@@ -125,7 +120,7 @@ public class Transfer extends BaseEntity implements Parcelable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Transfer {");
-        sb.append("id = ").append(id).append(", ");
+        sb.append("id = ").append(getId()).append(", ");
         sb.append("time = ").append(time).append(", ");
         sb.append("fromAccountId = ").append(fromAccountId).append(", ");
         sb.append("toAccountId = ").append(toAccountId).append(", ");

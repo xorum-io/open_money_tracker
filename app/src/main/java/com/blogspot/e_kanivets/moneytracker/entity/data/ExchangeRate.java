@@ -18,7 +18,7 @@ public class ExchangeRate extends BaseEntity implements Parcelable {
     private double amount;
 
     public ExchangeRate(long id, long createdAt, String fromCurrency, String toCurrency, double amount) {
-        this.id = id;
+        setId(id);
         this.createdAt = createdAt;
         this.fromCurrency = fromCurrency;
         this.toCurrency = toCurrency;
@@ -26,7 +26,7 @@ public class ExchangeRate extends BaseEntity implements Parcelable {
     }
 
     public ExchangeRate(long createdAt, String fromCurrency, String toCurrency, double amount) {
-        this.id = -1;
+        setId(-1L);
         this.createdAt = createdAt;
         this.fromCurrency = fromCurrency;
         this.toCurrency = toCurrency;
@@ -52,11 +52,6 @@ public class ExchangeRate extends BaseEntity implements Parcelable {
         }
     };
 
-    @Override
-    public long getId() {
-        return id;
-    }
-
     public long getCreatedAt() {
         return createdAt;
     }
@@ -77,7 +72,7 @@ public class ExchangeRate extends BaseEntity implements Parcelable {
     public boolean equals(Object o) {
         if (o instanceof ExchangeRate) {
             ExchangeRate rate = (ExchangeRate) o;
-            return this.id == rate.getId()
+            return this.getId() == rate.getId()
                     && this.createdAt == rate.getCreatedAt()
                     && equals(fromCurrency, rate.getFromCurrency())
                     && equals(this.toCurrency, rate.getToCurrency())
@@ -90,7 +85,7 @@ public class ExchangeRate extends BaseEntity implements Parcelable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("ExchangeRate {");
-        sb.append("id = ").append(id).append(", ");
+        sb.append("id = ").append(getId()).append(", ");
         sb.append("createdAt = ").append(createdAt).append(", ");
         sb.append("fromCurrency = ").append(fromCurrency).append(", ");
         sb.append("toCurrency = ").append(toCurrency).append(", ");

@@ -15,17 +15,17 @@ public class Category extends BaseEntity implements Parcelable {
     private String name;
 
     public Category(long id, String name) {
-        this.id = id;
+        setId(id);
         this.name = name;
     }
 
     public Category(String name) {
-        this.id = -1;
+        setId(-1L);
         this.name = name;
     }
 
     protected Category(Parcel in) {
-        id = in.readLong();
+        setId(in.readLong());
         name = in.readString();
     }
 
@@ -41,11 +41,6 @@ public class Category extends BaseEntity implements Parcelable {
         }
     };
 
-    @Override
-    public long getId() {
-        return id;
-    }
-
     public String getName() {
         return name;
     }
@@ -54,7 +49,7 @@ public class Category extends BaseEntity implements Parcelable {
     public boolean equals(Object o) {
         if (o instanceof Category) {
             Category category = (Category) o;
-            return this.id == category.getId()
+            return this.getId() == category.getId()
                     && equals(this.name, category.getName());
         } else return false;
     }
@@ -64,7 +59,7 @@ public class Category extends BaseEntity implements Parcelable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Category {");
-        sb.append("id = ").append(id).append(", ");
+        sb.append("id = ").append(getId()).append(", ");
         sb.append("title = ").append(name);
         sb.append("}");
 
@@ -78,7 +73,7 @@ public class Category extends BaseEntity implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
+        dest.writeLong(getId());
         dest.writeString(name);
     }
 }

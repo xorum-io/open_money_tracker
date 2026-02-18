@@ -27,7 +27,7 @@ public class Record extends BaseEntity implements Parcelable {
 
     public Record(long id, long time, int type, String title, long categoryId, String notes,
                   long price, long accountId, String currency, long decimals) {
-        this.id = id;
+        setId(id);
         this.time = time;
         this.type = type;
         this.title = title;
@@ -41,7 +41,7 @@ public class Record extends BaseEntity implements Parcelable {
 
     public Record(long id, long time, int type, String title, Category category, String notes,
                   long price, Account account, String currency, long decimals) {
-        this.id = id;
+        setId(id);
         this.time = time;
         this.type = type;
         this.title = title;
@@ -55,7 +55,7 @@ public class Record extends BaseEntity implements Parcelable {
 
     public Record(long id, long time, int type, String title, Category category, String notes,
                   double price, Account account, String currency) {
-        this.id = id;
+        setId(id);
         this.time = time;
         this.type = type;
         this.title = title;
@@ -69,7 +69,7 @@ public class Record extends BaseEntity implements Parcelable {
 
     public Record(long time, int type, String title, Category category, String notes, double price,
                   Account account, String currency) {
-        this.id = -1;
+        setId(-1L);
         this.time = time;
         this.type = type;
         this.title = title;
@@ -82,7 +82,7 @@ public class Record extends BaseEntity implements Parcelable {
     }
 
     protected Record(Parcel in) {
-        id = in.readLong();
+        setId(in.readLong());
         time = in.readLong();
         type = in.readInt();
         title = in.readString();
@@ -108,11 +108,6 @@ public class Record extends BaseEntity implements Parcelable {
 
     public int getType() {
         return type;
-    }
-
-    @Override
-    public long getId() {
-        return id;
     }
 
     public String getTitle() {
@@ -161,7 +156,7 @@ public class Record extends BaseEntity implements Parcelable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Record {");
-        sb.append("id = ").append(id).append(", ");
+        sb.append("id = ").append(getId()).append(", ");
         sb.append("title = ").append(title).append(", ");
 
         sb.append("type = ");
@@ -196,7 +191,7 @@ public class Record extends BaseEntity implements Parcelable {
     public boolean equals(Object o) {
         if (o instanceof Record) {
             Record record = (Record) o;
-            return this.id == record.getId()
+            return this.getId() == record.getId()
                     && this.time == record.getTime()
                     && this.type == record.getType()
                     && equals(this.title, record.getTitle())
@@ -216,7 +211,7 @@ public class Record extends BaseEntity implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
+        dest.writeLong(getId());
         dest.writeLong(time);
         dest.writeInt(type);
         dest.writeString(title);

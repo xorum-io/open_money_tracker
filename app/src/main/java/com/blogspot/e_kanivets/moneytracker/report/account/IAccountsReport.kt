@@ -1,6 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.report.account;
-
-import androidx.annotation.NonNull;
+package com.blogspot.e_kanivets.moneytracker.report.account
 
 /**
  * Interface that represents a contract of access to accounts report data.
@@ -8,15 +6,14 @@ import androidx.annotation.NonNull;
  *
  * @author Evgenii Kanivets
  */
-public interface IAccountsReport {
+interface IAccountsReport {
     /**
      * @return code of report currency
      */
-    @NonNull
-    String getCurrency();
+    val currency: String
 
     /**
      * @return total sum in given currency for given period
      */
-    double getTotal();
+    val total: Double
 }

@@ -97,7 +97,7 @@ class AddRecordActivity : BaseBackActivity() {
         autoCompleter = CategoryAutoCompleter(categoryController, preferenceController)
         uiDecorator = AddRecordUiDecorator(this)
 
-        uiDecorator.decorateActionBar(supportActionBar, mode, type)
+        uiDecorator.decorateActionBar(supportActionBar, mode!!, type)
 
         if (mode == Mode.MODE_EDIT) {
             record?.let { record ->

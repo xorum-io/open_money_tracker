@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
@@ -80,7 +81,7 @@ dependencies {
     androidTestImplementation 'com.crittercism.dexmaker:dexmaker:1.4'
     androidTestImplementation 'com.crittercism.dexmaker:dexmaker-dx:1.4'
     androidTestImplementation 'com.crittercism.dexmaker:dexmaker-mockito:1.4'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.51.1'
+    kapt 'com.google.dagger:dagger-compiler:2.51.1'
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0'

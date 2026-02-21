@@ -64,11 +64,11 @@ class AccountOperationsFragment : Fragment() {
     }
 
     private fun getRecordItems(): List<RecordItem> {
-        val accountRecords = recordController.getRecordsForAccount(account)
         val accountTransfers = transferController.getTransfersForAccount(account)
 
-        accountRecords += obtainRecordsFromTransfers(accountTransfers)
-        accountRecords.sortByDescending { it.time }
+        val accountRecords = (recordController.getRecordsForAccount(account) +
+                obtainRecordsFromTransfers(accountTransfers))
+            .sortedByDescending { it.time }
 
         return RecordItemsBuilder().getRecordItems(accountRecords)
     }

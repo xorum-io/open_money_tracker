@@ -57,7 +57,7 @@ class ReportActivity : BaseBackActivity() {
         period = intent.getParcelableExtra(KEY_PERIOD)
         if (period == null) return false
 
-        recordList = recordController.getRecordsForPeriod(period)
+        recordList = recordController.getRecordsForPeriod(period!!)
         shortSummaryPresenter = ShortSummaryPresenter(this)
         adapter = RecordReportAdapter(mutableListOf(), hashMapOf(), this)
         recordReportConverter = RecordReportConverter()

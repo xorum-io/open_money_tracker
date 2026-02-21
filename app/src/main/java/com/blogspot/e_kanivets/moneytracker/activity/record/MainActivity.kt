@@ -87,11 +87,11 @@ class MainActivity : BaseDrawerActivity() {
         drawer = binding.drawerLayout
         navigationView = binding.navView
 
-        navigationView.setNavigationItemSelectedListener(this)
+        navigationView?.setNavigationItemSelectedListener(this)
 
-        tvDefaultAccountTitle = navigationView.getHeaderView(0).findViewById(R.id.tvDefaultAccountTitle)
-        tvDefaultAccountSum = navigationView.getHeaderView(0).findViewById(R.id.tvDefaultAccountSum)
-        tvCurrency = navigationView.getHeaderView(0).findViewById(R.id.tvCurrency)
+        tvDefaultAccountTitle = navigationView!!.getHeaderView(0).findViewById(R.id.tvDefaultAccountTitle)
+        tvDefaultAccountSum = navigationView!!.getHeaderView(0).findViewById(R.id.tvDefaultAccountSum)
+        tvCurrency = navigationView!!.getHeaderView(0).findViewById(R.id.tvCurrency)
 
         recordAdapter = RecordAdapter(this, listOf(), true)
         recordAdapter.itemClickListener = { position -> editRecord(getPositionWithoutSummary(position)) }

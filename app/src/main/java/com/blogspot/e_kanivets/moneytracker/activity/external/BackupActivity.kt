@@ -162,7 +162,7 @@ class BackupActivity : BaseBackActivity(),
         if (isFinishing) return
 
         stopProgress()
-        showToast(reason)
+        showToast(reason ?: "")
     }
 
     fun backupNow() {

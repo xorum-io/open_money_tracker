@@ -35,7 +35,7 @@ class CategoryAutoCompleteAdapter(
         val category = getItem(position)
         binding.tvCategory.text = category
         binding.ivCancel.setOnClickListener {
-            autoCompleter.removeFromAutoComplete(category)
+            autoCompleter.removeFromAutoComplete(category ?: return@setOnClickListener)
             remove(category)
             notifyDataSetChanged()
         }

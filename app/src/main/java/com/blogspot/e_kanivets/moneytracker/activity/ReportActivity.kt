@@ -74,7 +74,7 @@ class ReportActivity : BaseBackActivity() {
 
     private fun update(currency: String) {
         val reportMaker = ReportMaker(rateController)
-        val report = reportMaker.getRecordReport(currency, period, recordList)
+        val report = reportMaker.getRecordReport(currency, period!!, recordList)
 
         adapter.setData(recordReportConverter.getItemsFromReport(report), recordReportConverter.getDataFromReport(report))
         shortSummaryPresenter.update(report, currency, reportMaker.currencyNeeded(currency, recordList))

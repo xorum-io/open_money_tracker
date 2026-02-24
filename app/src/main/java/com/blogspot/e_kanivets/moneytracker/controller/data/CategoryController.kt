@@ -12,7 +12,7 @@ import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo
  *
  * @author Evgenii Kanivets
  */
-class CategoryController(
+open class CategoryController(
     categoryRepo: IRepo<Category>,
     private val preferenceController: PreferenceController
 ) : BaseController<Category>(categoryRepo) {

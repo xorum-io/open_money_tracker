@@ -16,7 +16,7 @@ import java.util.TreeSet
  *
  * @author Evgenii Kanivets
  */
-class PreferenceController(private val context: Context) {
+open class PreferenceController(private val context: Context) {
 
     fun addLaunchCount() {
         val preferences = getDefaultPrefs()

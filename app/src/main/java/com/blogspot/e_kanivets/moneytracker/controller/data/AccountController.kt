@@ -10,7 +10,7 @@ import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer
 import com.blogspot.e_kanivets.moneytracker.repo.DbHelper
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo
 
-class AccountController(
+open class AccountController(
     accountRepo: IRepo<Account>,
     private val preferenceController: PreferenceController
 ) : BaseController<Account>(accountRepo) {

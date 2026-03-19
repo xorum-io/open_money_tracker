@@ -11,18 +11,14 @@ import com.blogspot.e_kanivets.moneytracker.databinding.DialogRateBinding
 import javax.inject.Inject
 
 class AppRateDialog(context: Context) : AlertDialog(context) {
-    companion object {
-        private const val GP_MARKET = "market://details?id="
-    }
 
-    private val contextRef = context
     private lateinit var binding: DialogRateBinding
 
     @Inject
     lateinit var preferenceController: PreferenceController
 
     init {
-        MtApp.instance.appComponent?.inject(this)
+        MtApp.instance.appComponent.inject(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +31,8 @@ class AppRateDialog(context: Context) : AlertDialog(context) {
     }
 
     fun yes() {
-        contextRef.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(GP_MARKET + contextRef.packageName)))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(GP_MARKET + context.packageName))
+        context.startActivity(intent)
         preferenceController.appRated()
         dismiss()
     }
@@ -51,5 +48,9 @@ class AppRateDialog(context: Context) : AlertDialog(context) {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    companion object {
+        private const val GP_MARKET = "market://details?id="
     }
 } 

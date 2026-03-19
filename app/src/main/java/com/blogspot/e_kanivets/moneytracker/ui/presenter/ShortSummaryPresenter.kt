@@ -25,7 +25,7 @@ class ShortSummaryPresenter(context: Context) : BaseSummaryPresenter() {
 
     init {
         this.context = context
-        MtApp.get().appComponent.inject(this)
+        MtApp.instance.appComponent.inject(this)
         layoutInflater = LayoutInflater.from(context)
         red = context.resources.getColor(R.color.red)
         green = context.resources.getColor(R.color.green)

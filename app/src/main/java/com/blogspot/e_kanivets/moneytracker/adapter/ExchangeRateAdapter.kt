@@ -19,7 +19,7 @@ class ExchangeRateAdapter(
     @Inject lateinit var formatController: FormatController
 
     init {
-        MtApp.get().appComponent.inject(this)
+        MtApp.instance.appComponent.inject(this)
     }
 
     override fun getCount(): Int = exchangeRates.size

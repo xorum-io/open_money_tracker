@@ -74,20 +74,20 @@ class ExchangeRatesActivity : BaseBackActivity() {
     }
 
     fun deleteExchangeRate(position: Int) {
-        CrashlyticsProxy.get().logButton("Delete Exchange Rate")
+        CrashlyticsProxy.instance.logButton("Delete Exchange Rate")
         rateController.deleteExchangeRatePair(exchangeRateList[position])
         update()
         setResult(RESULT_OK)
     }
 
     fun addExchangeRate() {
-        CrashlyticsProxy.get().logButton("Add Exchange Rate")
+        CrashlyticsProxy.instance.logButton("Add Exchange Rate")
         val intent = Intent(this, AddExchangeRateActivity::class.java)
         startActivityForResult(intent, REQUEST_ADD_EXCHANGE_RATE)
     }
 
     fun addExchangeRateOnBaseOfExisted(position: Int) {
-        CrashlyticsProxy.get().logButton("Edit Exchange Rate")
+        CrashlyticsProxy.instance.logButton("Edit Exchange Rate")
         if (position < 0 || position >= exchangeRateList.size) return
         val intent = Intent(this, AddExchangeRateActivity::class.java)
         intent.putExtra(AddExchangeRateActivity.KEY_EXCHANGE_RATE, exchangeRateList[position])

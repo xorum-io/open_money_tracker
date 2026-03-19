@@ -27,7 +27,7 @@ class AccountAdapter(
     private val grey: Int = context.resources.getColor(R.color.grey_inactive)
 
     init {
-        MtApp.get().appComponent.inject(this)
+        MtApp.instance.appComponent.inject(this)
     }
 
     override fun getCount(): Int = accounts.size

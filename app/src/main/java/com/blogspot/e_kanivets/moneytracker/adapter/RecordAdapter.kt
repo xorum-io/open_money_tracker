@@ -36,7 +36,7 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.context = context
         this.items = items
 
-        MtApp.get().appComponent.inject(this)
+        MtApp.instance.appComponent.inject(this)
 
         whiteRed = ContextCompat.getColor(context, R.color.white_red)
         whiteGreen = ContextCompat.getColor(context, R.color.white_green)

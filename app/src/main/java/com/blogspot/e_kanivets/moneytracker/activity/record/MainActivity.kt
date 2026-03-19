@@ -117,23 +117,23 @@ class MainActivity : BaseDrawerActivity() {
     private fun getPositionWithoutSummary(position: Int) = position - 1
 
     private fun editRecord(position: Int) {
-        CrashlyticsProxy.get().logButton("Edit Record")
+        CrashlyticsProxy.instance.logButton("Edit Record")
         val record = recordList[getRecordPosition(position)]
         startAddRecordActivity(record, AddRecordActivity.Mode.MODE_EDIT, record.type)
     }
 
     private fun addExpense() {
-        CrashlyticsProxy.get().logButton("Add Expense")
+        CrashlyticsProxy.instance.logButton("Add Expense")
         startAddRecordActivity(null, AddRecordActivity.Mode.MODE_ADD, Record.TYPE_EXPENSE)
     }
 
     private fun addIncome() {
-        CrashlyticsProxy.get().logButton("Add Income")
+        CrashlyticsProxy.instance.logButton("Add Income")
         startAddRecordActivity(null, AddRecordActivity.Mode.MODE_ADD, Record.TYPE_INCOME)
     }
 
     private fun showReport() {
-        CrashlyticsProxy.get().logButton("Show Report")
+        CrashlyticsProxy.instance.logButton("Show Report")
         val intent = Intent(this, ReportActivity::class.java)
         intent.putExtra(ReportActivity.KEY_PERIOD, period)
         startActivity(intent)
@@ -179,7 +179,7 @@ class MainActivity : BaseDrawerActivity() {
     }
 
     private fun showAppRateDialog() {
-        CrashlyticsProxy.get().logEvent("Show App Rate Dialog")
+        CrashlyticsProxy.instance.logEvent("Show App Rate Dialog")
         val dialog = AppRateDialog(this)
         dialog.setCanceledOnTouchOutside(false)
         dialog.show()

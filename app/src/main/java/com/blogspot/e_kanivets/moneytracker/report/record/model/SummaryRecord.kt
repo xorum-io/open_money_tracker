@@ -14,6 +14,6 @@ class SummaryRecord(title: String, val currency: String, val amount: Double, rec
 
     private fun buildTitle(title: String, recordsCount: Int): String {
         return if (recordsCount <= 1) title
-        else MtApp.get().resources.getString(R.string.title_summary_record, title, recordsCount)
+        else MtApp.instance.resources.getString(R.string.title_summary_record, title, recordsCount)
     }
 }

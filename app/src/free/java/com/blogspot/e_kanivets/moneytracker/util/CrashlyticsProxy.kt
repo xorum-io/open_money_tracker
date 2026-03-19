@@ -13,15 +13,9 @@ class CrashlyticsProxy private constructor() {
     fun logButton(buttonName: String?): Boolean = false
 
     companion object {
-        private var instance: CrashlyticsProxy? = null
 
-        @JvmStatic
-        fun get(): CrashlyticsProxy {
-            if (instance == null) instance = CrashlyticsProxy()
-            return instance!!
-        }
+        val instance = CrashlyticsProxy()
 
-        @JvmStatic
         fun startCrashlytics(context: Context) {}
     }
 }

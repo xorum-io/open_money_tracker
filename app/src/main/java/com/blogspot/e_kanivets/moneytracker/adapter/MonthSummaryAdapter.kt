@@ -21,7 +21,7 @@ class MonthSummaryAdapter(
     private val dateFormat = SimpleDateFormat("MMM, yyyy")
 
     init {
-        MtApp.get().appComponent.inject(this)
+        MtApp.instance.appComponent.inject(this)
         if (monthReport.monthList.size != monthReport.incomeList.size ||
             monthReport.incomeList.size != monthReport.expenseList.size) {
             throw IllegalArgumentException("Broken report data")

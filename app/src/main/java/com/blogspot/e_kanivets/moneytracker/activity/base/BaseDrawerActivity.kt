@@ -82,32 +82,32 @@ abstract class BaseDrawerActivity : BaseActivity(), NavigationView.OnNavigationI
     }
 
     private fun showAccounts() {
-        CrashlyticsProxy.get().logButton("Show Accounts")
+        CrashlyticsProxy.instance.logButton("Show Accounts")
         startActivityForResult(Intent(this, AccountsActivity::class.java), REQUEST_ACCOUNTS)
     }
 
     private fun showRates() {
-        CrashlyticsProxy.get().logButton("Show Rates")
+        CrashlyticsProxy.instance.logButton("Show Rates")
         startActivityForResult(Intent(this, ExchangeRatesActivity::class.java), REQUEST_RATES)
     }
 
     private fun showCharts() {
-        CrashlyticsProxy.get().logButton("Show Charts")
+        CrashlyticsProxy.instance.logButton("Show Charts")
         startActivity(Intent(this, ChartsActivity::class.java))
     }
 
     private fun showBackup() {
-        CrashlyticsProxy.get().logButton("Show Backup")
+        CrashlyticsProxy.instance.logButton("Show Backup")
         startActivityForResult(Intent(this, BackupActivity::class.java), REQUEST_BACKUP)
     }
 
     private fun showImportExport() {
-        CrashlyticsProxy.get().logButton("Show Import Export")
+        CrashlyticsProxy.instance.logButton("Show Import Export")
         startActivityForResult(Intent(this, ImportExportActivity::class.java), REQUEST_IMPORT_EXPORT)
     }
 
     private fun showSettings() {
-        CrashlyticsProxy.get().logButton("Show Settings")
+        CrashlyticsProxy.instance.logButton("Show Settings")
         startActivityForResult(Intent(this, SettingsActivity::class.java), REQUEST_SETTINGS)
     }
 }

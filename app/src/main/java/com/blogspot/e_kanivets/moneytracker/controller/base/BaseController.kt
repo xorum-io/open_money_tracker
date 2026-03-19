@@ -2,18 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.controller.base
 
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo
 
-/**
- * This is just a wrapper for [IRepo] interface.
- * Don't use Repo classes outside of controllers.
- * Created on 2/17/16.
- *
- * @author Evgenii Kanivets
- */
-abstract class BaseController<T>(repo: IRepo<T>) : IRepo<T> {
-
-    @JvmField
-    protected val repo: IRepo<T> = repo
-
+abstract class BaseController<T>(protected val repo: IRepo<T>) : IRepo<T> {
 
     override fun create(instance: T?): T? = repo.create(instance)
 

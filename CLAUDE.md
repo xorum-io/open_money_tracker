@@ -43,7 +43,7 @@ Activities inject controllers directly. New classes that need DI must be added t
 - **View Binding** is enabled globally — use `ActivityXxxBinding` / `FragmentXxxBinding`, not `findViewById`.
 - **`IRepo<T>`** is the contract for all data access. Implement it (or extend `BaseRepo`) for new entity types.
 - **`Record`** uses `TYPE_INCOME = 0` / `TYPE_EXPENSE = 1` integer constants.
-- **`MtApp.get()`** provides the singleton application instance.
+- **`MtApp.instance`** provides the singleton application instance.
 - **Timber** is used for logging (`Timber.d(...)`, `Timber.e(...)`), not `Log`.
 
 ## Testing

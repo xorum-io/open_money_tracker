@@ -32,16 +32,10 @@ class CrashlyticsProxy private constructor() {
     }
 
     companion object {
-        private var instance: CrashlyticsProxy? = null
-        private var analytics: FirebaseAnalytics? = null
 
-        @JvmStatic
-        fun get(): CrashlyticsProxy {
-            if (instance == null) instance = CrashlyticsProxy()
-            return instance!!
-        }
+        val instance = CrashlyticsProxy()
+        private lateinit var analytics: FirebaseAnalytics
 
-        @JvmStatic
         fun startCrashlytics(context: Context) {
             analytics = FirebaseAnalytics.getInstance(context)
         }

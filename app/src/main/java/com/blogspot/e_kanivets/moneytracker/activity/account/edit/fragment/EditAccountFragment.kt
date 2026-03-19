@@ -47,7 +47,7 @@ class EditAccountFragment : Fragment() {
     }
 
     private fun initData() {
-        MtApp.get().appComponent.inject(this@EditAccountFragment)
+        MtApp.instance.appComponent.inject(this@EditAccountFragment)
         arguments?.let { arguments -> account = arguments.getParcelable(KEY_ACCOUNT)!! }
     }
 
@@ -63,7 +63,7 @@ class EditAccountFragment : Fragment() {
     }
 
     private fun done() {
-        CrashlyticsProxy.get().logButton("Edit Account")
+        CrashlyticsProxy.instance.logButton("Edit Account")
         if (accountValidator.validate()) {
             val title = binding.etTitle.text.toString().trim { it <= ' ' }
             val goal = binding.etGoal.text.toString().toDouble()
@@ -74,7 +74,7 @@ class EditAccountFragment : Fragment() {
             )
             val updated = accountController.update(newAccount) != null
             if (updated) {
-                CrashlyticsProxy.get().logEvent("Edit Account")
+                CrashlyticsProxy.instance.logEvent("Edit Account")
                 activity?.setResult(Activity.RESULT_OK)
                 activity?.finish()
             }

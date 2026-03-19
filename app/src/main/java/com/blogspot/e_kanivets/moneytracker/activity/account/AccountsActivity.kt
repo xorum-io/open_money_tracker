@@ -68,12 +68,12 @@ class AccountsActivity : BaseBackActivity() {
     }
 
     fun makeTransfer() {
-        CrashlyticsProxy.get().logButton("Add Transfer")
+        CrashlyticsProxy.instance.logButton("Add Transfer")
         startActivityForResult(Intent(this, TransferActivity::class.java), REQUEST_TRANSFER)
     }
 
     fun addAccount() {
-        CrashlyticsProxy.get().logButton("Add Account")
+        CrashlyticsProxy.instance.logButton("Add Account")
         val intent = Intent(this, AddAccountActivity::class.java)
         startActivityForResult(intent, REQUEST_ADD_ACCOUNT)
     }

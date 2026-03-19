@@ -55,7 +55,7 @@ class AccountOperationsFragment : Fragment() {
     }
 
     private fun initData() {
-        MtApp.get().appComponent.inject(this@AccountOperationsFragment)
+        MtApp.instance.appComponent.inject(this@AccountOperationsFragment)
         arguments?.let { arguments -> account = arguments.getParcelable(KEY_ACCOUNT)!! }
     }
 

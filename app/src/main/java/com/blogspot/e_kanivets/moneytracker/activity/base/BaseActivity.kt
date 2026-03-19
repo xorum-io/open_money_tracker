@@ -16,7 +16,7 @@ abstract class BaseActivity : AppCompatActivity() {
     protected var progressDialog: ProgressDialog? = null
 
     protected val appComponent: AppComponent
-        get() = MtApp.get().appComponent
+        get() = MtApp.instance.appComponent
 
     protected abstract fun initToolbar(): Toolbar?
 

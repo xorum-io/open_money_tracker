@@ -98,7 +98,7 @@ class BackupActivity : BaseBackActivity(),
     }
 
     override fun onBackupSuccess() {
-        CrashlyticsProxy.get().logEvent("Backup success")
+        CrashlyticsProxy.instance.logEvent("Backup success")
         Timber.d("Backup success.")
         if (isFinishing) return
 
@@ -107,7 +107,7 @@ class BackupActivity : BaseBackActivity(),
     }
 
     override fun onBackupFailure(reason: String?) {
-        CrashlyticsProxy.get().logEvent("Backup failure")
+        CrashlyticsProxy.instance.logEvent("Backup failure")
         Timber.d("Backup failure.")
         if (isFinishing) return
 
@@ -118,7 +118,7 @@ class BackupActivity : BaseBackActivity(),
     }
 
     override fun onRestoreSuccess(backupName: String) {
-        CrashlyticsProxy.get().logEvent("Restore Success")
+        CrashlyticsProxy.instance.logEvent("Restore Success")
         Timber.d("Restore success.")
         if (isFinishing) return
 
@@ -128,7 +128,7 @@ class BackupActivity : BaseBackActivity(),
         builder.setTitle(getString(R.string.backup_is_restored))
         builder.setMessage(getString(R.string.backup_restored, backupName))
         builder.setOnDismissListener {
-            MtApp.get().buildAppComponent()
+            MtApp.instance.buildAppComponent()
             setResult(RESULT_OK)
             finish()
         }
@@ -137,7 +137,7 @@ class BackupActivity : BaseBackActivity(),
     }
 
     override fun onRestoreFailure(reason: String?) {
-        CrashlyticsProxy.get().logEvent("Restore Failure")
+        CrashlyticsProxy.instance.logEvent("Restore Failure")
         Timber.d("Restore failure.")
         if (isFinishing) return
 
@@ -148,7 +148,7 @@ class BackupActivity : BaseBackActivity(),
     }
 
     override fun onRemoveSuccess() {
-        CrashlyticsProxy.get().logEvent("Remove Success")
+        CrashlyticsProxy.instance.logEvent("Remove Success")
         Timber.d("Remove success.")
         if (isFinishing) return
 
@@ -157,7 +157,7 @@ class BackupActivity : BaseBackActivity(),
     }
 
     override fun onRemoveFailure(reason: String?) {
-        CrashlyticsProxy.get().logEvent("Remove Failure")
+        CrashlyticsProxy.instance.logEvent("Remove Failure")
         Timber.d("Remove failure.")
         if (isFinishing) return
 
@@ -166,13 +166,13 @@ class BackupActivity : BaseBackActivity(),
     }
 
     fun backupNow() {
-        CrashlyticsProxy.get().logButton("Make Backup")
+        CrashlyticsProxy.instance.logButton("Make Backup")
         startProgress(getString(R.string.making_backup))
         backupController.makeBackup(dbClient)
     }
 
     fun restoreBackupClicked(position: Int) {
-        CrashlyticsProxy.get().logButton("Restore backup")
+        CrashlyticsProxy.instance.logButton("Restore backup")
         val backupName = binding.listView.adapter.getItem(position).toString()
 
         AlertDialog.Builder(this).apply {

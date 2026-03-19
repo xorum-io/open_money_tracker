@@ -66,7 +66,7 @@ class PeriodSpinner(context: Context, attrs: AttributeSet? = null, defStyleAttr:
     }
 
     private fun init(context: Context) {
-        MtApp.get().appComponent.inject(this)
+        MtApp.instance.appComponent.inject(this)
 
         setAdapter(ArrayAdapter(context, android.R.layout.simple_list_item_1,
             resources.getStringArray(R.array.array_periods)))

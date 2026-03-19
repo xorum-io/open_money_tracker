@@ -65,7 +65,7 @@ class ImportExportActivity : BaseBackActivity() {
     }
 
     fun showHelp() {
-        CrashlyticsProxy.get().logButton("Show Help")
+        CrashlyticsProxy.instance.logButton("Show Help")
         AlertDialog.Builder(this)
             .setTitle(R.string.help)
             .setMessage(R.string.import_help)
@@ -74,7 +74,7 @@ class ImportExportActivity : BaseBackActivity() {
     }
 
     fun importRecords() {
-        CrashlyticsProxy.get().logButton("Import Records")
+        CrashlyticsProxy.instance.logButton("Import Records")
         val data = binding.etImportData.text.toString().trim()
         CoroutineScope(Dispatchers.Main).launch {
             startProgress(getString(R.string.importing_records))
@@ -89,7 +89,7 @@ class ImportExportActivity : BaseBackActivity() {
     }
 
     fun exportRecords() {
-        CrashlyticsProxy.get().logButton("Export Records")
+        CrashlyticsProxy.instance.logButton("Export Records")
         val records = exportController.getRecordsForExport(0, Long.MAX_VALUE)
         val exportDir = File(cacheDir, "export")
         val exportDirCreated = exportDir.mkdirs()
@@ -113,7 +113,7 @@ class ImportExportActivity : BaseBackActivity() {
     }
 
     private fun shareExportedRecords(exportFile: File) {
-        CrashlyticsProxy.get().logEvent("Share Records")
+        CrashlyticsProxy.instance.logEvent("Share Records")
         val fileUri: Uri = FileProvider.getUriForFile(this, packageName, exportFile)
         val sendIntent = Intent().apply {
             action = Intent.ACTION_SEND

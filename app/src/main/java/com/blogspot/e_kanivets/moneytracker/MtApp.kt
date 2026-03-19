@@ -8,12 +8,6 @@ import com.blogspot.e_kanivets.moneytracker.di.module.repo.CachedRepoModule
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
 import timber.log.Timber
 
-/**
- * Custom application implementation.
- * Created on 29/08/14.
- *
- * @author Evgenii Kanivets
- */
 class MtApp : Application() {
 
     lateinit var appComponent: AppComponent
@@ -22,16 +16,16 @@ class MtApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        mtApp = this
+        instance = this
         buildAppComponent()
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
-            CrashlyticsProxy.get().setEnabled(false)
+            CrashlyticsProxy.instance.setEnabled(false)
         } else {
             Timber.plant(ReleaseTree())
             CrashlyticsProxy.startCrashlytics(this)
-            CrashlyticsProxy.get().setEnabled(true)
+            CrashlyticsProxy.instance.setEnabled(true)
         }
     }
 
@@ -41,8 +35,8 @@ class MtApp : Application() {
 
     private fun buildComponent(): AppComponent {
         return DaggerAppComponent.builder()
-            .cachedRepoModule(CachedRepoModule(get()))
-            .controllerModule(ControllerModule(get()))
+            .cachedRepoModule(CachedRepoModule(instance))
+            .controllerModule(ControllerModule(instance))
             .build()
     }
 
@@ -53,9 +47,8 @@ class MtApp : Application() {
     }
 
     companion object {
-        private lateinit var mtApp: MtApp
 
-        @JvmStatic
-        fun get(): MtApp = mtApp
+        lateinit var instance: MtApp
+            private set
     }
 }

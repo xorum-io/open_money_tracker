@@ -22,7 +22,7 @@ class AppRateDialog(context: Context) : AlertDialog(context) {
     lateinit var preferenceController: PreferenceController
 
     init {
-        MtApp.get().appComponent?.inject(this)
+        MtApp.instance.appComponent?.inject(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -104,9 +104,9 @@ class AddExchangeRateActivity : BaseBackActivity() {
     }
 
     private fun tryAddExchangeRate() {
-        CrashlyticsProxy.get().logButton("Done Exchange Rate")
+        CrashlyticsProxy.instance.logButton("Done Exchange Rate")
         if (addExchangeRate()) {
-            CrashlyticsProxy.get().logEvent("Done Exchange Rate")
+            CrashlyticsProxy.instance.logEvent("Done Exchange Rate")
             setResult(RESULT_OK)
             finish()
         }

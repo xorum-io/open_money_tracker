@@ -102,7 +102,7 @@ class ReportActivity : BaseBackActivity() {
         lateinit var formatController: FormatController
 
         init {
-            MtApp.get().appComponent.inject(this)
+            MtApp.instance.appComponent.inject(this)
         }
 
         fun getItemsFromReport(report: IRecordReport?): MutableList<RecordReportItem> {

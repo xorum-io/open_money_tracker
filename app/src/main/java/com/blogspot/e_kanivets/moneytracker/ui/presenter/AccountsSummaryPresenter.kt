@@ -34,7 +34,7 @@ class AccountsSummaryPresenter(context: Context) : BaseSummaryPresenter() {
         layoutInflater = LayoutInflater.from(context)
         red = context.resources.getColor(R.color.red)
         green = context.resources.getColor(R.color.green)
-        MtApp.get().appComponent.inject(this)
+        MtApp.instance.appComponent.inject(this)
         reportMaker = ReportMaker(rateController)
     }
 

@@ -254,10 +254,10 @@ class AddRecordActivity : BaseBackActivity() {
     }
 
     private fun tryRecord() {
-        CrashlyticsProxy.instance.logButton("Done Record")
+        CrashlyticsProxy.instance.logButton("Try Record")
         if (addRecord()) {
             CrashlyticsProxy.instance.logEvent("Done Record")
-            setResult(Activity.RESULT_OK)
+            setResult(RESULT_OK)
             finish()
         }
     }

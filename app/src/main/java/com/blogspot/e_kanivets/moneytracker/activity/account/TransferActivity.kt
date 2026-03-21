@@ -79,7 +79,7 @@ class TransferActivity : BaseBackActivity() {
     }
 
     private fun tryTransfer() {
-        CrashlyticsProxy.instance.logButton("Done Transfer")
+        CrashlyticsProxy.instance.logButton("Try Transfer")
         if (doTransfer()) {
             CrashlyticsProxy.instance.logEvent("Done Transfer")
             setResult(RESULT_OK)

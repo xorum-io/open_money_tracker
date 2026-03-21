@@ -68,7 +68,7 @@ class AddAccountActivity : BaseBackActivity() {
     }
 
     private fun tryAddAccount() {
-        CrashlyticsProxy.instance.logButton("Done Account")
+        CrashlyticsProxy.instance.logButton("Try Account")
         if (addAccount()) {
             CrashlyticsProxy.instance.logEvent("Done Account")
             setResult(RESULT_OK)

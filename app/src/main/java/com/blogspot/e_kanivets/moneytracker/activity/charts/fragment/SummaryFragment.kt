@@ -11,19 +11,8 @@ import com.blogspot.e_kanivets.moneytracker.report.chart.IMonthReport
 
 class SummaryFragment : Fragment() {
 
-    companion object {
-
-        private const val ARG_MONTH_REPORT = "arg_month_report"
-
-        fun newInstance(monthReport: IMonthReport?) = SummaryFragment().apply {
-            arguments = Bundle().apply {
-                putParcelable(ARG_MONTH_REPORT, monthReport)
-            }
-        }
-    }
-
     private var monthReport: IMonthReport? = null
-    private var binding: FragmentSummaryBinding? = null
+    private lateinit var binding: FragmentSummaryBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,13 +23,24 @@ class SummaryFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentSummaryBinding.inflate(inflater, container, false)
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         monthReport?.let { report ->
-            binding?.listView?.adapter = MonthSummaryAdapter(requireActivity(), report)
+            binding.listView.adapter = MonthSummaryAdapter(requireActivity(), report)
+        }
+    }
+
+    companion object {
+
+        private const val ARG_MONTH_REPORT = "arg_month_report"
+
+        fun newInstance(monthReport: IMonthReport?) = SummaryFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(ARG_MONTH_REPORT, monthReport)
+            }
         }
     }
 }

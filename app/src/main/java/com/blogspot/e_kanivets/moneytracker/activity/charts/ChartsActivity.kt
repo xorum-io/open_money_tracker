@@ -60,7 +60,7 @@ class ChartsActivity : BaseBackActivity() {
         val recordList = recordController.readAll()
         val currencyNeeded = reportMaker.currencyNeeded(currency, recordList)
 
-        var monthReport = reportMaker.getMonthReport(currency, recordList).takeIf { currencyNeeded.isEmpty() }
+        val monthReport = reportMaker.getMonthReport(currency, recordList).takeIf { currencyNeeded.isEmpty() }
 
         val graphFragment = if (monthReport == null) {
             GraphFragment.newInstance(createRatesNeededList(currency, currencyNeeded))

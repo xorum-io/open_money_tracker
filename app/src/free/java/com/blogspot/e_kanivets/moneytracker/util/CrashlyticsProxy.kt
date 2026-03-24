@@ -8,9 +8,9 @@ class CrashlyticsProxy private constructor() {
 
     fun isEnabled(): Boolean = false
 
-    fun logEvent(eventName: String?): Boolean = false
+    fun logEvent(eventName: String): Boolean = false
 
-    fun logButton(buttonName: String?): Boolean = false
+    fun logButton(buttonName: String): Boolean = false
 
     companion object {
 

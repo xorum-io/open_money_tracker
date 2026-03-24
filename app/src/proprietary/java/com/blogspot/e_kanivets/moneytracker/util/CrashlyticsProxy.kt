@@ -13,7 +13,7 @@ class CrashlyticsProxy private constructor() {
 
     fun isEnabled(): Boolean = enabled
 
-    fun logEvent(eventName: String?): Boolean {
+    fun logEvent(eventName: String): Boolean {
         return if (enabled) {
             analytics?.logEvent(eventName, null)
             true
@@ -22,7 +22,7 @@ class CrashlyticsProxy private constructor() {
         }
     }
 
-    fun logButton(buttonName: String?): Boolean {
+    fun logButton(buttonName: String): Boolean {
         return if (enabled) {
             analytics?.logEvent(buttonName, null)
             true

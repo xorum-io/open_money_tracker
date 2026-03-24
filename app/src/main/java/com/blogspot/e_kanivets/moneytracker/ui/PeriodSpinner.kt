@@ -22,14 +22,31 @@ class PeriodSpinner(context: Context, attrs: AttributeSet? = null, defStyleAttr:
     lateinit var periodController: PeriodController
 
     private var periodSelectedListener: OnPeriodSelectedListener? = null
-    private var listener: AdapterView.OnItemSelectedListener? = null
+    private var listener: OnItemSelectedListener? = null
     private var lastPeriod: Period? = null
 
     constructor(context: Context) : this(context, null, 0)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
     init {
-        init(context)
+        MtApp.instance.appComponent.inject(this)
+
+        setAdapter(ArrayAdapter(context, android.R.layout.simple_list_item_1,
+            resources.getStringArray(R.array.array_periods)))
+        setOnItemSelectedEvenIfUnchangedListener(object : OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                when (position) {
+                    0 -> updatePeriod(periodController.dayPeriod())
+                    1 -> updatePeriod(periodController.weekPeriod())
+                    2 -> updatePeriod(periodController.monthPeriod())
+                    3 -> updatePeriod(periodController.yearPeriod())
+                    4 -> updatePeriod(periodController.allTimePeriod())
+                    5 -> showFromDateDialog()
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        })
     }
 
     fun updatePeriod(period: Period) {
@@ -63,27 +80,6 @@ class PeriodSpinner(context: Context, attrs: AttributeSet? = null, defStyleAttr:
 
     fun setOnItemSelectedEvenIfUnchangedListener(listener: AdapterView.OnItemSelectedListener) {
         this.listener = listener
-    }
-
-    private fun init(context: Context) {
-        MtApp.instance.appComponent.inject(this)
-
-        setAdapter(ArrayAdapter(context, android.R.layout.simple_list_item_1,
-            resources.getStringArray(R.array.array_periods)))
-        setOnItemSelectedEvenIfUnchangedListener(object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                when (position) {
-                    0 -> updatePeriod(periodController.dayPeriod())
-                    1 -> updatePeriod(periodController.weekPeriod())
-                    2 -> updatePeriod(periodController.monthPeriod())
-                    3 -> updatePeriod(periodController.yearPeriod())
-                    4 -> updatePeriod(periodController.allTimePeriod())
-                    5 -> showFromDateDialog()
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        })
     }
 
     private fun showFromDateDialog() {

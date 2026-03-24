@@ -19,23 +19,14 @@ import com.google.android.material.navigation.NavigationView
 
 abstract class BaseDrawerActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    companion object {
-        private const val REQUEST_ACCOUNTS = 1
-        private const val REQUEST_RATES = 2
-        private const val REQUEST_SETTINGS = 3
-        private const val REQUEST_IMPORT_EXPORT = 4
-    }
-
-    protected val REQUEST_BACKUP = 5
-
-    protected var drawer: DrawerLayout? = null
-    protected var navigationView: NavigationView? = null
+    protected lateinit var drawer: DrawerLayout
+    protected lateinit var navigationView: NavigationView
 
     protected abstract fun update()
 
     override fun onBackPressed() {
-        if (drawer != null && drawer!!.isDrawerOpen(GravityCompat.START))
-            drawer!!.closeDrawer(GravityCompat.START)
+        if (drawer.isDrawerOpen(GravityCompat.START))
+            drawer.closeDrawer(GravityCompat.START)
         else super.onBackPressed()
     }
 
@@ -64,7 +55,7 @@ abstract class BaseDrawerActivity : BaseActivity(), NavigationView.OnNavigationI
             R.id.nav_settings -> showSettings()
         }
 
-        drawer?.closeDrawer(GravityCompat.START)
+        drawer.closeDrawer(GravityCompat.START)
         return false
     }
 
@@ -109,5 +100,13 @@ abstract class BaseDrawerActivity : BaseActivity(), NavigationView.OnNavigationI
     private fun showSettings() {
         CrashlyticsProxy.instance.logButton("Show Settings")
         startActivityForResult(Intent(this, SettingsActivity::class.java), REQUEST_SETTINGS)
+    }
+
+    companion object {
+        private const val REQUEST_ACCOUNTS = 1
+        private const val REQUEST_RATES = 2
+        private const val REQUEST_SETTINGS = 3
+        private const val REQUEST_IMPORT_EXPORT = 4
+        const val REQUEST_BACKUP = 5
     }
 }

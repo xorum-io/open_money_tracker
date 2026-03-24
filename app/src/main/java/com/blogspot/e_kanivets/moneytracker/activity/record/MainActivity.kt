@@ -142,7 +142,7 @@ class MainActivity : BaseDrawerActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == AppCompatActivity.RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             when (requestCode) {
                 REQUEST_ACTION_RECORD -> update()
                 REQUEST_BACKUP -> {

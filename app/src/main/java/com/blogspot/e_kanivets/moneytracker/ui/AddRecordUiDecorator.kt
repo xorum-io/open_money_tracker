@@ -35,15 +35,10 @@ class AddRecordUiDecorator(private val activity: Activity) {
     @StyleRes
     fun getTheme(type: Int): Int {
         if (dialogTheme == -1) {
-            when (type) {
-                Record.TYPE_EXPENSE ->
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        dialogTheme = R.style.RedDialogTheme
-                    }
-                Record.TYPE_INCOME ->
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        dialogTheme = R.style.GreenDialogTheme
-                    }
+            dialogTheme = when (type) {
+                Record.TYPE_EXPENSE -> R.style.RedDialogTheme
+                Record.TYPE_INCOME -> R.style.GreenDialogTheme
+                else -> -1
             }
         }
         return dialogTheme
@@ -59,10 +54,9 @@ class AddRecordUiDecorator(private val activity: Activity) {
                 else actionBar.setTitle(R.string.title_edit_expense)
 
                 actionBar.setBackgroundDrawable(ColorDrawable(redLightColor))
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    val window = activity.window
-                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                    window.statusBarColor = redDarkColor
+                activity.window.apply {
+                    addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                    statusBarColor = redDarkColor
                 }
             }
             Record.TYPE_INCOME -> {
@@ -71,10 +65,9 @@ class AddRecordUiDecorator(private val activity: Activity) {
                 else actionBar.setTitle(R.string.title_edit_income)
 
                 actionBar.setBackgroundDrawable(ColorDrawable(greenLightColor))
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    val window = activity.window
-                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                    window.statusBarColor = greenDarkColor
+                activity.window.apply {
+                    addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                    statusBarColor = greenDarkColor
                 }
             }
         }

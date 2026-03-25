@@ -38,19 +38,19 @@ class SettingsActivity : BaseBackActivity() {
 
     class SettingsFragment : PreferenceFragment() {
 
-        @JvmField @Inject
+        @set:Inject
         var accountController: AccountController? = null
 
-        @JvmField @Inject
+        @set:Inject
         var currencyController: CurrencyController? = null
 
-        @JvmField @Inject
+        @set:Inject
         var preferenceController: PreferenceController? = null
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
 
-            MtApp.get().appComponent.inject(this@SettingsFragment)
+            MtApp.instance.appComponent.inject(this@SettingsFragment)
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences)

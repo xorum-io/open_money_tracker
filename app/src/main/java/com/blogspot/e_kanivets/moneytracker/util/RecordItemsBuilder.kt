@@ -12,7 +12,7 @@ class RecordItemsBuilder {
     lateinit var formatController: FormatController
 
     constructor() {
-        MtApp.get().appComponent.inject(this)
+        MtApp.instance.appComponent.inject(this)
     }
 
     fun getRecordItems(recordList: List<Record>): List<RecordItem> {

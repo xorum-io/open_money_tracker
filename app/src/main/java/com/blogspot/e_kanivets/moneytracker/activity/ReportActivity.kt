@@ -57,7 +57,7 @@ class ReportActivity : BaseBackActivity() {
         period = intent.getParcelableExtra(KEY_PERIOD)
         if (period == null) return false
 
-        recordList = recordController.getRecordsForPeriod(period)
+        recordList = recordController.getRecordsForPeriod(period!!)
         shortSummaryPresenter = ShortSummaryPresenter(this)
         adapter = RecordReportAdapter(mutableListOf(), hashMapOf(), this)
         recordReportConverter = RecordReportConverter()
@@ -74,7 +74,7 @@ class ReportActivity : BaseBackActivity() {
 
     private fun update(currency: String) {
         val reportMaker = ReportMaker(rateController)
-        val report = reportMaker.getRecordReport(currency, period, recordList)
+        val report = reportMaker.getRecordReport(currency, period!!, recordList)
 
         adapter.setData(recordReportConverter.getItemsFromReport(report), recordReportConverter.getDataFromReport(report))
         shortSummaryPresenter.update(report, currency, reportMaker.currencyNeeded(currency, recordList))
@@ -102,7 +102,7 @@ class ReportActivity : BaseBackActivity() {
         lateinit var formatController: FormatController
 
         init {
-            MtApp.get().appComponent.inject(this)
+            MtApp.instance.appComponent.inject(this)
         }
 
         fun getItemsFromReport(report: IRecordReport?): MutableList<RecordReportItem> {

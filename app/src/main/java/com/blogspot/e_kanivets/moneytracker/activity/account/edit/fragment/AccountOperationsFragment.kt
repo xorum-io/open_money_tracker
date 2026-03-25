@@ -55,7 +55,7 @@ class AccountOperationsFragment : Fragment() {
     }
 
     private fun initData() {
-        MtApp.get().appComponent.inject(this@AccountOperationsFragment)
+        MtApp.instance.appComponent.inject(this@AccountOperationsFragment)
         arguments?.let { arguments -> account = arguments.getParcelable(KEY_ACCOUNT)!! }
     }
 
@@ -64,11 +64,11 @@ class AccountOperationsFragment : Fragment() {
     }
 
     private fun getRecordItems(): List<RecordItem> {
-        val accountRecords = recordController.getRecordsForAccount(account)
         val accountTransfers = transferController.getTransfersForAccount(account)
 
-        accountRecords += obtainRecordsFromTransfers(accountTransfers)
-        accountRecords.sortByDescending { it.time }
+        val accountRecords = (recordController.getRecordsForAccount(account) +
+                obtainRecordsFromTransfers(accountTransfers))
+            .sortedByDescending { it.time }
 
         return RecordItemsBuilder().getRecordItems(accountRecords)
     }

@@ -97,7 +97,7 @@ class AddRecordActivity : BaseBackActivity() {
         autoCompleter = CategoryAutoCompleter(categoryController, preferenceController)
         uiDecorator = AddRecordUiDecorator(this)
 
-        uiDecorator.decorateActionBar(supportActionBar, mode, type)
+        uiDecorator.decorateActionBar(supportActionBar, mode!!, type)
 
         if (mode == Mode.MODE_EDIT) {
             record?.let { record ->
@@ -182,7 +182,7 @@ class AddRecordActivity : BaseBackActivity() {
     }
 
     private fun selectDate() {
-        CrashlyticsProxy.get().logButton("Select Date")
+        CrashlyticsProxy.instance.logButton("Select Date")
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = timestamp
         val dialog = DatePickerDialog(this, uiDecorator.getTheme(type),
@@ -206,7 +206,7 @@ class AddRecordActivity : BaseBackActivity() {
     }
 
     private fun selectTime() {
-        CrashlyticsProxy.get().logButton("Show Time")
+        CrashlyticsProxy.instance.logButton("Show Time")
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = timestamp
         val dialog = TimePickerDialog(this, uiDecorator.getTheme(type),
@@ -254,10 +254,10 @@ class AddRecordActivity : BaseBackActivity() {
     }
 
     private fun tryRecord() {
-        CrashlyticsProxy.get().logButton("Done Record")
+        CrashlyticsProxy.instance.logButton("Try Record")
         if (addRecord()) {
-            CrashlyticsProxy.get().logEvent("Done Record")
-            setResult(Activity.RESULT_OK)
+            CrashlyticsProxy.instance.logEvent("Done Record")
+            setResult(RESULT_OK)
             finish()
         }
     }

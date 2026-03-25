@@ -3,7 +3,6 @@ package com.blogspot.e_kanivets.moneytracker.activity.record
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity
@@ -22,6 +21,7 @@ import com.blogspot.e_kanivets.moneytracker.entity.RecordItem
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog
+import com.blogspot.e_kanivets.moneytracker.ui.PeriodSpinner
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
 import com.blogspot.e_kanivets.moneytracker.util.RecordItemsBuilder
@@ -87,11 +87,11 @@ class MainActivity : BaseDrawerActivity() {
         drawer = binding.drawerLayout
         navigationView = binding.navView
 
-        navigationView.setNavigationItemSelectedListener(this)
+        navigationView?.setNavigationItemSelectedListener(this)
 
-        tvDefaultAccountTitle = navigationView.getHeaderView(0).findViewById(R.id.tvDefaultAccountTitle)
-        tvDefaultAccountSum = navigationView.getHeaderView(0).findViewById(R.id.tvDefaultAccountSum)
-        tvCurrency = navigationView.getHeaderView(0).findViewById(R.id.tvCurrency)
+        tvDefaultAccountTitle = navigationView!!.getHeaderView(0).findViewById(R.id.tvDefaultAccountTitle)
+        tvDefaultAccountSum = navigationView!!.getHeaderView(0).findViewById(R.id.tvDefaultAccountSum)
+        tvCurrency = navigationView!!.getHeaderView(0).findViewById(R.id.tvCurrency)
 
         recordAdapter = RecordAdapter(this, listOf(), true)
         recordAdapter.itemClickListener = { position -> editRecord(getPositionWithoutSummary(position)) }
@@ -102,7 +102,7 @@ class MainActivity : BaseDrawerActivity() {
 
         binding.recyclerView.adapter = recordAdapter
 
-        binding.spinner.setPeriodSelectedListener { period ->
+        binding.spinner.periodSelectedListener = PeriodSpinner.OnPeriodSelectedListener { period ->
             this.period = period
             periodController.writeLastUsedPeriod(period)
             update()
@@ -117,23 +117,23 @@ class MainActivity : BaseDrawerActivity() {
     private fun getPositionWithoutSummary(position: Int) = position - 1
 
     private fun editRecord(position: Int) {
-        CrashlyticsProxy.get().logButton("Edit Record")
+        CrashlyticsProxy.instance.logButton("Edit Record")
         val record = recordList[getRecordPosition(position)]
         startAddRecordActivity(record, AddRecordActivity.Mode.MODE_EDIT, record.type)
     }
 
     private fun addExpense() {
-        CrashlyticsProxy.get().logButton("Add Expense")
+        CrashlyticsProxy.instance.logButton("Add Expense")
         startAddRecordActivity(null, AddRecordActivity.Mode.MODE_ADD, Record.TYPE_EXPENSE)
     }
 
     private fun addIncome() {
-        CrashlyticsProxy.get().logButton("Add Income")
+        CrashlyticsProxy.instance.logButton("Add Income")
         startAddRecordActivity(null, AddRecordActivity.Mode.MODE_ADD, Record.TYPE_INCOME)
     }
 
     private fun showReport() {
-        CrashlyticsProxy.get().logButton("Show Report")
+        CrashlyticsProxy.instance.logButton("Show Report")
         val intent = Intent(this, ReportActivity::class.java)
         intent.putExtra(ReportActivity.KEY_PERIOD, period)
         startActivity(intent)
@@ -142,7 +142,7 @@ class MainActivity : BaseDrawerActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == AppCompatActivity.RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             when (requestCode) {
                 REQUEST_ACTION_RECORD -> update()
                 REQUEST_BACKUP -> {
@@ -179,7 +179,7 @@ class MainActivity : BaseDrawerActivity() {
     }
 
     private fun showAppRateDialog() {
-        CrashlyticsProxy.get().logEvent("Show App Rate Dialog")
+        CrashlyticsProxy.instance.logEvent("Show App Rate Dialog")
         val dialog = AppRateDialog(this)
         dialog.setCanceledOnTouchOutside(false)
         dialog.show()

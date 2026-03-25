@@ -3,7 +3,6 @@ package com.blogspot.e_kanivets.moneytracker.activity.record
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity
@@ -22,6 +21,7 @@ import com.blogspot.e_kanivets.moneytracker.entity.RecordItem
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog
+import com.blogspot.e_kanivets.moneytracker.ui.PeriodSpinner
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
 import com.blogspot.e_kanivets.moneytracker.util.RecordItemsBuilder
@@ -102,7 +102,7 @@ class MainActivity : BaseDrawerActivity() {
 
         binding.recyclerView.adapter = recordAdapter
 
-        binding.spinner.setPeriodSelectedListener { period ->
+        binding.spinner.periodSelectedListener = PeriodSpinner.OnPeriodSelectedListener { period ->
             this.period = period
             periodController.writeLastUsedPeriod(period)
             update()

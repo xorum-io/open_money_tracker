@@ -15,25 +15,27 @@ import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 
-class PeriodSpinner(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+class PeriodSpinner(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     AppCompatSpinner(context, attrs, defStyleAttr) {
 
     @Inject
     lateinit var periodController: PeriodController
 
-    private var periodSelectedListener: OnPeriodSelectedListener? = null
-    private var listener: OnItemSelectedListener? = null
+    var periodSelectedListener: OnPeriodSelectedListener? = null
+    private val listener: OnItemSelectedListener
     private var lastPeriod: Period? = null
 
-    constructor(context: Context) : this(context, null, 0)
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
+    constructor(context: Context) : this(context, null, android.R.attr.spinnerStyle)
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, android.R.attr.spinnerStyle)
 
     init {
         MtApp.instance.appComponent.inject(this)
 
-        setAdapter(ArrayAdapter(context, android.R.layout.simple_list_item_1,
-            resources.getStringArray(R.array.array_periods)))
-        setOnItemSelectedEvenIfUnchangedListener(object : OnItemSelectedListener {
+        adapter = ArrayAdapter(
+            context, android.R.layout.simple_list_item_1,
+            resources.getStringArray(R.array.array_periods)
+        )
+        listener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 when (position) {
                     0 -> updatePeriod(periodController.dayPeriod())
@@ -46,7 +48,7 @@ class PeriodSpinner(context: Context, attrs: AttributeSet? = null, defStyleAttr:
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
-        })
+        }
     }
 
     fun updatePeriod(period: Period) {
@@ -69,22 +71,15 @@ class PeriodSpinner(context: Context, attrs: AttributeSet? = null, defStyleAttr:
         }
     }
 
-    fun setPeriodSelectedListener(periodSelectedListener: OnPeriodSelectedListener) {
-        this.periodSelectedListener = periodSelectedListener
-    }
-
     override fun setSelection(position: Int) {
         super.setSelection(position)
-        listener?.onItemSelected(null, null, position, 0)
-    }
-
-    fun setOnItemSelectedEvenIfUnchangedListener(listener: AdapterView.OnItemSelectedListener) {
-        this.listener = listener
+        listener.onItemSelected(null, null, position, 0)
     }
 
     private fun showFromDateDialog() {
         if (lastPeriod == null) return
-        val dialog = ChangeDateDialog(context, lastPeriod!!.first,
+        val dialog = ChangeDateDialog(
+            context, lastPeriod!!.first,
             object : ChangeDateDialog.OnDateChangedListener {
                 override fun onDateChanged(fromDate: Date) {
                     val cal = Calendar.getInstance()
@@ -101,7 +96,8 @@ class PeriodSpinner(context: Context, attrs: AttributeSet? = null, defStyleAttr:
 
     private fun showToDateDialog(fromDate: Date) {
         if (lastPeriod == null) return
-        val dialog = ChangeDateDialog(context, lastPeriod!!.last,
+        val dialog = ChangeDateDialog(
+            context, lastPeriod!!.last,
             object : ChangeDateDialog.OnDateChangedListener {
                 override fun onDateChanged(toDate: Date) {
                     val cal = Calendar.getInstance()

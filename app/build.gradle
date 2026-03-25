@@ -13,8 +13,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 34
 
-        versionCode 40
-        versionName '2.2.0'
+        versionCode 46
+        versionName '2.3.0'
     }
 
     signingConfigs {

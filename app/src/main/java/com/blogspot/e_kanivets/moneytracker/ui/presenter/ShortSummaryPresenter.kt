@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import com.blogspot.e_kanivets.moneytracker.MtApp
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController
 import com.blogspot.e_kanivets.moneytracker.databinding.ViewSummaryRecordsBinding
@@ -13,11 +12,12 @@ import com.blogspot.e_kanivets.moneytracker.entity.Period
 import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.base.BaseSummaryPresenter
 import java.text.SimpleDateFormat
-import javax.inject.Inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class ShortSummaryPresenter(context: Context) : BaseSummaryPresenter() {
+class ShortSummaryPresenter(context: Context) : BaseSummaryPresenter(), KoinComponent {
 
-    @Inject lateinit var formatController: FormatController
+    private val formatController: FormatController by inject()
 
     private var red: Int
     private var green: Int
@@ -25,7 +25,6 @@ class ShortSummaryPresenter(context: Context) : BaseSummaryPresenter() {
 
     init {
         this.context = context
-        MtApp.instance.appComponent.inject(this)
         layoutInflater = LayoutInflater.from(context)
         red = context.resources.getColor(R.color.red)
         green = context.resources.getColor(R.color.green)

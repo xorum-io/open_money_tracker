@@ -7,19 +7,18 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatSpinner
-import com.blogspot.e_kanivets.moneytracker.MtApp
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.controller.PeriodController
 import com.blogspot.e_kanivets.moneytracker.entity.Period
 import java.util.Calendar
 import java.util.Date
-import javax.inject.Inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class PeriodSpinner(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
-    AppCompatSpinner(context, attrs, defStyleAttr) {
+    AppCompatSpinner(context, attrs, defStyleAttr), KoinComponent {
 
-    @Inject
-    lateinit var periodController: PeriodController
+    private val periodController: PeriodController by inject()
 
     var periodSelectedListener: OnPeriodSelectedListener? = null
     private val listener: OnItemSelectedListener
@@ -29,8 +28,6 @@ class PeriodSpinner(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, android.R.attr.spinnerStyle)
 
     init {
-        MtApp.instance.appComponent.inject(this)
-
         adapter = ArrayAdapter(
             context, android.R.layout.simple_list_item_1,
             resources.getStringArray(R.array.array_periods)

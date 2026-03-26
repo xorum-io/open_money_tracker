@@ -6,18 +6,17 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
-import com.blogspot.e_kanivets.moneytracker.MtApp
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController
 import com.blogspot.e_kanivets.moneytracker.databinding.ViewHeaderDateBinding
 import com.blogspot.e_kanivets.moneytracker.databinding.ViewRecordBinding
 import com.blogspot.e_kanivets.moneytracker.entity.RecordItem
-import javax.inject.Inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>, KoinComponent {
 
-    @Inject
-    lateinit var formatController: FormatController
+    private val formatController: FormatController by inject()
 
     var itemClickListener: ((Int) -> Unit)? = null
 
@@ -35,8 +34,6 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     constructor(context: Context, items: List<RecordItem>, isSummaryViewNeeded: Boolean) {
         this.context = context
         this.items = items
-
-        MtApp.instance.appComponent.inject(this)
 
         whiteRed = ContextCompat.getColor(context, R.color.white_red)
         whiteGreen = ContextCompat.getColor(context, R.color.white_green)

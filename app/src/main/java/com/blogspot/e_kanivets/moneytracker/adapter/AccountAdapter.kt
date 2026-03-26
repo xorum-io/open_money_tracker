@@ -6,29 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.blogspot.e_kanivets.moneytracker.MtApp
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController
 import com.blogspot.e_kanivets.moneytracker.databinding.ViewAccountBinding
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
-import javax.inject.Inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class AccountAdapter(
     private val context: Context,
     private val accounts: List<Account>
-) : BaseAdapter() {
-    @Inject
-    lateinit var formatController: FormatController
+) : BaseAdapter(), KoinComponent {
+    private val formatController: FormatController by inject()
 
     private val whiteRed: Int = context.resources.getColor(R.color.white_red)
     private val whiteGreen: Int = context.resources.getColor(R.color.white_green)
     private val red: Int = context.resources.getColor(R.color.red)
     private val green: Int = context.resources.getColor(R.color.green)
     private val grey: Int = context.resources.getColor(R.color.grey_inactive)
-
-    init {
-        MtApp.instance.appComponent.inject(this)
-    }
 
     override fun getCount(): Int = accounts.size
 

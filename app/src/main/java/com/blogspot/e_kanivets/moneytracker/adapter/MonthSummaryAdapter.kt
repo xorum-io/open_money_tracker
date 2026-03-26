@@ -5,23 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.blogspot.e_kanivets.moneytracker.MtApp
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController
 import com.blogspot.e_kanivets.moneytracker.databinding.ViewMonthSummaryBinding
 import com.blogspot.e_kanivets.moneytracker.report.chart.IMonthReport
 import java.text.SimpleDateFormat
-import javax.inject.Inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class MonthSummaryAdapter(
     private val context: Context,
     private val monthReport: IMonthReport
-) : BaseAdapter() {
+) : BaseAdapter(), KoinComponent {
 
-    @Inject lateinit var formatController: FormatController
+    private val formatController: FormatController by inject()
     private val dateFormat = SimpleDateFormat("MMM, yyyy")
 
     init {
-        MtApp.instance.appComponent.inject(this)
         if (monthReport.monthList.size != monthReport.incomeList.size ||
             monthReport.incomeList.size != monthReport.expenseList.size) {
             throw IllegalArgumentException("Broken report data")

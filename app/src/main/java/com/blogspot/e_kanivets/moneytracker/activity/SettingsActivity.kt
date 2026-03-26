@@ -6,7 +6,6 @@ import android.preference.ListPreference
 import android.preference.Preference.OnPreferenceChangeListener
 import android.preference.PreferenceFragment
 import com.blogspot.e_kanivets.moneytracker.BuildConfig
-import com.blogspot.e_kanivets.moneytracker.MtApp
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController
@@ -15,7 +14,8 @@ import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.databinding.ActivitySettingsBinding
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
-import javax.inject.Inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class SettingsActivity : BaseBackActivity() {
 
@@ -36,21 +36,14 @@ class SettingsActivity : BaseBackActivity() {
         fragmentManager.beginTransaction().replace(binding.contentView.id, SettingsFragment()).commit()
     }
 
-    class SettingsFragment : PreferenceFragment() {
+    class SettingsFragment : PreferenceFragment(), KoinComponent {
 
-        @set:Inject
-        var accountController: AccountController? = null
-
-        @set:Inject
-        var currencyController: CurrencyController? = null
-
-        @set:Inject
-        var preferenceController: PreferenceController? = null
+        private val accountController: AccountController by inject()
+        private val currencyController: CurrencyController by inject()
+        private val preferenceController: PreferenceController by inject()
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
-
-            MtApp.instance.appComponent.inject(this@SettingsFragment)
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences)
@@ -67,11 +60,11 @@ class SettingsActivity : BaseBackActivity() {
                 findPreference(getString(R.string.pref_default_account)) as ListPreference
             defaultAccountPref.onPreferenceChangeListener = preferenceChangeListener
 
-            val accountList = accountController!!.readActiveAccounts()
+            val accountList = accountController.readActiveAccounts()
             defaultAccountPref.entries = getEntries(accountList)
             defaultAccountPref.entryValues = getEntryValues(accountList)
 
-            val defaultAccount = accountController!!.readDefaultAccount()
+            val defaultAccount = accountController.readDefaultAccount()
             if (defaultAccount == null) {
                 defaultAccountPref.setDefaultValue("")
                 defaultAccountPref.summary = ""
@@ -86,11 +79,11 @@ class SettingsActivity : BaseBackActivity() {
                 findPreference(getString(R.string.pref_default_currency)) as ListPreference
             defaultCurrencyPref.onPreferenceChangeListener = preferenceChangeListener
 
-            val currencyList = currencyController!!.readAll()
+            val currencyList = currencyController.readAll()
             defaultCurrencyPref.entries = currencyList.toTypedArray<String>()
             defaultCurrencyPref.entryValues = currencyList.toTypedArray<String>()
 
-            val defaultCurrency = currencyController!!.readDefaultCurrency()
+            val defaultCurrency = currencyController.readDefaultCurrency()
             defaultCurrencyPref.setDefaultValue(defaultCurrency)
             defaultCurrencyPref.summary = defaultCurrency
         }
@@ -100,11 +93,11 @@ class SettingsActivity : BaseBackActivity() {
                 findPreference(getString(R.string.pref_non_substitution_currency)) as ListPreference
             nonSubstitutionCurrencyPref.onPreferenceChangeListener = preferenceChangeListener
 
-            val currencyList = currencyController!!.readAll()
+            val currencyList = currencyController.readAll()
             nonSubstitutionCurrencyPref.entries = currencyList.toTypedArray<String>()
             nonSubstitutionCurrencyPref.entryValues = currencyList.toTypedArray<String>()
 
-            val nonSubstitutionCurrency = preferenceController!!.readNonSubstitutionCurrency()
+            val nonSubstitutionCurrency = preferenceController.readNonSubstitutionCurrency()
             nonSubstitutionCurrencyPref.setDefaultValue(nonSubstitutionCurrency)
             nonSubstitutionCurrencyPref.summary = nonSubstitutionCurrency
         }
@@ -126,7 +119,7 @@ class SettingsActivity : BaseBackActivity() {
             precisionList.add(getString(R.string.precision_none))
             displayPrecisionPref.entries = precisionList.toTypedArray<String>()
 
-            if (FormatController.PRECISION_MATH == preferenceController!!.readDisplayPrecision()) {
+            if (FormatController.PRECISION_MATH == preferenceController.readDisplayPrecision()) {
                 displayPrecisionPref.setDefaultValue(getString(R.string.precision_math))
                 displayPrecisionPref.summary = getString(R.string.precision_math)
             }

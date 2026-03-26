@@ -25,7 +25,7 @@ import com.blogspot.e_kanivets.moneytracker.ui.PeriodSpinner
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
 import com.blogspot.e_kanivets.moneytracker.util.RecordItemsBuilder
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class MainActivity : BaseDrawerActivity() {
 
@@ -34,26 +34,13 @@ class MainActivity : BaseDrawerActivity() {
     private lateinit var period: Period
     private lateinit var recordAdapter: RecordAdapter
 
-    @Inject
-    lateinit var recordController: RecordController
-
-    @Inject
-    lateinit var rateController: ExchangeRateController
-
-    @Inject
-    lateinit var accountController: AccountController
-
-    @Inject
-    lateinit var currencyController: CurrencyController
-
-    @Inject
-    lateinit var preferenceController: PreferenceController
-
-    @Inject
-    lateinit var periodController: PeriodController
-
-    @Inject
-    lateinit var formatController: FormatController
+    private val recordController: RecordController by inject()
+    private val rateController: ExchangeRateController by inject()
+    private val accountController: AccountController by inject()
+    private val currencyController: CurrencyController by inject()
+    private val preferenceController: PreferenceController by inject()
+    private val periodController: PeriodController by inject()
+    private val formatController: FormatController by inject()
 
     private lateinit var summaryPresenter: ShortSummaryPresenter
 
@@ -74,7 +61,6 @@ class MainActivity : BaseDrawerActivity() {
     }
 
     private fun initData(): Boolean {
-        appComponent.inject(this)
         preferenceController.addLaunchCount()
         return true
     }
@@ -145,10 +131,7 @@ class MainActivity : BaseDrawerActivity() {
         if (resultCode == RESULT_OK) {
             when (requestCode) {
                 REQUEST_ACTION_RECORD -> update()
-                REQUEST_BACKUP -> {
-                    appComponent.inject(this)
-                    update()
-                }
+                REQUEST_BACKUP -> recreate()
             }
         }
     }

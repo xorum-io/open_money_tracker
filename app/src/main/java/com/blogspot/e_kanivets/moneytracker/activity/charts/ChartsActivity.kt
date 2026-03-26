@@ -15,13 +15,13 @@ import com.blogspot.e_kanivets.moneytracker.databinding.ActivityChartsBinding
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker
 import com.blogspot.e_kanivets.moneytracker.report.chart.IMonthReport
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class ChartsActivity : BaseBackActivity() {
 
-    @Inject lateinit var recordController: RecordController
-    @Inject lateinit var exchangeRateController: ExchangeRateController
-    @Inject lateinit var currencyController: CurrencyController
+    private val recordController: RecordController by inject()
+    private val exchangeRateController: ExchangeRateController by inject()
+    private val currencyController: CurrencyController by inject()
 
     private lateinit var binding: ActivityChartsBinding
 
@@ -31,14 +31,8 @@ class ChartsActivity : BaseBackActivity() {
         binding = ActivityChartsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initData()
         initToolbar()
         initViews()
-    }
-
-    private fun initData(): Boolean {
-        appComponent.inject(this)
-        return true
     }
 
     private fun initViews() {

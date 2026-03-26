@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import com.blogspot.e_kanivets.moneytracker.MtApp
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordReportAdapter
@@ -20,16 +19,15 @@ import com.blogspot.e_kanivets.moneytracker.report.ReportMaker
 import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter
 import java.util.*
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class ReportActivity : BaseBackActivity() {
 
-    @Inject
-    lateinit var recordController: RecordController
-    @Inject
-    lateinit var rateController: ExchangeRateController
-    @Inject
-    lateinit var currencyController: CurrencyController
+    private val recordController: RecordController by inject()
+    private val rateController: ExchangeRateController by inject()
+    private val currencyController: CurrencyController by inject()
 
     private var recordList: List<Record> = listOf()
     private var period: Period? = null
@@ -52,8 +50,6 @@ class ReportActivity : BaseBackActivity() {
     }
 
     private fun initData(): Boolean {
-        appComponent.inject(this)
-
         period = intent.getParcelableExtra(KEY_PERIOD)
         if (period == null) return false
 
@@ -96,14 +92,9 @@ class ReportActivity : BaseBackActivity() {
         binding.spinnerCurrency.setSelection(currencyList.indexOf(currency))
     }
 
-    class RecordReportConverter {
+    class RecordReportConverter : KoinComponent {
 
-        @Inject
-        lateinit var formatController: FormatController
-
-        init {
-            MtApp.instance.appComponent.inject(this)
-        }
+        private val formatController: FormatController by inject()
 
         fun getItemsFromReport(report: IRecordReport?): MutableList<RecordReportItem> {
             val items: MutableList<RecordReportItem> = mutableListOf()

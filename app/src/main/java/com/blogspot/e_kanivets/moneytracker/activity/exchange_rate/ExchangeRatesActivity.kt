@@ -16,7 +16,7 @@ import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRatePair
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
 import com.blogspot.e_kanivets.moneytracker.util.ExchangeRatesSummarizer
 import java.util.Collections
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class ExchangeRatesActivity : BaseBackActivity() {
 
@@ -24,7 +24,7 @@ class ExchangeRatesActivity : BaseBackActivity() {
         private const val REQUEST_ADD_EXCHANGE_RATE = 1
     }
 
-    @Inject lateinit var rateController: ExchangeRateController
+    private val rateController: ExchangeRateController by inject()
 
     private var exchangeRateList: List<ExchangeRatePair> = emptyList()
 
@@ -36,14 +36,8 @@ class ExchangeRatesActivity : BaseBackActivity() {
         binding = ActivityExchangeRatesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initData()
         initToolbar()
         initViews()
-    }
-
-    private fun initData(): Boolean {
-        appComponent.inject(this)
-        return true
     }
 
     private fun initViews() {

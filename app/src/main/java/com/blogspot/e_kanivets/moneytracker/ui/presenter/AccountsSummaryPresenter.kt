@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController
-import com.blogspot.e_kanivets.moneytracker.MtApp
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
@@ -14,14 +13,15 @@ import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateControll
 import com.blogspot.e_kanivets.moneytracker.databinding.ViewSummaryAccountsBinding
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.base.BaseSummaryPresenter
-import javax.inject.Inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class AccountsSummaryPresenter(context: Context) : BaseSummaryPresenter() {
+class AccountsSummaryPresenter(context: Context) : BaseSummaryPresenter(), KoinComponent {
 
-    @Inject lateinit var rateController: ExchangeRateController
-    @Inject lateinit var accountController: AccountController
-    @Inject lateinit var currencyController: CurrencyController
-    @Inject lateinit var formatController: FormatController
+    private val rateController: ExchangeRateController by inject()
+    private val accountController: AccountController by inject()
+    private val currencyController: CurrencyController by inject()
+    private val formatController: FormatController by inject()
 
     private var red: Int
     private var green: Int
@@ -34,7 +34,6 @@ class AccountsSummaryPresenter(context: Context) : BaseSummaryPresenter() {
         layoutInflater = LayoutInflater.from(context)
         red = context.resources.getColor(R.color.red)
         green = context.resources.getColor(R.color.green)
-        MtApp.instance.appComponent.inject(this)
         reportMaker = ReportMaker(rateController)
     }
 

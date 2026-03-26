@@ -13,7 +13,7 @@ import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.DbxClientV2
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 class BackupActivity : BaseBackActivity(),
@@ -22,8 +22,8 @@ class BackupActivity : BaseBackActivity(),
         private const val APP_KEY = "5lqugcckdy9y6lj"
     }
 
-    @Inject lateinit var preferenceController: PreferenceController
-    @Inject lateinit var backupController: BackupController
+    private val preferenceController: PreferenceController by inject()
+    private val backupController: BackupController by inject()
 
     private lateinit var dbClient: DbxClientV2
 
@@ -41,8 +41,6 @@ class BackupActivity : BaseBackActivity(),
     }
 
     private fun initData(): Boolean {
-        appComponent.inject(this)
-
         val accessToken = preferenceController.readDropboxAccessToken()
         if (accessToken == null) {
             Auth.startOAuth2Authentication(this, APP_KEY)
@@ -128,7 +126,7 @@ class BackupActivity : BaseBackActivity(),
         builder.setTitle(getString(R.string.backup_is_restored))
         builder.setMessage(getString(R.string.backup_restored, backupName))
         builder.setOnDismissListener {
-            MtApp.instance.buildAppComponent()
+            MtApp.instance.restartKoin()
             setResult(RESULT_OK)
             finish()
         }

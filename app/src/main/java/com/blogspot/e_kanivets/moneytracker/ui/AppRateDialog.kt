@@ -5,21 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import com.blogspot.e_kanivets.moneytracker.MtApp
 import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController
 import com.blogspot.e_kanivets.moneytracker.databinding.DialogRateBinding
-import javax.inject.Inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class AppRateDialog(context: Context) : AlertDialog(context) {
+class AppRateDialog(context: Context) : AlertDialog(context), KoinComponent {
 
     private lateinit var binding: DialogRateBinding
 
-    @Inject
-    lateinit var preferenceController: PreferenceController
-
-    init {
-        MtApp.instance.appComponent.inject(this)
-    }
+    private val preferenceController: PreferenceController by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

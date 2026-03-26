@@ -18,7 +18,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.PrintWriter
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 class ImportExportActivity : BaseBackActivity() {
@@ -27,8 +27,8 @@ class ImportExportActivity : BaseBackActivity() {
         private const val DEFAULT_EXPORT_FILE_NAME = "money_tracker.csv"
     }
 
-    @Inject lateinit var importController: ImportController
-    @Inject lateinit var exportController: ExportController
+    private val importController: ImportController by inject()
+    private val exportController: ExportController by inject()
 
     private lateinit var binding: ActivityImportExportBinding
 
@@ -36,7 +36,6 @@ class ImportExportActivity : BaseBackActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityImportExportBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        initData()
         initToolbar()
         initViews()
     }
@@ -44,11 +43,6 @@ class ImportExportActivity : BaseBackActivity() {
     private fun initViews() {
         binding.btnImport.setOnClickListener { importRecords() }
         binding.btnExport.setOnClickListener { exportRecords() }
-    }
-
-    private fun initData(): Boolean {
-        appComponent.inject(this)
-        return true
     }
 
     override fun onCreateOptionsMenu(menu: android.view.Menu): Boolean {

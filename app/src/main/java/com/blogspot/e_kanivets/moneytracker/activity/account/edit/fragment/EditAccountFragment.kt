@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.blogspot.e_kanivets.moneytracker.MtApp
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController
@@ -16,15 +15,12 @@ import com.blogspot.e_kanivets.moneytracker.entity.data.Account
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
 import com.blogspot.e_kanivets.moneytracker.util.validator.EditAccountValidator
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class EditAccountFragment : Fragment() {
 
-    @Inject
-    internal lateinit var accountController: AccountController
-
-    @Inject
-    internal lateinit var formatController: FormatController
+    private val accountController: AccountController by inject()
+    private val formatController: FormatController by inject()
 
     private lateinit var accountValidator: IValidator<Account>
     private lateinit var account: Account
@@ -47,7 +43,6 @@ class EditAccountFragment : Fragment() {
     }
 
     private fun initData() {
-        MtApp.instance.appComponent.inject(this@EditAccountFragment)
         arguments?.let { arguments -> account = arguments.getParcelable(KEY_ACCOUNT)!! }
     }
 

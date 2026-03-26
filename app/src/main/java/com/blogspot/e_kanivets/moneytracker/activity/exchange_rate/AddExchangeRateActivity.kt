@@ -15,7 +15,7 @@ import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
 import com.blogspot.e_kanivets.moneytracker.util.validator.ExchangeRatePairValidator
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator
 import java.util.ArrayList
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class AddExchangeRateActivity : BaseBackActivity() {
 
@@ -23,9 +23,9 @@ class AddExchangeRateActivity : BaseBackActivity() {
         const val KEY_EXCHANGE_RATE = "key_exchange_rate"
     }
 
-    @Inject lateinit var exchangeRateController: ExchangeRateController
-    @Inject lateinit var currencyController: CurrencyController
-    @Inject lateinit var formatController: FormatController
+    private val exchangeRateController: ExchangeRateController by inject()
+    private val currencyController: CurrencyController by inject()
+    private val formatController: FormatController by inject()
 
     private lateinit var exchangeRatePairValidator: IValidator<ExchangeRatePair>
 
@@ -46,7 +46,6 @@ class AddExchangeRateActivity : BaseBackActivity() {
     }
 
     private fun initData(): Boolean {
-        appComponent.inject(this)
         exchangeRatePair = intent.getParcelableExtra(KEY_EXCHANGE_RATE)
         return true
     }

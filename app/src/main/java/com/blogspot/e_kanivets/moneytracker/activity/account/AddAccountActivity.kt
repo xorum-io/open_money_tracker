@@ -15,15 +15,12 @@ import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
 import com.blogspot.e_kanivets.moneytracker.util.validator.AccountValidator
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator
 import java.util.ArrayList
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class AddAccountActivity : BaseBackActivity() {
 
-    @Inject
-    lateinit var accountController: AccountController
-
-    @Inject
-    lateinit var currencyController: CurrencyController
+    private val accountController: AccountController by inject()
+    private val currencyController: CurrencyController by inject()
 
     private lateinit var accountValidator: IValidator<Account>
 
@@ -35,14 +32,8 @@ class AddAccountActivity : BaseBackActivity() {
         binding = ActivityAddAccountBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initData()
         initToolbar()
         initViews()
-    }
-
-    private fun initData(): Boolean {
-        appComponent.inject(this)
-        return true
     }
 
     private fun initViews() {

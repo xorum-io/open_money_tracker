@@ -14,15 +14,12 @@ import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator
 import com.blogspot.e_kanivets.moneytracker.util.validator.TransferValidator
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class TransferActivity : BaseBackActivity() {
 
-    @Inject
-    lateinit var transferController: TransferController
-
-    @Inject
-    lateinit var accountController: AccountController
+    private val transferController: TransferController by inject()
+    private val accountController: AccountController by inject()
 
     private lateinit var transferValidator: IValidator<Transfer>
 
@@ -42,7 +39,6 @@ class TransferActivity : BaseBackActivity() {
     }
 
     private fun initData(): Boolean {
-        appComponent.inject(this)
         accountList = accountController.readActiveAccounts()
         return true
     }

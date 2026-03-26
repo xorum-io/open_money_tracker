@@ -6,17 +6,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.widget.Toast
-import com.blogspot.e_kanivets.moneytracker.MtApp
-import com.blogspot.e_kanivets.moneytracker.di.AppComponent
 
 abstract class BaseActivity : AppCompatActivity() {
 
     var toolbar: Toolbar? = null
         private set
     protected var progressDialog: ProgressDialog? = null
-
-    protected val appComponent: AppComponent
-        get() = MtApp.instance.appComponent
 
     protected abstract fun initToolbar(): Toolbar?
 

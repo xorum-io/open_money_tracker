@@ -12,12 +12,11 @@ import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.databinding.ActivityAccountsBinding
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.AccountsSummaryPresenter
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class AccountsActivity : BaseBackActivity() {
 
-    @Inject
-    lateinit var accountController: AccountController
+    private val accountController: AccountController by inject()
 
     private lateinit var summaryPresenter: AccountsSummaryPresenter
     private lateinit var binding: ActivityAccountsBinding
@@ -34,7 +33,6 @@ class AccountsActivity : BaseBackActivity() {
     }
 
     private fun initData(): Boolean {
-        appComponent.inject(this)
         summaryPresenter = AccountsSummaryPresenter(this)
         return true
     }

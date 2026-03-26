@@ -1,19 +1,14 @@
 package com.blogspot.e_kanivets.moneytracker.util
 
-import com.blogspot.e_kanivets.moneytracker.MtApp
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController
 import com.blogspot.e_kanivets.moneytracker.entity.RecordItem
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
-import javax.inject.Inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class RecordItemsBuilder {
+class RecordItemsBuilder : KoinComponent {
 
-    @Inject
-    lateinit var formatController: FormatController
-
-    constructor() {
-        MtApp.instance.appComponent.inject(this)
-    }
+    private val formatController: FormatController by inject()
 
     fun getRecordItems(recordList: List<Record>): List<RecordItem> {
         val recordItems: MutableList<RecordItem> = mutableListOf()

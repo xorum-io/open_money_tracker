@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.blogspot.e_kanivets.moneytracker.MtApp
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController
@@ -19,21 +18,14 @@ import com.blogspot.e_kanivets.moneytracker.entity.data.Category
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
 import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer
 import com.blogspot.e_kanivets.moneytracker.util.RecordItemsBuilder
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class AccountOperationsFragment : Fragment() {
 
-    @Inject
-    internal lateinit var accountController: AccountController
-
-    @Inject
-    internal lateinit var recordController: RecordController
-
-    @Inject
-    internal lateinit var transferController: TransferController
-
-    @Inject
-    internal lateinit var formatController: FormatController
+    private val accountController: AccountController by inject()
+    private val recordController: RecordController by inject()
+    private val transferController: TransferController by inject()
+    private val formatController: FormatController by inject()
 
     private lateinit var account: Account
 
@@ -55,7 +47,6 @@ class AccountOperationsFragment : Fragment() {
     }
 
     private fun initData() {
-        MtApp.instance.appComponent.inject(this@AccountOperationsFragment)
         arguments?.let { arguments -> account = arguments.getParcelable(KEY_ACCOUNT)!! }
     }
 

@@ -34,7 +34,7 @@ import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator
 import com.blogspot.e_kanivets.moneytracker.util.validator.RecordValidator
 import java.util.*
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class AddRecordActivity : BaseBackActivity() {
 
@@ -45,20 +45,11 @@ class AddRecordActivity : BaseBackActivity() {
     private var accountList: List<Account> = listOf()
     private var timestamp: Long = 0
 
-    @Inject
-    lateinit var categoryController: CategoryController
-
-    @Inject
-    lateinit var recordController: RecordController
-
-    @Inject
-    lateinit var accountController: AccountController
-
-    @Inject
-    lateinit var formatController: FormatController
-
-    @Inject
-    lateinit var preferenceController: PreferenceController
+    private val categoryController: CategoryController by inject()
+    private val recordController: RecordController by inject()
+    private val accountController: AccountController by inject()
+    private val formatController: FormatController by inject()
+    private val preferenceController: PreferenceController by inject()
 
     private lateinit var recordValidator: IValidator<Record>
     private lateinit var uiDecorator: AddRecordUiDecorator
@@ -78,8 +69,6 @@ class AddRecordActivity : BaseBackActivity() {
     }
 
     private fun initData(): Boolean {
-        appComponent.inject(this)
-
         record = intent.getParcelableExtra(KEY_RECORD)
         mode = intent.getSerializableExtra(KEY_MODE) as Mode
         type = intent.getIntExtra(KEY_TYPE, -1)

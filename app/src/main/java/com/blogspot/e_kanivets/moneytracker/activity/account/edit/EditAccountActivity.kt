@@ -18,12 +18,11 @@ import com.blogspot.e_kanivets.moneytracker.adapter.GeneralViewPagerAdapter
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
 import com.blogspot.e_kanivets.moneytracker.databinding.ActivityEditAccountBinding
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class EditAccountActivity : BaseBackActivity() {
 
-    @Inject
-    internal lateinit var accountController: AccountController
+    private val accountController: AccountController by inject()
 
     private lateinit var account: Account
     private lateinit var binding: ActivityEditAccountBinding
@@ -40,7 +39,6 @@ class EditAccountActivity : BaseBackActivity() {
     }
 
     private fun initData(): Boolean {
-        appComponent.inject(this@EditAccountActivity)
         val accountFromParcel: Account? = intent.getParcelableExtra(KEY_ACCOUNT)
 
         return if (accountFromParcel == null) false
